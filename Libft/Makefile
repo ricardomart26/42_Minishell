@@ -6,7 +6,7 @@
 #    By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/24 20:16:53 by rimartin          #+#    #+#              #
-#    Updated: 2021/10/12 23:46:44 by rimartin         ###   ########.fr        #
+#    Updated: 2021/11/06 16:44:06 by rimartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,6 @@ SRC		= 	mem/ft_bzero.c \
 			conv/atoh.c \
 			env/path_env.c \
 			math/check_range.c \
-			math/pow.c \
 			files/get_next_line_bonus.c
 			
 
