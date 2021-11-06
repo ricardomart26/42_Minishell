@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmendes <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 16:55:15 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/06 18:34:44 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/06 19:03:25 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,10 @@ int	main(int argc, char **argv, char **envp )
 	index = 0;
 	while (envp[index] != NULL)
 	{
-		printf("declare -x %s\n",envp[index]);
+		printf("declare -x %s\n", envp[index]);
 		index++;
 	}
 	if (argc == 2)
 		envp[index] = ft_strdup(argv[1]);
-	printf("%s\n", envp[index]);
-
 	return (0);
 }

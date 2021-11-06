@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 21:03:27 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/06 00:09:56 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/06 19:50:23 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	exec_command(t_node *node, t_context *ctx, char **env)
 		if (ctx->fd_close >= 0)
 			close(ctx->fd_close);
 		cmd = ft_split_quotes(ft_strtrim(node->cmd, " "), ' ');
-		while (splited_path)
+		printf("cmd %s\n", cmd[0]);
+		while (*splited_path == NULL)
 		{
 			file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
 			splited_path++;
@@ -60,6 +61,8 @@ int	exec_command(t_node *node, t_context *ctx, char **env)
 				continue ;
 			break ;
 		}
+		if (!splited_path)
+			error_msg("Not found command\n");
 		execve(file_cmd, cmd, env);
 	}
 	return (1);
@@ -111,5 +114,9 @@ void	exec(t_node *node, char **env)
 	printf("children %d\n", children);
 	i = -1;
 	while (++i < children)
+	{
 		wait(NULL);
+		close(ctx.fd[0]);
+		close(ctx.fd[1]);
+	}
 }

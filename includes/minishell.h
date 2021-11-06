@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/04 22:44:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/06 19:55:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,14 @@ typedef struct s_context
 	int	fd[2];
 	int	fd_close;
 }	t_context;
+
+typedef struct s_global
+{
+	t_parse ps;
+	t_env	*linked_env;
+	t_node	*node;
+	char	**env;
+}	t_global;
 
 static t_node			*g_empty_node;
 static t_parse			g_empty_st;

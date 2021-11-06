@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/04 22:31:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/06 20:12:43 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,28 +95,46 @@ t_node	*abstract_tree_parser(t_node *node, t_parse *st)
 	return (root);
 }
 
+void	free_nodes(t_node *node)
+{
+	if (is_empty_tree(node))
+	{
+		free(node);
+		return ;
+	}
+	if (node->r == PIPESS)
+	{
+		free(node->l);
+		free_nodes(node->r);
+	}
+	free(node->l);
+	free(node->r);
+}
+
 int	main(int ac, char **av, char **env)
 {
-	t_parse		st;
-	t_node		*node;
-	t_env		*linked_env;
+	t_global	g;
 
 	(void) ac;
 	(void) av;
-	node = NULL;
-	linked_env = env_to_linked_list(env);
+	g.node = NULL;
+	g.env = env;
+	g.linked_env = env_to_linked_list(env);
 	while (1)
 	{
-		st = g_empty_st;
-		st.exp = readline("Enter a command: ");
-		while (find_c_in_str(*st.exp, SPACES))
-			st.exp++;
-		if (ft_strlen(st.exp) == 0)
+		g.ps = g_empty_st;
+		g.node = g_empty_node;
+		g.ps.exp = readline("Enter a command: ");
+		while (find_c_in_str(*g.ps.exp, SPACES))
+			g.ps.exp++;
+		if (ft_strlen(g.ps.exp) == 0)
 			continue ;
-		add_history(st.exp);
-		st.exp = expand_vars(st.exp, 0, -1, false);
-		node = abstract_tree_parser(node, &st);
-		exec(node, env);
+		add_history(g.ps.exp);
+		g.ps.exp = expand_vars(g.ps.exp, 0, -1, false);
+		g.node = abstract_tree_parser(g.node, &g.ps);
+		exec(g.node, g.env);
+		free(g.ps.exp);
+		free_nodes(g.node);
 	}
 	return (0);
 }
