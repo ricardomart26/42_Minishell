@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/06 20:12:43 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/06 23:57:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,10 @@ t_node	*abstract_tree_parser(t_node *node, t_parse *st)
 	return (root);
 }
 
-void	free_nodes(t_node *node)
+void	free_nodes(t_node *node, t_node *old)
 {
+	t_node	*save_node;
+	
 	if (is_empty_tree(node))
 	{
 		free(node);
@@ -104,8 +106,10 @@ void	free_nodes(t_node *node)
 	}
 	if (node->r == PIPESS)
 	{
+		if (node != NULL)
+			free(node);
 		free(node->l);
-		free_nodes(node->r);
+		free_nodes(node->r, node);
 	}
 	free(node->l);
 	free(node->r);
