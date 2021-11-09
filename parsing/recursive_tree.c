@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 22:23:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/09 20:21:31 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ void	handle_ast_nodes(t_node *node, char *exp, t_limit *l, int pipes)
 		temp->l = rec_node_tree_init(exp, true, true, l);
 	else
 		temp->r = rec_node_tree_init(exp, false, true, l);
-	if (temp->l == NULL)
-		return (NULL);
-	if (temp->r == NULL)
-		return (NULL);
 }
 
 /**

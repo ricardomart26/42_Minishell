@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:55:07 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 22:03:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/09 22:45:16 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,14 @@ int	exec_command(t_node *node, t_context *ctx, char **env)
 	char	**splited_path;
 	char	*file_cmd;
 	char	**cmd;
-
+	t_parse	*ps;
+	t_env	*linked_env;
+	int 	code;
+	
+	ps = singleton_ps(NULL);
+	linked_env = singleton_env(NULL);
+	printf("linked %s\n", linked_env->keyword);
+	printf("amout red %d\n", ps->amount_red);
 	splited_path = ft_split(get_env_path(env), ':');
 	if (fork() == FORKED_CHILD)
 	{
@@ -48,6 +55,9 @@ int	exec_command(t_node *node, t_context *ctx, char **env)
 		dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO);
 		if (ctx->fd_close >= 0)
 			close(ctx->fd_close);
+		code = builtins(ps, &linked_env, &node);
+		if (code != 0)
+			return (code);
 		cmd = ft_split_quotes(ft_strtrim(node->cmd, " "), ' ');
 		file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
 		while (access(file_cmd, F_OK) == -1 && *splited_path != NULL)
@@ -58,6 +68,7 @@ int	exec_command(t_node *node, t_context *ctx, char **env)
 		}
 		if (!splited_path)
 			error_msg("Not found command\n");
+		// printf("file cmd %s\n", file_cmd);
 		execve(file_cmd, cmd, env);
 	}
 	return (1);
@@ -109,9 +120,5 @@ void	exec(t_node *node, char **env)
 	printf("children %d\n", children);
 	i = -1;
 	while (++i < children)
-	{
 		wait(NULL);
-		close(ctx.fd[0]);
-		close(ctx.fd[1]);
-	}
 }

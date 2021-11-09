@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:32 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/04 22:40:09 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/09 23:22:40 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,37 @@ char	*ft_strndup(const char *s1, int len)
 	i = -1;
 	while (++i < len)
 		dup[i] = s1[i];
+	dup[i] = '\0';
+	return (dup);
+}
+
+char	*ft_strdup_range(const char *s1, int st, int end)
+{
+	char	*dup;
+	int		i;
+
+	if (st == 0 && end == 0)
+		return (ft_strdup(s1));		
+	dup = (char *)malloc(ft_strlen_range((char *)s1, st, end) + 1);
+	if (!dup)
+		return (NULL);
+	i = 0;
+	if (end == 0)
+	{
+		while (s1[st] != '\0')
+		{
+			dup[i++] = s1[st];
+			st++;
+		}
+	}
+	if (i == 0)
+	{
+		while (st < end && s1[st] != '\0')
+		{
+			dup[i++] = s1[st];
+			st++;
+		}
+	}
 	dup[i] = '\0';
 	return (dup);
 }

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/08 01:27:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/09 20:35:06 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	pwd(void)
  * 
  * - Sem argumentos (Ex. cd ) vai para a home
  * - Com ~ vai para a home tambem
- *
+ * - cd -
  */
 
 int	cd(char *path)
@@ -83,6 +83,25 @@ int	exit_builtin(t_parse *st, t_env **env, t_node **node)
 	free_node(&tmp);
 	return (0);
 }
+
+t_parse	*singleton_ps(t_parse *ps) // Design pattern
+{
+	static t_parse *new_ps = NULL;
+	
+	if (new_ps == NULL && ps != NULL)
+		new_ps = ps;
+	return (new_ps);
+}
+
+t_env	*singleton_env(t_env *link) // Design pattern
+{
+	static t_env *new_link = NULL;
+	
+	if (new_link == NULL && link != NULL)
+		new_link = link;
+	return (new_link);
+}
+
 
 int	builtins(t_parse *st, t_env **env, t_node **node)
 {

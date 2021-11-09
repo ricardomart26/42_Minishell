@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 22:21:38 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/09 22:55:31 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,11 @@ void	free_nodes(t_node *node, t_node *old)
 	free(node->r);
 }
 
-void	init_variables(t_global *g, char **env)
+void	init_variables(t_global *g)
 {
 	static t_parse	empty_ps;
 	static t_node	*empty_node;
 	
-	g->env = env;
-	g->linked_env = env_to_linked_list(env);
 	g->ps = empty_ps;
 	g->node = empty_node;
 }
@@ -121,15 +119,22 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
+
+	g.env = env;
+	g.linked_env = env_to_linked_list(env);
 	while (1)
 	{
-		init_variables(&g, env);
+		init_variables(&g);
 		if (get_readline_and_history(&g) == -1)
 			continue ;
 		expand_vars(g.ps.exp, 0, -1, false);
 		g.node = abstract_tree_parser(g.node, &g.ps);
+		singleton_ps(&g.ps);
+		singleton_env(g.linked_env);
+		printf("linked %s\n", g.linked_env->keyword);
 		exec(g.node, g.env);
 		free(g.ps.exp);
+		g.ps.exp = NULL;
 		free_nodes(g.node, NULL);
 	}
 	return (0);

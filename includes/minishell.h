@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 21:58:56 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/09 20:34:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,10 @@ int		set_brackets_to_true(char *line, int i, bool *brackets);
 void	rec_parse_pipes(char *exp, t_node *node, t_limit *l, int pipes);
 void	rec_pipe_parser(t_node *node, char *exp, t_limit *l, int pipes);
 t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l);
+t_parse	*singleton_ps(t_parse *ps);
+t_env	*singleton_env(t_env *link);
 void	exec(t_node *node, char **env);
+t_node	*abstract_tree_parser(t_node *node, t_parse *st);
+void	only_one_cmd(char *exp, t_node *node);
 
 #endif
