@@ -6,11 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/04 22:32:00 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 22:13:45 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "minishell.h"
 
 char	*cut_string_for_divide(char *cmd, int *start, int *end)
 {
@@ -18,7 +18,6 @@ char	*cut_string_for_divide(char *cmd, int *start, int *end)
 	int		i;
 	int		size;
 
-	printf("start %d e end %d\n", *start, *end);
 	if (*start >= *end || *end > ft_strlen(cmd))
 		exit(4);
 	size = *end - *start;
@@ -36,21 +35,6 @@ char	*cut_string_for_divide(char *cmd, int *start, int *end)
 	return (ret);
 }
 
-char	*get_returned_files(t_parse *st, char *cmd, t_limit *l)
-{
-	t_token	token;
-
-	while (cmd[++l->end])
-	{
-		printf("cmd in files[%d] %c\n", l->end, cmd[l->end]);
-		c_and_next(&st->c, &st->next, cmd, l->end);
-		token = get_token(st->c, st->next);
-		if (token == REDIRECTION)
-			return (cut_string_for_divide(cmd, &l->start, &l->end));
-	}
-	return (cut_string_for_divide(cmd, &l->start, &l->end));
-}
-
 /**
  * 
  * @definition:
@@ -61,24 +45,28 @@ char	*get_returned_files(t_parse *st, char *cmd, t_limit *l)
  * 
  */
 
-char	**return_files(t_parse *st, char *cmd, int nbr_files)
+char	**return_files(t_parse *ps, char *cmd, int nbr_files)
 {
 	char	**ret;
 	int		i;
 	t_limit	l;
-
-	printf("teste 1\n");
+	t_token	token;
+	
 	ret = malloc(sizeof(char *) * (nbr_files + 2));
 	if (!ret)
 		return (NULL);
-	i = -1;
+	i = 0;
 	l.end = -1;
 	l.start = 0;
-	printf("teste 2\n");
-	while (++i < nbr_files)
-		ret[i] = get_returned_files(st, cmd, &l);
-	printf("teste 3\n");
-	ret[i] = NULL;
+	while (cmd[++l.end])
+	{
+		c_and_next(&ps->c, &ps->next, cmd, l.end);
+		token = get_token(ps->c, ps->next);
+		if (token == REDIRECTION)
+			ret[i++] = cut_string_for_divide(cmd, &l.start, &l.end);
+	}
+	ret[i] = cut_string_for_divide(cmd, &l.start, &l.end);
+	ret[i + 1] = NULL;
 	return (ret);
 }
 

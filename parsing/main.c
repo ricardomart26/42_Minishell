@@ -6,11 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/06 23:57:44 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 22:21:38 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "minishell.h"
 
 /**
  * 
@@ -62,7 +62,7 @@ int	count_tokens(t_parse *st, t_token find_token)
  * 
  */
 
-void	parse_cmd(char *exp, t_node *node)
+void	only_one_cmd(char *exp, t_node *node)
 {
 	node->n_red = 0;
 	node->l = NULL;
@@ -74,45 +74,45 @@ void	parse_cmd(char *exp, t_node *node)
 	node->cmd = ft_strdup(exp);
 }
 
-t_node	*abstract_tree_parser(t_node *node, t_parse *st)
-{
-	t_limit	l;
-	t_node	*root;
-
-	l.start = 0;
-	l.end = 0;
-	st->n_pipes = count_tokens(st, PIPE);
-	st->amount_red = count_tokens(st, REDIRECTION);
-	node = malloc(sizeof(t_node));
-	root = node;
-	if (st->n_pipes == 0)
-		parse_cmd(st->exp, node);
-	else
-		rec_parse_pipes(st->exp, node, &l, st->n_pipes);
-	parse_red(st, &root);
-	if (st->amount_red)
-		divide_cmd_and_file(&node, st);
-	return (root);
-}
-
 void	free_nodes(t_node *node, t_node *old)
 {
-	t_node	*save_node;
-	
 	if (is_empty_tree(node))
 	{
 		free(node);
 		return ;
 	}
-	if (node->r == PIPESS)
+	if (node->r->type == PIPESS)
 	{
-		if (node != NULL)
-			free(node);
+		printf("node type %d\n", node->r->type);
+		if (old != NULL)
+			free(old);
 		free(node->l);
 		free_nodes(node->r, node);
 	}
 	free(node->l);
 	free(node->r);
+}
+
+void	init_variables(t_global *g, char **env)
+{
+	static t_parse	empty_ps;
+	static t_node	*empty_node;
+	
+	g->env = env;
+	g->linked_env = env_to_linked_list(env);
+	g->ps = empty_ps;
+	g->node = empty_node;
+}
+
+int	get_readline_and_history(t_global *g)
+{
+	g->ps.exp = readline("Enter a command: ");
+	while (find_c_in_str(*g->ps.exp, SPACES))
+		g->ps.exp++;
+	if (ft_strlen(g->ps.exp) == 0)
+		return (-1);
+	add_history(g->ps.exp);
+	return (0);
 }
 
 int	main(int ac, char **av, char **env)
@@ -121,24 +121,16 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	g.node = NULL;
-	g.env = env;
-	g.linked_env = env_to_linked_list(env);
 	while (1)
 	{
-		g.ps = g_empty_st;
-		g.node = g_empty_node;
-		g.ps.exp = readline("Enter a command: ");
-		while (find_c_in_str(*g.ps.exp, SPACES))
-			g.ps.exp++;
-		if (ft_strlen(g.ps.exp) == 0)
+		init_variables(&g, env);
+		if (get_readline_and_history(&g) == -1)
 			continue ;
-		add_history(g.ps.exp);
-		g.ps.exp = expand_vars(g.ps.exp, 0, -1, false);
+		expand_vars(g.ps.exp, 0, -1, false);
 		g.node = abstract_tree_parser(g.node, &g.ps);
 		exec(g.node, g.env);
 		free(g.ps.exp);
-		free_nodes(g.node);
+		free_nodes(g.node, NULL);
 	}
 	return (0);
 }

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/06 19:55:42 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 21:58:56 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -112,15 +112,13 @@ typedef struct s_context
 
 typedef struct s_global
 {
-	t_parse ps;
+	t_parse	ps;
 	t_env	*linked_env;
 	t_node	*node;
 	char	**env;
 }	t_global;
 
-static t_node			*g_empty_node;
-static t_parse			g_empty_st;
-
+int		exec_node(t_node *node, t_context *ctx, char **env);
 int		count_tokens(t_parse *st, t_token find_token);
 bool	is_empty_tree(t_node *node);
 bool	find_c_in_str(int c, char *str);
@@ -131,10 +129,10 @@ void	parse_exp_pipes(t_parse *st, t_node **node);
 void	parse_red(t_parse *st, t_node **node);
 void	c_and_next(int *c, int *next, char *str, int i);
 void	divide_cmd_and_file(t_node **node, t_parse *st);
-void	free_nodes(t_node **node, t_parse st);
+void	free_nodes(t_node *node, t_node *old);
 char	*cut_string(char *cmd, int start, int end);
 t_env	*env_to_linked_list(char **env);
-char	*expand_vars(char *line, int pos, int i, bool brackets);
+void	expand_vars(char *line, int pos, int i, bool brackets);
 char	*cut_string_with_red(char *cmd, int *start, int *end);
 char	*heredoc(char *del);
 char	*do_infile(char *filename, int fd);

@@ -6,11 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 14:28:24 by rimartin          #+#    #+#             */
-/*   Updated: 2021/10/28 04:51:13 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 21:30:34 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "minishell.h"
 
 void	rl_heredoc(char *del)
 {
@@ -23,7 +23,7 @@ void	rl_heredoc(char *del)
 		error_msg("Heredoc: Dont have delimiter\n");
 	size_del = ft_strlen(del);
 	i = 1;
-	fd = open("temp_txt", O_CREAT | O_WRONLY);
+	fd = open(".temp_txt", O_CREAT | O_WRONLY);
 	exp = readline("heredoc> ");
 	while (1)
 	{

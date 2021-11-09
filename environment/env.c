@@ -6,11 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 12:58:47 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/06 00:09:03 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 21:54:23 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "minishell.h"
 
 /**
  * 
@@ -132,7 +132,7 @@ char	*add_value(char *line, int start, char *value)
 	return (ret);
 }
 
-char	*expand_vars(char *line, int pos, int i, bool bracket)
+void	expand_vars(char *line, int pos, int i, bool bracket)
 {
 	char	*name;
 	char	*value;
@@ -160,5 +160,4 @@ char	*expand_vars(char *line, int pos, int i, bool bracket)
 			start = i;
 		}
 	}
-	return (line);
 }

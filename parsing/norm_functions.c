@@ -6,11 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:36:55 by rimartin          #+#    #+#             */
-/*   Updated: 2021/10/31 19:58:28 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 01:27:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "minishell.h"
 
 int	norm_helper(t_split *sp, char const *s, int *i, int *counter)
 {

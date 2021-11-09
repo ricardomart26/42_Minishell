@@ -6,11 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:58:36 by rimartin          #+#    #+#             */
-/*   Updated: 2021/10/28 22:01:49 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 01:27:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "minishell.h"
 
 int	free_node(t_node **node)
 {

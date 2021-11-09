@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 16:55:15 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/06 19:03:25 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/08 01:57:33 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ char	*ft_strdup(const char *s1)
 	dup[i] = '\0';
 	return (dup);
 }
+
+/*
+	O export tem que ser ordenado antes de imprimir
+	O env tem é random
+*/
 
 int	main(int argc, char **argv, char **envp )
 {
