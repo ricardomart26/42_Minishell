@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:05 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/09 23:15:10 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:56:13 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,22 @@ int	ft_strlen(const char *str)
 
 int	ft_strlen_range(const char *str, size_t st, size_t end)
 {
-	if (st + end >= ft_strlen(str))
+	int	i;
+
+	if (st + end >= (size_t)ft_strlen(str))
 		exit(1);
 	if (st == 0 && end == 0)
 		return (ft_strlen(str));
+	i = 0;
 	if (end == 0)
 	{
-		while (str[st] != '\0')
-			st++;
-		return (st);
+		while (str[st + i] != '\0')
+			i++;
+		return (i);
 	}
-	while (str[st] != '\0' && st <= end)
-		st++;
-	return (st);
+	while (str[st + i] != '\0' && i + st < end)
+		i++;
+	return (i);
 }
 
 int	ft_strlen_char(const char *str, char c)
@@ -45,6 +48,18 @@ int	ft_strlen_char(const char *str, char c)
 
 	i = 0;
 	while (str[i] != '\0' && str[i] != c)
-		i++;		
+		i++;
+	if (str[i] == '\0')
+		return (-1);
 	return (i);
+}
+
+int	ft_strlen_dp(const char	**s1)
+{
+	int	ret;
+
+	ret = 0;
+	while (s1[ret])
+		ret++;
+	return (ret);
 }

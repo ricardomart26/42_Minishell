@@ -6,13 +6,13 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:55:07 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/09 22:45:16 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:39:40 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_pipes(t_node *node, t_context *ctx, char **env)
+int	exec_pipes(t_node *node, t_context *ctx)
 {
 	int			children;
 	pid_t		p[2];
@@ -25,30 +25,45 @@ int	exec_pipes(t_node *node, t_context *ctx, char **env)
 	ls_ctx = *ctx;
 	ls_ctx.fd[STDOUT_FILENO] = p[WRITE_END];
 	ls_ctx.fd_close = p[READ_END];
-	children += exec_node(node->l, &ls_ctx, env);
+	children += exec_node(node->l, &ls_ctx);
 	rs_ctx = *ctx;
 	rs_ctx.fd[STDIN_FILENO] = p[READ_END];
 	rs_ctx.fd_close = p[WRITE_END];
-	children += exec_node(node->r, &rs_ctx, env);
+	children += exec_node(node->r, &rs_ctx);
 	close(p[READ_END]);
 	close(p[WRITE_END]);
 	return (children);
 }
 
-int	exec_command(t_node *node, t_context *ctx, char **env)
+void	continue_exec(t_node *node, char **env)
 {
-	char	**splited_path;
-	char	*file_cmd;
 	char	**cmd;
+	char	*file_cmd;
+	char	**splited_path;
+	
+	splited_path = ft_split(get_env_path(env), ':');
+	cmd = ft_split_quotes(ft_strtrim(node->cmd, " "), ' ');
+	file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
+	while (access(file_cmd, F_OK) == -1 && *splited_path != NULL)
+	{
+		splited_path++;
+		free(file_cmd);
+		file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
+	}
+	if (!splited_path)
+		error_msg("Not found command\n");
+	execve(file_cmd, cmd, env);
+}
+
+int	exec_command(t_node *node, t_context *ctx)
+{
 	t_parse	*ps;
 	t_env	*linked_env;
 	int 	code;
 	
 	ps = singleton_ps(NULL);
+	printf("env: %s\n", ps->env[0]);
 	linked_env = singleton_env(NULL);
-	printf("linked %s\n", linked_env->keyword);
-	printf("amout red %d\n", ps->amount_red);
-	splited_path = ft_split(get_env_path(env), ':');
 	if (fork() == FORKED_CHILD)
 	{
 		dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO);
@@ -58,28 +73,17 @@ int	exec_command(t_node *node, t_context *ctx, char **env)
 		code = builtins(ps, &linked_env, &node);
 		if (code != 0)
 			return (code);
-		cmd = ft_split_quotes(ft_strtrim(node->cmd, " "), ' ');
-		file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
-		while (access(file_cmd, F_OK) == -1 && *splited_path != NULL)
-		{
-			splited_path++;
-			free(file_cmd);
-			file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
-		}
-		if (!splited_path)
-			error_msg("Not found command\n");
-		// printf("file cmd %s\n", file_cmd);
-		execve(file_cmd, cmd, env);
+		continue_exec(node, ps->env);
 	}
 	return (1);
 }
 
-int	exec_node(t_node *node, t_context *ctx, char **env)
+int	exec_node(t_node *node, t_context *ctx)
 {
 	if (node->type == PIPESS)
-		return (exec_pipes(node, ctx, env));
+		return (exec_pipes(node, ctx));
 	else if (node->type == COMMAND)
-		return (exec_command(node, ctx, env));
+		return (exec_command(node, ctx));
 	else
 		fprintf(stderr, "(exec_node) Type of node isn't right!\n");
 	return (0);
@@ -106,7 +110,7 @@ void	tree_printer(t_node *node, int ident)
 	}
 }
 
-void	exec(t_node *node, char **env)
+void	exec(t_node *node)
 {
 	t_context	ctx;
 	int			i;
@@ -116,8 +120,7 @@ void	exec(t_node *node, char **env)
 	ctx.fd[0] = STDIN_FILENO;
 	ctx.fd[1] = STDOUT_FILENO;
 	ctx.fd_close = -1;
-	children = exec_node(node, &ctx, env);
-	printf("children %d\n", children);
+	children = exec_node(node, &ctx);
 	i = -1;
 	while (++i < children)
 		wait(NULL);

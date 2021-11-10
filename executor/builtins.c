@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/09 20:35:06 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:57:17 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_parse	*singleton_ps(t_parse *ps) // Design pattern
 {
 	static t_parse *new_ps = NULL;
 	
-	if (new_ps == NULL && ps != NULL)
+	if (!new_ps && ps)
 		new_ps = ps;
 	return (new_ps);
 }

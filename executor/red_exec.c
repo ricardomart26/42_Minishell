@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 05:00:46 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 01:27:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:31:19 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,27 @@ char	*do_outfile(char *filename, int fd)
 		return ("bash: Permission denied");
 	dup2(fd, STDOUT_FILENO);
 	return (NULL);
+}
+
+void	rl_heredoc(char *del)
+{
+	int		size_del;
+	char	*exp;
+	int		i;
+	int		fd;
+
+	if (!del)
+		error_msg("Heredoc: Dont have delimiter\n");
+	size_del = ft_strlen(del);
+	i = 1;
+	fd = open(".temp_txt", O_CREAT | O_WRONLY);
+	exp = readline("heredoc> ");
+	while (1)
+	{
+		write(fd, exp, ft_strlen(exp));
+		exp = readline("heredoc> ");
+		if (ft_strlen(exp) != 0 && !ft_strncmp(exp, del, ft_strlen(exp)))
+			break ;
+	}
+	dup2(STDIN_FILENO, fd);
 }

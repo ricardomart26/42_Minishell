@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/09 20:34:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:38:31 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_parse // Parsing
 	int		start;
 	int		end;
 	char	*exp;
+	char	**env;
 }	t_parse;
 
 typedef enum s_red
@@ -115,10 +116,9 @@ typedef struct s_global
 	t_parse	ps;
 	t_env	*linked_env;
 	t_node	*node;
-	char	**env;
 }	t_global;
 
-int		exec_node(t_node *node, t_context *ctx, char **env);
+int		exec_node(t_node *node, t_context *ctx);
 int		count_tokens(t_parse *st, t_token find_token);
 bool	is_empty_tree(t_node *node);
 bool	find_c_in_str(int c, char *str);
@@ -155,7 +155,7 @@ void	rec_pipe_parser(t_node *node, char *exp, t_limit *l, int pipes);
 t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l);
 t_parse	*singleton_ps(t_parse *ps);
 t_env	*singleton_env(t_env *link);
-void	exec(t_node *node, char **env);
+void	exec(t_node *node);
 t_node	*abstract_tree_parser(t_node *node, t_parse *st);
 void	only_one_cmd(char *exp, t_node *node);
 

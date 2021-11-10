@@ -6,11 +6,26 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:32 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/09 23:22:40 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:56:45 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+char	**ft_strdup_dp(const char **s1)
+{
+	char	**ret;
+	int		i;
+
+	ret = malloc(sizeof(char *) * ft_strlen_dp(s1) + 1);
+	if (!ret)
+		return (NULL);
+	i = -1;
+	while (s1[++i])
+		ret[i] = ft_strdup(s1[i]);
+	ret[i] = NULL;
+	return (ret);	
+}
 
 char	*ft_strndup(const char *s1, int len)
 {
@@ -35,7 +50,7 @@ char	*ft_strdup_range(const char *s1, int st, int end)
 	int		i;
 
 	if (st == 0 && end == 0)
-		return (ft_strdup(s1));		
+		return (ft_strdup(s1));
 	dup = (char *)malloc(ft_strlen_range((char *)s1, st, end) + 1);
 	if (!dup)
 		return (NULL);
@@ -43,18 +58,12 @@ char	*ft_strdup_range(const char *s1, int st, int end)
 	if (end == 0)
 	{
 		while (s1[st] != '\0')
-		{
-			dup[i++] = s1[st];
-			st++;
-		}
+			dup[i++] = s1[st++];
 	}
 	if (i == 0)
 	{
 		while (st < end && s1[st] != '\0')
-		{
-			dup[i++] = s1[st];
-			st++;
-		}
+			dup[i++] = s1[st++];
 	}
 	dup[i] = '\0';
 	return (dup);

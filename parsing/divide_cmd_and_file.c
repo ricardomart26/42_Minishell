@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 22:13:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/10 21:25:45 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	**return_files(t_parse *ps, char *cmd, int nbr_files)
 	int		i;
 	t_limit	l;
 	t_token	token;
-	
+
 	ret = malloc(sizeof(char *) * (nbr_files + 2));
 	if (!ret)
 		return (NULL);
