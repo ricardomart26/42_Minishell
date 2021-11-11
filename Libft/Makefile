@@ -6,7 +6,7 @@
 #    By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/24 20:16:53 by rimartin          #+#    #+#              #
-#    Updated: 2021/11/06 16:44:06 by rimartin         ###   ########.fr        #
+#    Updated: 2021/11/11 11:24:40 by rimartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC		= 	mem/ft_bzero.c \
 			print/ft_putnbr_fd.c \
 			print/ft_putstr_fd.c \
 			print/error_msg.c \
+			print/print_dp.c \
 			strings/ft_strchr.c \
 			strings/ft_split.c \
 			strings/ft_strdup.c \

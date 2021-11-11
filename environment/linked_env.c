@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/09 11:19:45 by ricardo           #+#    #+#             */
-/*   Updated: 2021/11/10 21:20:28 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 20:40:24 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	add_values_to_t_env(t_env **curr, char *env)
 {
 	int	i;
 	int	x;
-	
+
 	i = 0;
-	(*curr)->keyword = ft_strndup(env, ft_strlen_char(env, '='));
-	(*curr)->value = malloc(ft_strlen_range(env, ft_strlen_char(env, '='), 0) + 1);
+	(*curr)->keyword = ft_strndup(env, ft_strlen_c(env, '='));
+	(*curr)->value = malloc(ft_strlen_range(env, ft_strlen_c(env, '='), 0) + 1);
 	x = -1;
-	while (++x < ft_strlen_range(env, ft_strlen_char(env, '='), 0))
-		(*curr)->value[x] = env[x + ft_strlen_char(env, '=')];
+	while (++x < ft_strlen_range(env, ft_strlen_c(env, '='), 0))
+		(*curr)->value[x] = env[x + ft_strlen_c(env, '=')];
 	(*curr)->value[x] = '\0';
 }
 

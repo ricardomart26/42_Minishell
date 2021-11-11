@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 12:58:47 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 21:54:23 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 20:41:07 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,14 +146,12 @@ void	expand_vars(char *line, int pos, int i, bool bracket)
 		{
 			pos = i + 1;
 			name = ft_substr(line, pos, size_rem_env(line, pos, bracket, &i));
-			printf("name %s asf\n", name);
 			value = getenv(name);
 			if (value == NULL)
 				printf("Didn't found env %s\n", name);
 			end = pos + ft_strlen(name);
 			pos--;
 			line = add_value(rem_from_str(line, pos, end), pos, value);
-			printf("line after getting out %s\n", line);
 			i += ft_strlen(value) - 1;
 			if (i >= ft_strlen(line))
 				break ;
