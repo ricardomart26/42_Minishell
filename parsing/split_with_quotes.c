@@ -6,25 +6,38 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 21:44:15 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/12 01:41:11 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_quotes_split(const char *str, bool *dq, bool *q, int i)
+bool	find_set_in_str(const char *set, char c)
 {
-	if (str[i] == '"' && !(*q))
+	int i;
+
+	i = -1;
+	while (set[++i])
 	{
-		if (str[i - 1] != ' ' && *dq == false)
+		if (c == set[i])
+			return (true);
+	}
+	return (false);
+}
+
+bool	find_quotes(char c, bool *dq, bool *q)
+{
+	if (c == '"' && !*q)
+	{
+		if (*dq == false)
 			*dq = true;
 		else if (*dq == true)
 			*dq = false;
 		return (true);
 	}
-	else if (str[i] == '\'' && !(*dq))
+	else if (c == '\'' && !*dq)
 	{
-		if (str[i - 1] != ' ' && *q == false)
+		if (*q == false)
 			*q = true;
 		else if (*q == true)
 			*q = false;
@@ -33,75 +46,139 @@ bool	check_quotes_split(const char *str, bool *dq, bool *q, int i)
 	return (false);
 }
 
-void	init_vars(t_split *sp, int *a, int *b)
+int	ft_strlen(const char *s)
 {
-	sp->dq = false;
-	sp->q = false;
-	sp->tab = NULL;
-	*a = 0;
-	*b = 0;
-}
-
-static int	ft_cntwrd_quotes(char const *s, char c)
-{
-	int				i;
-	int				counter;
-	t_split			sp;
-
-	if (!s)
-		return (0);
-	init_vars(&sp, &i, &counter);
+	int i = 0;
 	while (s[i])
-	{
-		while (s[i] == c && (s[i] != '\'' && s[i] != '"'))
-			i++;
-		if (check_quotes_split(s, &sp.dq, &sp.q, i))
-		{
-			if (norm_helper(&sp, s, &i, &counter) == -1)
-				return (-1);
-			if (s[i] == '\0')
-				break ;
-		}
-		while (s[i] == c)
-			i++;
-		while (s[i] && ((s[i] != c) && (s[i] != '\'' && s[i] != '"')))
-			i++;
-		counter++;
-	}
-	return (counter + 1);
+		i++;
+	return (i);
 }
 
-// char	*remove_quotes(char *s)
-// {
-	
-// }
-
-char	**ft_split_quotes(const char *s, char c)
+char    *ft_substr(char const *s, unsigned int i, size_t len)
 {
-	t_limit	l;
-	int		k;
-	t_split	sp;
+    size_t    c;
+    char    *temp;
 
-	init_vars(&sp, &l.end, &k);
-	// s = remove_quotes();
-	sp.tab = malloc(sizeof(char *) * (ft_cntwrd_quotes(s, c) + 1));
-	if (!sp.tab || !s)
-		return (NULL);
-	while (s[l.end])
+    c = 0;
+    if (!s)
+        return (0);
+    if (ft_strlen(s) < len)
+        len = ft_strlen(s);
+    temp = malloc(sizeof(s) * (len + 1));
+    if (!temp)
+        return (NULL);
+    if (i >= ft_strlen(s))
+    {
+        temp[c] = '\0';
+        return (temp);
+    }
+    while (c < len)
+    {
+        temp[c] = s[i];
+        i++;
+        c++;
+    }
+    temp[c] = '\0';
+    return (temp);
+}
+
+char	**collect(char **r, char const *s, int start, int i)
+{
+	bool	q;
+	bool	dq;
+	int		size;
+	int		k;
+	
+	q = false;
+	dq = false;
+	while (s[start])
 	{
-		while (s[l.end] == c)
-			l.end++;
-		l.start = l.end;
-		if (check_quotes_split(s, &sp.dq, &sp.q, l.end))
+		while (s[start] == ' ')
+			start++;
+		size = start;
+		while (find_quotes(s[size], &dq, &q) && s[size] != '\0')
 		{
-			l = norm_helper2(&sp, s, l, &k);
-			continue ;
+			while (find_quotes(s[size], &dq, &q))
+			{
+				while ((dq || q) && s[size] != '\0')
+					find_quotes(s[++size], &dq, &q);
+				while (s[size] != ' ' && s[size] != s[size])
+					size++;
+			}
 		}
-		while (s[l.end] && s[l.end] != c)
-			l.end++;
-		if (l.end > l.start)
-			sp.tab[k++] = ft_strndup(s + l.start, l.end - l.start);
+		while (s[size] != ' ' && s[size] != '\0')
+		{
+			find_quotes(s[size], &dq, &q);
+			while (dq || q)
+				find_quotes(s[++size], &dq, &q);
+			size++;
+		}
+		r[k++] = ft_substr(s, start, size - start);
+		start = size;
 	}
-	sp.tab[k] = NULL;
-	return (sp.tab);
+	r[k] = NULL;		
+	return (r);
+}
+
+int	ft_cw(const char *s)
+{
+	int		i;
+	int		x;
+	bool	dq;
+	bool	q;
+	int		c;
+	
+	dq = false;
+	q = false;
+	i = -1;
+	c = 0;
+	while (s[++i])
+	{
+		while(s[i] == ' ')
+			i++;
+		while (find_quotes(s[i], &dq, &q) && s[i] != '\0')
+		{
+			while ((dq || q) && s[i] != '\0')
+				find_quotes(s[++i], &dq, &q);
+			while (s[i] != ' ' && s[i] != s[i])
+				i++;
+		}
+		while (s[i] != ' ' && s[i] != '\0')
+		{
+			find_quotes(s[i], &dq, &q);
+			while (dq || q)
+				find_quotes(s[++i], &dq, &q);
+			i++;
+		}
+		c++;
+		if (s[i] == '\0')
+			break ;
+	}
+	printf("c: %d\n");
+	return (c);
+}
+
+char **split_with_quotes(const char *s)
+{
+	int		i;
+	int		x;
+	int		k;
+	char	**r;
+
+	i = 0;
+	x = 0;
+	k = 0;
+	r = malloc(sizeof(char *) * ft_cw(s));
+	r = collect(r, s, x, i);
+	return (r);
+}
+
+int main(void)
+{
+	char **r;
+	int		i;
+	r = split("echo \"'-n'\"    lo");
+	i = -1;
+	while (r[++i])
+		printf("r: %s\n", r[i]);
 }
