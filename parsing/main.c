@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 20:30:22 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 21:46:31 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	main(int ac, char **av, char **env)
 	(void) ac;
 	(void) av;
 	g.ps.env = ft_strdup_dp((const char **)env);
-	g.linked_env = env_to_linked_list(env);
 	while (1)
 	{
 		g.ps = empty_ps;
@@ -123,7 +122,7 @@ int	main(int ac, char **av, char **env)
 		expand_vars(g.ps.exp, 0, -1, false);
 		g.node = abstract_tree_parser(g.node, &g.ps);
 		singleton_ps(&g.ps);
-		singleton_env(g.linked_env);
+		// singleton_env(g.linked_env);
 		my_exec(g.node, &g.ps, env);
 		free(g.ps.exp);
 		g.ps.exp = NULL;

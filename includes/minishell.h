@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 18:26:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 21:50:30 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,17 @@ struct s_node
 	t_type	type;
 };
 
-typedef struct s_env
+typedef struct s_lista
 {
-	char			*keyword;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
+	char			*content;
+	struct s_lista	*next;
+}	t_lista;
+
+typedef struct s_listas
+{
+	t_lista	*linked_env;
+	t_lista	*sort;
+}	t_listas;
 
 typedef struct s_context
 {
@@ -114,7 +119,7 @@ typedef struct s_context
 typedef struct s_global
 {
 	t_parse	ps;
-	t_env	*linked_env;
+	t_lista	*linked_env;
 	t_node	*node;
 }	t_global;
 
@@ -131,7 +136,7 @@ void	c_and_next(int *c, int *next, char *str, int i);
 void	divide_cmd_and_file(t_node **node, t_parse *st);
 void	free_nodes(t_node *node, t_node *old);
 char	*cut_string(char *cmd, int start, int end);
-t_env	*env_to_linked_list(char **env);
+// t_env	*env_to_linked_list(char **env);
 void	expand_vars(char *line, int pos, int i, bool brackets);
 char	*cut_string_with_red(char *cmd, int *start, int *end);
 char	*heredoc(char *del);
@@ -140,21 +145,21 @@ char	*do_outfile(char *filename, int fd);
 char	*executor(t_node *node, t_parse st, char **env, int n);
 char	*do_append(char *filename, int fd);
 void	rl_heredoc(char *del);
-int		builtins(t_parse *st, t_env **env, t_node **node);
+// int		builtins(t_parse *st, t_lista **env, t_node **node);
 char	**ft_split_quotes(char const *s, char c);
 int		norm_helper(t_split *sp, char const *s, int *i, int *counter);
 t_limit	norm_helper2(t_split *sp, char const *s, t_limit l, int *k);
-int		exit_builtin(t_parse *st, t_env **env, t_node **node);
+// int		exit_builtin(t_parse *st, t_env **env, t_node **node);
 bool	check_quotes_split(const char	*str, bool *dq, bool *q, int i);
 int		free_node(t_node **node);
-void	ft_lstclear_env(t_env **lst, void (*del)(void *));
+// void	ft_lstclear_env(t_env **lst, void (*del)(void *));
 int		set_brackets_to_true(char *line, int i, bool *brackets);
 
 void	rec_parse_pipes(char *exp, t_node *node, t_limit *l, int pipes);
 void	rec_pipe_parser(t_node *node, char *exp, t_limit *l, int pipes);
 t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l);
 t_parse	*singleton_ps(t_parse *ps);
-t_env	*singleton_env(t_env *link);
+// t_env	*singleton_env(t_env *link);
 void	exec(t_node *node);
 t_node	*abstract_tree_parser(t_node *node, t_parse *st);
 void	only_one_cmd(char *exp, t_node *node);

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/11 20:44:42 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 21:54:00 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	echo(char **line, int flag_n, int error_code)
 	return (error_code);
 }
 
-int	exit_builtin(t_parse *st, t_env **env, t_node **node)
+int	exit_builtin(t_parse *st, t_lista **env, t_node **node)
 {
 	t_node	*tmp;
 
@@ -93,14 +93,14 @@ t_parse	*singleton_ps(t_parse *ps) // Design pattern
 	return (new_ps);
 }
 
-t_env	*singleton_env(t_env *link) // Design pattern
-{
-	static t_env *new_link = NULL;
+// t_env	*singleton_env(t_ *link) // Design pattern
+// {
+// 	static t_env *new_link = NULL;
 	
-	if (new_link == NULL && link != NULL)
-		new_link = link;
-	return (new_link);
-}
+// 	if (new_link == NULL && link != NULL)
+// 		new_link = link;
+// 	return (new_link);
+// }
 
 void list_sort(t_lista *lst)
 {
@@ -145,9 +145,6 @@ void list_sort(t_lista *lst)
 		current = current->next;
 	}
 	printf("declare -x %s\n", current->content);
-	//deallocate(lst);
-	//free(temp);
-	//deallocate(&current);
 }
 
 int export(char *var, t_lista *envp, t_lista *sort)
@@ -166,7 +163,7 @@ int export(char *var, t_lista *envp, t_lista *sort)
 	return (0);
 }
 
-int	env(t_lista *lst)
+int	ft_env(t_lista *lst)
 {
 	t_lista *current;
 
@@ -179,30 +176,30 @@ int	env(t_lista *lst)
 	return (0);
 }
 
-int 	list_init(t_listas *s_listas, char **envp)
+void 	list_init(t_listas *listas, char **env)
 {
 	int index;
 
 	index = 0;
-	lst_envp = NULL;
-	while (envp[index] != NULL)
+	while (env[index] != NULL)
 	{
-		ft_lstadd_back((void *)&s_listas->envp, ft_lstnew((void *)ft_strdup(envp[index])));
-		ft_lstadd_back((void *)&s_listas->sort, ft_lstnew((void *)ft_strdup(envp[index])));
+		ft_lstadd_back((void *)&listas->linked_env, ft_lstnew((void *)ft_strdup(env[index])));
+		ft_lstadd_back((void *)&listas->sort, ft_lstnew((void *)ft_strdup(env[index])));
 		index++;
 	}
-	return (0);
 }
 
-int	builtins(t_parse *st, t_env **env, t_node **node, t_listas *s_listas, char **envp)
+int	builtins(t_parse *st, t_node **node, t_lista *s_listas, char **env)
 {
 	int		echo_n;
 	int		error_code;
 	char	**line;
-
+	t_listas	*listas;
+	
 	echo_n = 0;
 	error_code = 3;
-	list_init(s_listas, envp);
+	listas = NULL;
+	list_init(listas, env);
 	line = ft_split_quotes((*node)->cmd, ' ');
 	if (ft_strncmp(line[0], "cd", ft_strlen(line[0])) == 0)
 		error_code = cd(line[1]);
@@ -217,8 +214,8 @@ int	builtins(t_parse *st, t_env **env, t_node **node, t_listas *s_listas, char *
 	if (ft_strncmp(line[0], "exit", ft_strlen(line[0])) == 0)
 		exit_builtin(st, env, node);
 	if (ft_strncmp(line[0], "export",ft_strlen(line[0])) == 0)
-		export(line[1], t_listas->envp, t_listas->sort);
+		export(line[1], listas->linked_env, listas->sort);
 	if (ft_strncmp(line[0], "env",ft_strlen(line[0])) == 0)
-		export(t_listas->envp);
+		ft_env(listas->linked_env);
 	return (0);
 }
