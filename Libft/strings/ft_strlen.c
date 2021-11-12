@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:05 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/10 21:56:13 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 20:40:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_strlen_range(const char *str, size_t st, size_t end)
 	return (i);
 }
 
-int	ft_strlen_char(const char *str, char c)
+int	ft_strlen_c(const char *str, char c)
 {
 	int	i;
 

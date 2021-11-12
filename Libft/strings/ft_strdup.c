@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:32 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/10 21:56:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 20:30:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**ft_strdup_dp(const char **s1)
 	while (s1[++i])
 		ret[i] = ft_strdup(s1[i]);
 	ret[i] = NULL;
-	return (ret);	
+	return (ret);
 }
 
 char	*ft_strndup(const char *s1, int len)

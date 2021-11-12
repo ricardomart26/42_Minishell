@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 01:27:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/11 21:44:15 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	check_quotes_split(const char *str, bool *dq, bool *q, int i)
 {
 	if (str[i] == '"' && !(*q))
 	{
-		if (*dq == false)
+		if (str[i - 1] != ' ' && *dq == false)
 			*dq = true;
 		else if (*dq == true)
 			*dq = false;
@@ -24,7 +24,7 @@ bool	check_quotes_split(const char *str, bool *dq, bool *q, int i)
 	}
 	else if (str[i] == '\'' && !(*dq))
 	{
-		if (*q == false)
+		if (str[i - 1] != ' ' && *q == false)
 			*q = true;
 		else if (*q == true)
 			*q = false;
@@ -71,13 +71,19 @@ static int	ft_cntwrd_quotes(char const *s, char c)
 	return (counter + 1);
 }
 
-char	**ft_split_quotes(char const *s, char c)
+// char	*remove_quotes(char *s)
+// {
+	
+// }
+
+char	**ft_split_quotes(const char *s, char c)
 {
 	t_limit	l;
 	int		k;
 	t_split	sp;
 
 	init_vars(&sp, &l.end, &k);
+	// s = remove_quotes();
 	sp.tab = malloc(sizeof(char *) * (ft_cntwrd_quotes(s, c) + 1));
 	if (!sp.tab || !s)
 		return (NULL);
