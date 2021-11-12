@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/12 01:41:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/12 22:28:10 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,84 +46,9 @@ bool	find_quotes(char c, bool *dq, bool *q)
 	return (false);
 }
 
-int	ft_strlen(const char *s)
-{
-	int i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-char    *ft_substr(char const *s, unsigned int i, size_t len)
-{
-    size_t    c;
-    char    *temp;
-
-    c = 0;
-    if (!s)
-        return (0);
-    if (ft_strlen(s) < len)
-        len = ft_strlen(s);
-    temp = malloc(sizeof(s) * (len + 1));
-    if (!temp)
-        return (NULL);
-    if (i >= ft_strlen(s))
-    {
-        temp[c] = '\0';
-        return (temp);
-    }
-    while (c < len)
-    {
-        temp[c] = s[i];
-        i++;
-        c++;
-    }
-    temp[c] = '\0';
-    return (temp);
-}
-
-char	**collect(char **r, char const *s, int start, int i)
-{
-	bool	q;
-	bool	dq;
-	int		size;
-	int		k;
-	
-	q = false;
-	dq = false;
-	while (s[start])
-	{
-		while (s[start] == ' ')
-			start++;
-		size = start;
-		while (find_quotes(s[size], &dq, &q) && s[size] != '\0')
-		{
-			while (find_quotes(s[size], &dq, &q))
-			{
-				while ((dq || q) && s[size] != '\0')
-					find_quotes(s[++size], &dq, &q);
-				while (s[size] != ' ' && s[size] != s[size])
-					size++;
-			}
-		}
-		while (s[size] != ' ' && s[size] != '\0')
-		{
-			find_quotes(s[size], &dq, &q);
-			while (dq || q)
-				find_quotes(s[++size], &dq, &q);
-			size++;
-		}
-		r[k++] = ft_substr(s, start, size - start);
-		start = size;
-	}
-	r[k] = NULL;		
-	return (r);
-}
-
 int	ft_cw(const char *s)
 {
 	int		i;
-	int		x;
 	bool	dq;
 	bool	q;
 	int		c;
@@ -140,7 +65,7 @@ int	ft_cw(const char *s)
 		{
 			while ((dq || q) && s[i] != '\0')
 				find_quotes(s[++i], &dq, &q);
-			while (s[i] != ' ' && s[i] != s[i])
+			while (s[i] != ' ' && s[i] != '\0')
 				i++;
 		}
 		while (s[i] != ' ' && s[i] != '\0')
@@ -154,22 +79,117 @@ int	ft_cw(const char *s)
 		if (s[i] == '\0')
 			break ;
 	}
-	printf("c: %d\n");
+	printf("cw: %d\n", c);
 	return (c);
+}
+
+char	**collect(char const *s, int start, bool dq, bool q)
+{
+	int		size;
+	int		k;
+	char	**r;
+
+	r = malloc(sizeof(char *) * ft_cw(s) + 1);
+	q = false;
+	dq = false;
+	k = 0;
+	while (s[start])
+	{
+		while (s[start] == ' ')
+			start++;
+		size = start;
+		while (find_quotes(s[size], &dq, &q) && s[size] != '\0')
+		{
+			while (find_quotes(s[size], &dq, &q))
+			{
+				while ((dq || q) && s[size] != '\0')
+					find_quotes(s[++size], &dq, &q);
+				while (s[size] != ' ' && s[size] != '\0')
+					size++;
+			}
+		}
+		while (s[size] != ' ' && s[size] != '\0')
+		{
+			find_quotes(s[size], &dq, &q);
+			while (dq || q)
+				find_quotes(s[++size], &dq, &q);
+			size++;
+		}
+		r[k++] = ft_substr(s, start, size - start);
+		printf("collect r[%d] %s\n", k - 1, r[k - 1]);
+		start = size;
+	}
+	r[k] = NULL;		
+	return (r);
+}
+
+int	cl(char *str, bool dq, bool q)
+{
+	int		i;
+	int		ret;
+	
+	i = -1;
+	ret = 0;
+	while (str[++i])
+	{
+		if (find_quotes(str[i], &dq, &q))
+		{
+			ret++;
+			while (dq || q)
+				find_quotes(str[i++], &dq, &q);
+			ret++;		
+		}
+	}
+	printf("cl: %d\n", ret);
+	return (ret);
+}
+
+char	*magic_eraser_quotes(char *str, bool dq, bool q)
+{
+	char	*ret;
+	int		i;
+
+	ret = malloc(sizeof(char *) * ft_strlen(str) - cl(str, dq, q) + 1);
+	if (!ret)
+		return (NULL);
+	i = -1;
+	printf("str %s\n", str);
+	while (*str)
+	{
+		if (find_quotes(*str, &dq, &q) && str++)
+		{
+			while ((dq || q) && *str)
+			{
+				ret[++i] = *(str++);
+				find_quotes(*str, &dq, &q);
+			}
+			str++;
+		}
+		ret[++i] = *str;
+		str++; 
+	}
+	ret[i + 1] = '\0';
+	printf("ret %s i %d\n", ret, i);
+	return (ret);
 }
 
 char **split_with_quotes(const char *s)
 {
 	int		i;
 	int		x;
-	int		k;
 	char	**r;
 
-	i = 0;
 	x = 0;
-	k = 0;
-	r = malloc(sizeof(char *) * ft_cw(s));
-	r = collect(r, s, x, i);
+	r = collect(s, x, false, false);
+	i = -1;
+	while (r[++i])
+		printf("split r[%d]: %s\n", i, r[i]);
+	i = 0;
+	while (r[i])
+	{
+		r[i] = magic_eraser_quotes(r[i], false, false);
+		i++;
+	}
 	return (r);
 }
 
@@ -177,7 +197,7 @@ int main(void)
 {
 	char **r;
 	int		i;
-	r = split("echo \"'-n'\"    lo");
+	r = split_with_quotes("e\"ch\"o \"'-n'\"    lo \"   \"  teste");
 	i = -1;
 	while (r[++i])
 		printf("r: %s\n", r[i]);

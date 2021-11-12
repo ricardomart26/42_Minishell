@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 20:16:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 11:26:18 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/12 21:48:28 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,6 @@ int		get_next_line(int fd, char **line);
 int		ft_strlen_dp(const char	**s1);
 char	**ft_strdup_dp(const char **s1);
 void	print_dp(void **r, int fd, int len);
+char	*magic_eraser(char *str, char *set, bool f);
 
 #endif

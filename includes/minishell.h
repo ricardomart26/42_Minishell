@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 21:50:30 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/12 21:15:05 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,7 @@ void	exec(t_node *node);
 t_node	*abstract_tree_parser(t_node *node, t_parse *st);
 void	only_one_cmd(char *exp, t_node *node);
 void	my_exec(t_node *node, t_parse *ps, char **env);
+		// singleton_env(g.linked_env);
+int	builtins(t_parse *st, t_node **node, char **env);
 
 #endif

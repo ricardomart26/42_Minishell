@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/11 21:54:00 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/12 21:44:24 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	echo(char **line, int flag_n, int error_code)
 	return (error_code);
 }
 
-int	exit_builtin(t_parse *st, t_lista **env, t_node **node)
+int	exit_builtin(t_parse *st, t_lista *env, t_node **node)
 {
 	t_node	*tmp;
 
@@ -92,15 +92,6 @@ t_parse	*singleton_ps(t_parse *ps) // Design pattern
 		new_ps = ps;
 	return (new_ps);
 }
-
-// t_env	*singleton_env(t_ *link) // Design pattern
-// {
-// 	static t_env *new_link = NULL;
-	
-// 	if (new_link == NULL && link != NULL)
-// 		new_link = link;
-// 	return (new_link);
-// }
 
 void list_sort(t_lista *lst)
 {
@@ -189,7 +180,7 @@ void 	list_init(t_listas *listas, char **env)
 	}
 }
 
-int	builtins(t_parse *st, t_node **node, t_lista *s_listas, char **env)
+int	builtins(t_parse *st, t_node **node, char **env)
 {
 	int		echo_n;
 	int		error_code;
@@ -212,7 +203,7 @@ int	builtins(t_parse *st, t_node **node, t_lista *s_listas, char **env)
 		echo(line, echo_n, error_code);
 	}
 	if (ft_strncmp(line[0], "exit", ft_strlen(line[0])) == 0)
-		exit_builtin(st, env, node);
+		exit_builtin(st, listas->linked_env, node);
 	if (ft_strncmp(line[0], "export",ft_strlen(line[0])) == 0)
 		export(line[1], listas->linked_env, listas->sort);
 	if (ft_strncmp(line[0], "env",ft_strlen(line[0])) == 0)
