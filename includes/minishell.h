@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/14 20:07:30 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 08:27:29 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_global
 void	list_sort(t_lista *lst);
 int		ft_export(char *var, t_lista *envp, t_lista *sort);
 int		ft_env(t_lista *lst);
-int		ft_unset(char *path, t_list **list_envp);
+int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
 void 	list_init(t_listas *listas, char **env);
 void	deallocate(t_lista **root);
 void	list_sort(t_lista *lst);

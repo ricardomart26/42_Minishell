@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/15 08:12:28 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/15 10:11:45 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,27 @@ int	cd(char *path)
 	return (0);
 }
 
-int	echo(char **line, int flag_n, int error_code)
+int	vars_echo(char *line, t_lista *lst)
+{
+	int		index;
+	t_lista	*current;
+
+	index = 0;
+	current = lst;
+	while (current != NULL)
+	{
+		if (ft_strncmp(current->content, line) == 0)
+		{
+			index = char_check(current->content, '=');
+			printf("%s\n", ft_substr(current->content, index, ft_strlen(current->content) - index));
+			return (0);
+		}
+		current = current->next;
+	}
+	return (1);
+}
+
+int	echo(char **line, int flag_n, int error_code, t_listas *listas)
 {
 	int	index;
 
@@ -43,6 +63,14 @@ int	echo(char **line, int flag_n, int error_code)
 		index = 2;
 	while (line[index])
 	{
+		if (line[index][0] == '$')
+		{
+			if (line[index][1] != '?')
+			{
+				if (vars_echo(line[index], listas->linked_env) == 0)
+					return (0);
+			}
+		}
 		if (line[index + 1])
 			printf(" ");
 		index++;
@@ -81,7 +109,7 @@ int	builtins(t_parse *st, t_node **node, char **env)
 	{
 		if (ft_strncmp(line[1], "-n", ft_strlen(line[1]) == 0))
 			echo_n = 1;
-		echo(line, echo_n, error_code);
+		echo(line, echo_n, error_code, listas);
 	}
 	if (ft_strncmp(line[0], "exit", ft_strlen(line[0])) == 0)
 		exit_builtin(st, listas->linked_env, node);
