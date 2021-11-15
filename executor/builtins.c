@@ -6,11 +6,12 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/14 16:46:03 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 08:12:28 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 int	pwd(void)
 {
@@ -88,5 +89,7 @@ int	builtins(t_parse *st, t_node **node, char **env)
 		ft_export(line[1], listas->linked_env, listas->sort);
 	if (ft_strncmp(line[0], "env",ft_strlen(line[0])) == 0)
 		ft_env(listas->linked_env);
+	if (ft_strncmp(line[0], "unset",ft_strlen(line[0])) == 0)
+		ft_unset(line[0], listas->linked_env, listas->sort);//unset da seg fault quando se tenta libertar o primeiro da lista ver -> first_unset()
 	return (0);
 }

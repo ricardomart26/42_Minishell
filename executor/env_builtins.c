@@ -6,47 +6,82 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/13 16:19:10 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 08:12:24 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*int	ft_unset(char *path, t_list **list_envp)
+int		first_unset(char *path, t_lista *lst)
 {
-	t_list *to_remove;
-	t_list *current;
+	int		index;
+	t_lista	*to_remove;
+	t_lista	*current;
 
-	temp = NULL;
-	if (ft_strncmp(path, list_envp->content, ft_strlen(path)) == 0)
+	current = lst;
+	index = char_check(current->content, '=');
+	if (ft_strncmp(current->content, path, index) == 0 || (index == -1 && ft_strncmp(current->content, path, ft_strlen(path)) == 0))
 	{
-		temp = list_envp;
-		list_envp = list_envp->next;
-		ft_lstdelone(temp, free);
+		to_remove = current;
+		current = current->next;
+		free(to_remove);
 		return (0);
 	}
-	while (ft_strncmp(path, list_envp->content, ft_strlen(path)) != 0)
+	return (1);
+}
+
+int		unset1(char *path, t_lista *lst)
+{
+	t_lista *current;
+	t_lista *to_remove;
+	int		index;
+
+	index = 0;
+	current = lst;
+	if (first_unset(path, lst) == 0)
+		return (0);
+	while (current->next != NULL)
 	{
-		temp = list_envp;
-		list_envp = list_envp->next;
+		index = char_check(current->next->content, '=');
+		if (ft_strncmp(current->next->content, path, index) == 0 || (index == -1 && ft_strncmp(current->next->content, path, ft_strlen(path)) == 0))
+		{
+			to_remove = current->next;
+			current->next = current->next->next;
+			free(to_remove);
+			return (0);
+		}
+		current = current->next;
 	}
-	temp->next = list_envp->next;
-	ft_lstdelone(list_envp, free);
-	return (0);
-}*/
+	return (1);
+}
 
-// void	ft_lstclear_env(t_lista **lst, void (*del)(void *))
-// {
-// 	t_lista	*current;
+int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)//nao funciona com o primeiro da lista ver -> first_unset()
+{
+	t_lista *current;
+	t_lista *to_remove;
+	int		index;
 
-// 	while ((*lst)->next != NULL)
-// 	{
-// 		current = (*lst)->next;
-// 		ft_lstdelone_env(*lst, del);
-// 		*lst = current;
-// 	}
-// }
-
+	index = 0;
+	current = lst_env;
+	if (first_unset(path, lst_env) == 0)
+		return (0);
+	while (current->next != NULL)
+	{
+		index = char_check(current->next->content, '=');
+		if (ft_strncmp(current->next->content, path, index) == 0)
+		{
+			to_remove = current->next;
+			current->next = current->next->next;
+			free(to_remove);
+			unset1(path, lst_sort);
+			return (0);
+		}
+		current = current->next;
+	}
+	if (unset1(path, lst_sort) == 0)
+		return (0);
+	return (1);
+}
 int ft_export(char *var, t_lista *envp, t_lista *sort)
 {
 	if (var == NULL)
