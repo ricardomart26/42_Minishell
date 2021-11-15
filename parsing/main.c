@@ -6,48 +6,19 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/12 21:13:05 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/14 16:48:29 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * 
- * @definition: Conta a quantidade de tokens na expressao recebida da readline
- * Example: Se o token for "\", entao o comando: ls -la | wc -l, vai contar como 
- * 1. 
- * 
- * @params: st -> Estrutura geral (So para nao ter que iniciar certas variaveis
- * em cada funcao, e para andar com a expressao recebida do readline pelas
- * funcoes)
- * st -> find_token vai ser o token que queremos contar
- *  
- * @return_value: Retorna o numero de tokens encontrado na expressao
- * 
- */
-
-int	count_tokens(t_parse *st, t_token find_token)
+t_parse	*singleton_ps(t_parse *ps ) // Design pattern
 {
-	int		i;
-	int		counter;
-	t_token	token;
-
-	i = -1;
-	counter = 0;
-	while (st->exp[++i])
-	{
-		st->c = st->exp[i];
-		if (st->exp[i + 1])
-			st->next = st->exp[i + 1];
-		else
-			st->next = 0;
-		token = get_token(st->c, st->next);
-		check_quotes(token, &st->open_dq, &st->open_q);
-		if (token == find_token && (!st->open_dq && !st->open_q))
-			counter++;
-	}
-	return (counter);
+	static t_parse *new_ps = NULL;
+	
+	if (!new_ps && ps)
+		new_ps = ps;
+	return (new_ps);
 }
 
 /**
@@ -72,25 +43,6 @@ void	only_one_cmd(char *exp, t_node *node)
 	node->first_cmd = true;
 	node->type = COMMAND;
 	node->cmd = ft_strdup(exp);
-}
-
-void	free_nodes(t_node *node, t_node *old)
-{
-	if (is_empty_tree(node))
-	{
-		free(node);
-		return ;
-	}
-	if (node->r->type == PIPESS)
-	{
-		printf("node type %d\n", node->r->type);
-		if (old != NULL)
-			free(old);
-		free(node->l);
-		free_nodes(node->r, node);
-	}
-	free(node->l);
-	free(node->r);
 }
 
 int	get_readline_and_history(t_global *g)
@@ -125,7 +77,7 @@ int	main(int ac, char **av, char **env)
 		my_exec(g.node, &g.ps, env);
 		free(g.ps.exp);
 		g.ps.exp = NULL;
-		free_nodes(g.node, NULL);
+		free_nodes(&g.node);
 	}
 	return (0);
 }

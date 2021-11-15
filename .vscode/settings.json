@@ -13,6 +13,9 @@
 		"unordered_map": "c",
 		"utility": "c",
 		"vector": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"minishell.h": "c",
+		"memory_resource": "c",
+		"memory": "c"
 	}
 }

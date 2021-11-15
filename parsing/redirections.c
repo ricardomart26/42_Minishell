@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/08 01:27:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/14 19:45:48 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_red	*get_red(t_node *curr, t_parse *st, char *cmd)
 				pos++;
 		}
 	}
+	curr->red[n_red] = NOTHING;
 	curr->n_red = n_red;
 	return (curr->red);
 }
