@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 09:55:50 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/15 21:56:29 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ void	execute_cmd(t_node *node, char **env, t_parse *ps)
 	}
 	if (!splited_path)
 		error_msg("Not found command\n");
+	if (node->fd_h != -1)
+	{
+		printf("execute_cmd: fd_h %d\n", node->fd_h);
+		dup2(node->fd_h, STDIN_FILENO);
+		close(node->fd_h);
+	}
 	execve(file_cmd, cmd, env);
 }
 
@@ -138,7 +144,7 @@ void	if_heredoc_do_heredoc(t_node *node)
 	{
 		if (node->red[i] == TO_HEREDOC)
 		{
-			rl_heredoc(ft_strtrim(node->filename[i], " "));
+			rl_heredoc(node, ft_strtrim(node->filename[i], " "));
 			break ;
 		}
 		i++;
@@ -158,7 +164,6 @@ void	if_heredoc(t_node *node)
 	{
 		if (node->l->n_red != 0)
 			if_heredoc_do_heredoc(node->l);
-		fprintf(stderr, "Weeeeeeee\n");
 		node = node->r;
 	}
 	if (node->l->n_red != 0)
@@ -175,13 +180,13 @@ void	my_exec(t_node *node, t_parse *ps, char **env)
 
 	l.start = -1;
 	l.end = ps->n_pipes;
+	if_heredoc(node);
 	while (++l.start <= l.end)
 	{
 		if (l.end != 0 && pipe(p) == -1)
 			error_msg("Pipe error\n");
 		else if (fork() == FORKED_CHILD)
 		{
-			if_heredoc(node);
 			if (l.end == 0)
 				execute_cmd(node, env, ps);
 			ft_handle_pipes(p, saved_p, l);

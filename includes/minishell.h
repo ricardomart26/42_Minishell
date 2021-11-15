@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 08:27:29 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/15 17:27:10 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ struct s_node
 	char	**filename;
 	t_red	*red;
 	int		n_red;
+	int		fd_h;
 	bool	pipe;
 	bool	first_cmd;
 	bool	end_of_tree;
@@ -155,7 +156,7 @@ void	do_infile(char *filename);
 void	do_outfile(char *filename);
 char	*executor(t_node *node, t_parse st, char **env, int n);
 void	do_append(char *filename);
-void	rl_heredoc(char *del);
+void	rl_heredoc(t_node *node, char *del);
 int		builtins(t_parse *st, t_node **node, char **env);
 char	**ft_split_quotes(char const *s);
 int		exit_builtin(t_parse *st, t_lista *env, t_node **node);

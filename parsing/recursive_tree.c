@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 01:30:53 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 17:36:28 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l)
 		node->first_cmd = true;
 	node->type = COMMAND;
 	size = l->end - l->start;
+	node->fd_h = -1;
 	node->end_of_tree = false;
 	if (final)
 		node->end_of_tree = true;
@@ -60,7 +61,6 @@ void	handle_ast_nodes(t_node *node, char *exp, t_limit *l, int pipes)
 	temp->type = PIPESS;
 	if (pipes > 1)
 	{
-		printf("TESTEEEEE\n");
 		temp->l = rec_node_tree_init(exp, true, false, l);
 		temp->r = malloc(sizeof(t_node));
 		temp->r->l = NULL;

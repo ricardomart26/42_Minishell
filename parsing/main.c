@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 07:27:43 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/15 17:25:06 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	only_one_cmd(char *exp, t_node *node)
 	node->end_of_tree = true;
 	node->first_cmd = true;
 	node->type = COMMAND;
+	node->fd_h = -1;
 	node->cmd = ft_strdup(exp);
 }
 
@@ -73,6 +74,8 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		expand_vars(g.ps.exp, 0, -1, false);
 		g.node = abstract_tree_parser(g.node, &g.ps);
+		// if (validate_line() == -1)
+		// 	error_msg("Wrong input\n");
 		singleton_ps(&g.ps);
 		my_exec(g.node, &g.ps, env);
 		free(g.ps.exp);

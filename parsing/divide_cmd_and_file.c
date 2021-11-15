@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/10 21:25:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 17:36:12 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,18 @@ char	*cut_string_for_divide(char *cmd, int *start, int *end)
  * 
  */
 
+char print_tokens[9][20] = {
+	"EMPTY",
+	"CHAR",
+	"SPACE",
+	"PIPE",
+	"DQ",
+	"Q",
+	"ENV",
+	"REDIRECTION",
+	"REDIRECTION2"
+};
+
 char	**return_files(t_parse *ps, char *cmd, int nbr_files)
 {
 	char	**ret;
@@ -62,9 +74,14 @@ char	**return_files(t_parse *ps, char *cmd, int nbr_files)
 	{
 		c_and_next(&ps->c, &ps->next, cmd, l.end);
 		token = get_token(ps->c, ps->next);
-		if (token == REDIRECTION)
+		if (token == 42) // Posso remover esta condição
+			continue;
+		if (l.end == 0 && token == REDIRECTION)
+			continue;
+		else if (token == REDIRECTION)
 			ret[i++] = cut_string_for_divide(cmd, &l.start, &l.end);
 	}
+	l.start++;
 	ret[i] = cut_string_for_divide(cmd, &l.start, &l.end);
 	ret[i + 1] = NULL;
 	return (ret);
@@ -111,6 +128,10 @@ t_node	*split_red_and_cmd(t_parse *st, t_node *curr, t_token f_token)
 /**
  * 
  * @definition: Divide the command and the file (ls -la < file.txt >> file2.txt)
+ * It becomes (node->cmd = ls -la) and 
+ * (node->red[0] = TO_INFILE and node->filename[0] = file.txt) and
+ * (node->red[1] = TO_APPEND and node->filename[1] = file2.txt).
+ * 
  * 
  * @params: node -> Current tree with the commands and files
  * st -> geral struct 

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/14 16:45:09 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 17:37:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_cw(const char *s, bool dq, bool q)
 		if (s[i] == '\0')
 			break ;
 	}
-	printf("cw: %d\n", c);
+	// printf("cw: %d\n", c);
 	return (c);
 }
 
@@ -103,7 +103,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
 		r[k++] = ft_substr(s, start, size - start);
-		printf("collect r[%d] %s\n", k - 1, r[k - 1]);
+		// printf("collect r[%d] %s\n", k - 1, r[k - 1]);
 		start = size;
 	}
 	r[k] = NULL;

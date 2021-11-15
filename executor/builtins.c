@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/15 10:11:45 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/15 16:30:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	vars_echo(char *line, t_lista *lst)
 	current = lst;
 	while (current != NULL)
 	{
-		if (ft_strncmp(current->content, line) == 0)
+		if (ft_strncmp(current->content, line, ft_strlen(line)) == 0)
 		{
 			index = char_check(current->content, '=');
 			printf("%s\n", ft_substr(current->content, index, ft_strlen(current->content) - index));

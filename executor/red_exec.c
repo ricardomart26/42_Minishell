@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 05:00:46 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 01:20:44 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/15 22:00:14 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	do_outfile(char *filename)
 	dup2(fd, STDOUT_FILENO);
 }
 
-void	rl_heredoc(char *del)
+void	rl_heredoc(t_node *node, char *del)
 {
 	int		size_del;
 	char	*exp;
@@ -62,14 +62,17 @@ void	rl_heredoc(char *del)
 		error_msg("Heredoc: Dont have delimiter\n");
 	size_del = ft_strlen(del);
 	i = 1;
-	fd = open(".temp_txt", O_CREAT | O_WRONLY);
+	fd = open(".temp_txt", O_CREAT | O_RDWR | O_TRUNC);
+	node->fd_h = fd;
 	exp = readline("heredoc> ");
 	while (1)
 	{
-		write(fd, exp, ft_strlen(exp));
-		exp = readline("heredoc> ");
-		if (ft_strlen(exp) != 0 && !ft_strncmp(exp, del, ft_strlen(exp)))
+		if (!ft_strncmp(exp, del, ft_strlen(exp)))
 			break ;
+		write(fd, exp, ft_strlen(exp));
+		write(fd, "\n", 1);
+		exp = readline("heredoc> ");
 	}
-	dup2(STDIN_FILENO, fd);
+	// close(fd);
+	// unlink fd
 }
