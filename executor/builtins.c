@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/15 16:30:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 19:48:02 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	echo(char **line, int flag_n, int error_code, t_listas *listas)
 
 int	exit_builtin(t_parse *st, t_lista *env, t_node **node)
 {
+	fprintf(stderr, "teste 5\n");
 	if (env)
 		ft_lstclear((t_list **)&env, free);
 	free(st->exp);
@@ -89,33 +90,35 @@ int	exit_builtin(t_parse *st, t_lista *env, t_node **node)
 	return (0);
 }
 
-int	builtins(t_parse *st, t_node **node, char **env)
+int	builtins(t_parse *st, t_node **node, char **env, char **line)
 {
 	int			echo_n;
 	int			error_code;
-	char		**line;
 	t_listas	*listas;
-	
+
 	echo_n = 0;
 	error_code = 3;
 	listas = NULL;
+	printf("teste 69\n");
 	list_init(listas, env);
 	line = ft_split_quotes((*node)->cmd);
+	printf("line[0] %s sssss\n", line[0]);
 	if (ft_strncmp(line[0], "cd", ft_strlen(line[0])) == 0)
 		error_code = cd(line[1]);
 	else if (ft_strncmp(line[0], "pwd", ft_strlen(line[0])) == 0)
 		error_code = pwd();
 	else if (ft_strncmp(line[0], "echo", ft_strlen(line[0])) == 0)
 	{
+		fprintf(stderr, "Entrou?\n");
 		if (ft_strncmp(line[1], "-n", ft_strlen(line[1]) == 0))
 			echo_n = 1;
 		echo(line, echo_n, error_code, listas);
 	}
 	if (ft_strncmp(line[0], "exit", ft_strlen(line[0])) == 0)
 		exit_builtin(st, listas->linked_env, node);
-	if (ft_strncmp(line[0], "export",ft_strlen(line[0])) == 0)
+	if (ft_strncmp(line[0], "export", ft_strlen(line[0])) == 0)
 		ft_export(line[1], listas->linked_env, listas->sort);
-	if (ft_strncmp(line[0], "env",ft_strlen(line[0])) == 0)
+	if (ft_strncmp(line[0], "env", ft_strlen(line[0])) == 0)
 		ft_env(listas->linked_env);
 	if (ft_strncmp(line[0], "unset",ft_strlen(line[0])) == 0)
 		ft_unset(line[0], listas->linked_env, listas->sort);//unset da seg fault quando se tenta libertar o primeiro da lista ver -> first_unset()

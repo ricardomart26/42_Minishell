@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 05:00:46 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 22:00:14 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 14:43:05 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	do_append(char *filename)
 void	do_infile(char *filename)
 {
 	int	fd;
-	
+
 	if (access(filename, F_OK) == -1)
 		perror("bash: No such file or directory");
 	if (access(filename, R_OK) == -1)
@@ -51,28 +51,22 @@ void	do_outfile(char *filename)
 	dup2(fd, STDOUT_FILENO);
 }
 
-void	rl_heredoc(t_node *node, char *del)
+void	check_redirections_on_command(t_node *node)
 {
-	int		size_del;
-	char	*exp;
-	int		i;
-	int		fd;
+	int	i;
 
-	if (!del)
-		error_msg("Heredoc: Dont have delimiter\n");
-	size_del = ft_strlen(del);
-	i = 1;
-	fd = open(".temp_txt", O_CREAT | O_RDWR | O_TRUNC);
-	node->fd_h = fd;
-	exp = readline("heredoc> ");
-	while (1)
+	i = -1;
+	if (node->n_red != 0)
 	{
-		if (!ft_strncmp(exp, del, ft_strlen(exp)))
-			break ;
-		write(fd, exp, ft_strlen(exp));
-		write(fd, "\n", 1);
-		exp = readline("heredoc> ");
+		while (node->red[++i] != NOTHING)
+		{
+			printf("type of red on command %s: %d\n", node->cmd, node->red[i]);
+			if (node->red[i] == TO_APPEND)
+				do_append(ft_strtrim(node->filename[i], " "));
+			else if (node->red[i] == TO_INFILE)
+				do_infile(ft_strtrim(node->filename[i], " "));
+			else if (node->red[i] == TO_OUTFILE)
+				do_outfile(ft_strtrim(node->filename[i], " "));
+		}
 	}
-	// close(fd);
-	// unlink fd
 }

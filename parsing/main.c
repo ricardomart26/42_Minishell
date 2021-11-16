@@ -6,16 +6,16 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 17:25:06 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 18:48:53 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_parse	*singleton_ps(t_parse *ps ) // Design pattern
+t_parse	*singleton_ps(t_parse *ps)
 {
-	static t_parse *new_ps = NULL;
-	
+	static t_parse	*new_ps = NULL;
+
 	if (!new_ps && ps)
 		new_ps = ps;
 	return (new_ps);
@@ -57,6 +57,17 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
+// int	validate_line(char *)
+// {
+// 	char *error_code;
+
+// 	if (is_empty_tree(node))
+// 	{
+		
+// 	}
+	
+// }
+
 int	main(int ac, char **av, char **env)
 {
 	t_global		g;
@@ -66,16 +77,17 @@ int	main(int ac, char **av, char **env)
 	(void) ac;
 	(void) av;
 	g.ps.env = ft_strdup_dp((const char **)env);
+	// Fazer os sinais
 	while (1)
 	{
 		g.ps = empty_ps;
 		g.node = empty_node;
 		if (get_readline_and_history(&g) == -1)
 			continue ;
+		// if (validate_line(g.ps.exp) == -1)
+		// 	error_msg("Wrong input\n");
 		expand_vars(g.ps.exp, 0, -1, false);
 		g.node = abstract_tree_parser(g.node, &g.ps);
-		// if (validate_line() == -1)
-		// 	error_msg("Wrong input\n");
 		singleton_ps(&g.ps);
 		my_exec(g.node, &g.ps, env);
 		free(g.ps.exp);

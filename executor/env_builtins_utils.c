@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/13 16:12:54 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 19:52:14 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ void 	list_init(t_listas *listas, char **env)
 	while (env[index] != NULL)
 	{
 		ft_lstadd_back((void *)&listas->linked_env, ft_lstnew((void *)ft_strdup(env[index])));
+		printf("Got out?\n");
 		ft_lstadd_back((void *)&listas->sort, ft_lstnew((void *)ft_strdup(env[index])));
+		printf("Got out?\n");
 		index++;
 	}
 }

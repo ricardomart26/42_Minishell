@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 21:56:29 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 19:41:47 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 	
 int	if_builtin(char **line)
 {
+	fprintf(stderr, "teste\n");
 	if (ft_strncmp(line[0], "cd", ft_strlen(line[0])) == 0)
 		return (1);
 	else if (ft_strncmp(line[0], "pwd", ft_strlen(line[0])) == 0)
@@ -28,61 +29,51 @@ int	if_builtin(char **line)
 		return (1);
 	else if (ft_strncmp(line[0], "unset", ft_strlen(line[0])) == 0)
 		return (1);
+	fprintf(stderr, "teste 1\n");
 	return (0);
 }
 
-void	check_redirections_on_command(t_node *node)
+void	heredoc_redirection_and_unlink_file(t_node *node)
 {
+	int	fd;
 	int	i;
 
+	fd = open(".temp_txt", O_RDONLY, 0777);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
 	i = -1;
-	if (node->n_red != 0)
-	{
-		while (node->red[++i] != NOTHING)
-		{
-			printf("type of red on command %s: %d\n", node->cmd, node->red[i]);
-			if (node->red[i] == TO_APPEND)
-				do_append(ft_strtrim(node->filename[i], " "));
-			else if (node->red[i] == TO_INFILE)
-				do_infile(ft_strtrim(node->filename[i], " "));
-			else if (node->red[i] == TO_OUTFILE)
-			{
-				fprintf(stderr, "Chegou aqui? 2\n");
-				do_outfile(ft_strtrim(node->filename[i], " "));
-			}
-		}
-	}
+	while (node->red[++i] != TO_HEREDOC)
+		;
+	if (unlink(node->filename[i]) == -1)
+		perror("(heredoc_redirection_and_unlink_file) Error to destroy file in unlink");
 }
 
+int	free_no_void(void *str)
+{
+	free(str);
+	return (1);
+}
 
 void	execute_cmd(t_node *node, char **env, t_parse *ps)
 {
 	char	**cmd;
-	char	*file_cmd;
-	char	**splited_path;
+	char	*cmd_path;
+	char	**sp_path;
 
 	check_redirections_on_command(node);
-	fprintf(stderr, "Chegou aqui?\n");
-	splited_path = ft_split(get_env_path(env), ':');
+	sp_path = ft_split(get_env_path(env), ':');
 	cmd = ft_split_quotes(ft_strtrim(node->cmd, " "));
 	if (if_builtin(cmd))
-		builtins(ps, &node, env);
-	file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
-	while (access(file_cmd, F_OK) == -1 && *splited_path != NULL)
-	{
-		splited_path++;
-		free(file_cmd);
-		file_cmd = ft_str3join(*splited_path, "/", cmd[0]);
-	}
-	if (!splited_path)
+		builtins(ps, &node, env, cmd);
+	cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
+	while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
+		&& free_no_void((void *)cmd_path))
+		cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
+	if (!sp_path)
 		error_msg("Not found command\n");
-	if (node->fd_h != -1)
-	{
-		printf("execute_cmd: fd_h %d\n", node->fd_h);
-		dup2(node->fd_h, STDIN_FILENO);
-		close(node->fd_h);
-	}
-	execve(file_cmd, cmd, env);
+	if (node->has_heredoc)
+		heredoc_redirection_and_unlink_file(node);
+	execve(cmd_path, cmd, env);
 }
 
 void	ft_handle_pipes(int p[2], int saved_p, t_limit l)
@@ -135,43 +126,6 @@ int	close_and_save_p(int p[2], t_limit l, int saved_p)
 	return (saved_p);
 }
 
-void	if_heredoc_do_heredoc(t_node *node)
-{
-	int	i;
-
-	i = 0;
-	while (node->red[i] != NOTHING)
-	{
-		if (node->red[i] == TO_HEREDOC)
-		{
-			rl_heredoc(node, ft_strtrim(node->filename[i], " "));
-			break ;
-		}
-		i++;
-	}
-}
-
-
-void	if_heredoc(t_node *node)
-{
-	if (is_empty_tree(node))
-	{
-		if (node->n_red != 0)
-			if_heredoc_do_heredoc(node);
-		return ;
-	}
-	while (node->r->type == PIPE)
-	{
-		if (node->l->n_red != 0)
-			if_heredoc_do_heredoc(node->l);
-		node = node->r;
-	}
-	if (node->l->n_red != 0)
-		if_heredoc_do_heredoc(node->l);
-	if (node->r->n_red != 0)
-		if_heredoc_do_heredoc(node->r);
-}
-
 void	my_exec(t_node *node, t_parse *ps, char **env)
 {
 	int		p[2];
@@ -198,7 +152,11 @@ void	my_exec(t_node *node, t_parse *ps, char **env)
 		else if (l.end != 0)
 			saved_p = close_and_save_p(p, l, saved_p);
 		else
+		{
 			wait(NULL);
+			if (node->fd_h != -1)
+				close(node->fd_h);
+		}
 		if (l.end != 0 && node->r->type != COMMAND)
 			node = node->r;
 	}

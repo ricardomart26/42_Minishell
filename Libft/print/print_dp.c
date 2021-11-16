@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 11:21:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 20:30:48 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 12:12:47 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_dp(void **r, int fd, int len)
 	if (len == 0)
 	{
 		while (r[++i])
-			ft_putstr_fd(r[i], fd);
+			ft_putendl_fd(r[i], fd);
 	}
 	else
 	{

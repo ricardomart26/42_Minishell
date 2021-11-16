@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 17:36:12 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 18:43:05 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*cut_string_for_divide(char *cmd, int *start, int *end)
  * 
  */
 
-char print_tokens[9][20] = {
+char	g_print_tokens[9][20] = {
 	"EMPTY",
 	"CHAR",
 	"SPACE",
@@ -54,7 +54,6 @@ char print_tokens[9][20] = {
 	"Q",
 	"ENV",
 	"REDIRECTION",
-	"REDIRECTION2"
 };
 
 char	**return_files(t_parse *ps, char *cmd, int nbr_files)
@@ -74,10 +73,8 @@ char	**return_files(t_parse *ps, char *cmd, int nbr_files)
 	{
 		c_and_next(&ps->c, &ps->next, cmd, l.end);
 		token = get_token(ps->c, ps->next);
-		if (token == 42) // Posso remover esta condição
-			continue;
 		if (l.end == 0 && token == REDIRECTION)
-			continue;
+			continue ;
 		else if (token == REDIRECTION)
 			ret[i++] = cut_string_for_divide(cmd, &l.start, &l.end);
 	}

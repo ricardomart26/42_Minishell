@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 17:36:28 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:25:11 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	handle_ast_nodes(t_node *node, char *exp, t_limit *l, int pipes)
  * was AST (Abstract Syntax Tree), when only one command just save in the First
  * node without left and rigth nodes. When has pipes divide them into the
  * left goes through the rigth node until the last command, when it finds
- * the last command just add the command to the rigth node of the tree.
+ * the last command just add the command to the rigth node of the tree. 
  * Ex.
  * 
  * One command:     

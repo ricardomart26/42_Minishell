@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:42:06 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/13 16:07:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 14:40:18 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	count_tokens(t_parse *st, t_token find_token)
 	}
 	return (counter);
 }
-
 
 t_red	check_red(int c, int next)
 {

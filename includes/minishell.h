@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 17:27:10 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 19:42:20 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_split
 	bool	q;
 }	t_split;
 
-typedef struct s_parse // Parsing
+typedef struct s_parse
 {
 	int		n_pipes;
 	int		amount_red;
@@ -96,6 +96,7 @@ struct s_node
 	bool	pipe;
 	bool	first_cmd;
 	bool	end_of_tree;
+	bool	has_heredoc;
 	t_type	type;
 };
 
@@ -128,40 +129,33 @@ void	list_sort(t_lista *lst);
 int		ft_export(char *var, t_lista *envp, t_lista *sort);
 int		ft_env(t_lista *lst);
 int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
-void 	list_init(t_listas *listas, char **env);
+void	list_init(t_listas *listas, char **env);
 void	deallocate(t_lista **root);
 void	list_sort(t_lista *lst);
 int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);
 
-void	ft_lstclear_env(t_lista **lst, void (*del)(void *));
+void	check_redirections_on_command(t_node *node);
+void	rl_heredoc(t_node *node, char *del);
+void	if_heredoc(t_node *node);
+
 bool	find_quotes(char c, bool *dq, bool *q);
-int		exec_node(t_node *node, t_context *ctx);
 int		count_tokens(t_parse *st, t_token find_token);
 bool	is_empty_tree(t_node *node);
 bool	find_c_in_str(int c, char *str);
 bool	check_quotes(t_token token, bool *open_dq, bool *open_q);
 t_token	get_token(int c, int next);
 t_red	check_red(int c, int next);
-void	parse_exp_pipes(t_parse *st, t_node **node);
 void	parse_red(t_parse *st, t_node **node);
 void	c_and_next(int *c, int *next, char *str, int i);
 void	divide_cmd_and_file(t_node **node, t_parse *st);
 void	free_nodes(t_node **node);
-char	*cut_string(char *cmd, int start, int end);
 void	expand_vars(char *line, int pos, int i, bool brackets);
-char	*cut_string_with_red(char *cmd, int *start, int *end);
-char	*heredoc(char *del);
 void	do_infile(char *filename);
 void	do_outfile(char *filename);
-char	*executor(t_node *node, t_parse st, char **env, int n);
 void	do_append(char *filename);
 void	rl_heredoc(t_node *node, char *del);
-int		builtins(t_parse *st, t_node **node, char **env);
 char	**ft_split_quotes(char const *s);
-int		exit_builtin(t_parse *st, t_lista *env, t_node **node);
-bool	check_quotes_split(const char	*str, bool *dq, bool *q, int i);
-int		free_node(t_node **node);
 int		set_brackets_to_true(char *line, int i, bool *brackets);
 
 void	rec_parse_pipes(char *exp, t_node *node, t_limit *l, int pipes);
@@ -173,7 +167,7 @@ t_node	*abstract_tree_parser(t_node *node, t_parse *st);
 void	only_one_cmd(char *exp, t_node *node);
 void	my_exec(t_node *node, t_parse *ps, char **env);
 char	*magic_eraser_quotes(char *str, bool dq, bool q);
-int		builtins(t_parse *st, t_node **node, char **env);
+int		builtins(t_parse *st, t_node **node, char **env, char **cmd);
 void	free_nodes(t_node **node);
 
 #endif
