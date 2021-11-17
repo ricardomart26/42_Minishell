@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 18:48:53 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 23:54:18 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,17 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
-// int	validate_line(char *)
+// int	check_if_its_command()
 // {
-// 	char *error_code;
+	
+// }
 
-// 	if (is_empty_tree(node))
-// 	{
-		
-// 	}
+
+// int	validate_line(char *exp)
+// {
+// 	int error_code;
+
+// 	check_if_its_command();
 	
 // }
 

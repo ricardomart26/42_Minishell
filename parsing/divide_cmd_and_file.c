@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 18:43:05 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 00:01:23 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,19 +97,46 @@ char	**return_files(t_parse *ps, char *cmd, int nbr_files)
  * 
  */
 
-t_node	*split_red_and_cmd(t_parse *st, t_node *curr, t_token f_token)
+
+int	find_next_token()
+{
+	
+}
+
+int	check_if_redirection_first(t_parse *ps, char *cmd, t_node *node, int pos)
+{
+	t_token	token;
+	t_limit	l;
+	int		i;
+	
+	c_and_next(&ps->c, &ps->next, cmd, 0);
+	token = get_token(ps->c, ps->next);
+	l.end = -1;
+	i = -1;
+	if (token == REDIRECTION)
+	{
+		node->filename[++i] = ft_substr(cmd, );
+		while (cmd[++l.end])
+	}
+	return (l.end);
+}
+
+t_node	*split_red_and_cmd(t_parse *ps, t_node *curr, t_token f_token)
 {
 	t_limit	l;
 	t_token	token;
 	char	*cmd;
-
+	int		option;
+	
 	cmd = ft_strdup_and_free(&curr->cmd);
 	l.start = 0;
 	l.end = -1;
-	while (cmd[++l.end])
+	option = 0;
+	option = check_if_redirection_first(ps, cmd, curr, 0);
+	while (cmd[++l.end + option])
 	{
-		c_and_next(&st->c, &st->next, cmd, l.end);
-		token = get_token(st->c, st->next);
+		c_and_next(&ps->c, &ps->next, cmd, l.end);
+		token = get_token(ps->c, ps->next);
 		if (token == f_token)
 		{
 			l.start = l.end;
@@ -118,7 +145,7 @@ t_node	*split_red_and_cmd(t_parse *st, t_node *curr, t_token f_token)
 		}
 	}
 	if (l.start != 0)
-		curr->filename = return_files(st, (cmd + l.end + 1), curr->n_red);
+		curr->filename = return_files(ps, (cmd + l.end + 1), curr->n_red);
 	return (curr);
 }
 

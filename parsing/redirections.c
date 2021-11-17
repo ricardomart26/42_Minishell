@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 14:28:12 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/16 23:55:19 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ t_red	*get_red(t_node *curr, t_parse *st, char *cmd)
 		check_quotes(token, &st->open_dq, &st->open_q);
 		if (token == REDIRECTION && (!st->open_dq && !st->open_q))
 		{
+			
 			curr->red[n_red++] = check_red(st->c, st->next);
+			printf("curr red %d\n", curr->red[n_red - 1]);
 			curr->red = realloc(curr->red, (n_red + 1) * sizeof(t_red));
-			if (curr->red[n_red - 1] == TO_HEREDOC \
+			if (curr->red[n_red - 1] == TO_HEREDOC
 			|| curr->red[n_red - 1] == TO_APPEND)
 				pos++;
 		}
