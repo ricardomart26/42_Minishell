@@ -6,7 +6,7 @@
 #    By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/24 20:16:53 by rimartin          #+#    #+#              #
-#    Updated: 2021/11/16 14:19:07 by rimartin         ###   ########.fr        #
+#    Updated: 2021/11/17 23:34:05 by rimartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC		= 	mem/ft_bzero.c \
 			strings/ft_toupper.c \
 			strings/strjoin3.c \
 			strings/search_word.c \
+			strings/ft_find_c_in_str.c \
 			list/ft_lstadd_back.c \
 		    list/ft_lstadd_front.c \
 		    list/ft_lstclear.c \

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 19:41:47 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:49:32 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	if_builtin(char **line)
 		return (1);
 	else if (ft_strncmp(line[0], "unset", ft_strlen(line[0])) == 0)
 		return (1);
-	fprintf(stderr, "teste 1\n");
 	return (0);
 }
 
@@ -54,7 +53,7 @@ int	free_no_void(void *str)
 	return (1);
 }
 
-void	execute_cmd(t_node *node, char **env, t_parse *ps)
+void	execute_cmd(t_node *node, char **env, t_others *others)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -64,27 +63,26 @@ void	execute_cmd(t_node *node, char **env, t_parse *ps)
 	sp_path = ft_split(get_env_path(env), ':');
 	cmd = ft_split_quotes(ft_strtrim(node->cmd, " "));
 	if (if_builtin(cmd))
-		builtins(ps, &node, env, cmd);
+		builtins(others, &node, env, cmd);
 	cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
 	while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
 		&& free_no_void((void *)cmd_path))
 		cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
-	if (!sp_path)
-		error_msg("Not found command\n");
 	if (node->has_heredoc)
 		heredoc_redirection_and_unlink_file(node);
-	execve(cmd_path, cmd, env);
+	if (execve(cmd_path, cmd, env) == -1)
+		printf("bash: %s: command not found\n", node->cmd);
 }
 
-void	ft_handle_pipes(int p[2], int saved_p, t_limit l)
+void	ft_handle_pipes(int p[2], int saved_p, t_vars_x_y vars)
 {
-	if (l.start == 0)
+	if (vars.x == 0)
 	{
 		close(p[0]);
 		dup2(p[1], STDOUT_FILENO);
 		close(p[1]);
 	}
-	else if (l.start < l.end)
+	else if (vars.x < vars.y)
 	{
 		close(p[0]);
 		dup2(saved_p, STDIN_FILENO);
@@ -101,16 +99,16 @@ void	ft_handle_pipes(int p[2], int saved_p, t_limit l)
 	}
 }
 
-int	close_and_save_p(int p[2], t_limit l, int saved_p)
+int	close_and_save_p(int p[2], t_vars_x_y vars, int saved_p)
 {
 	wait(NULL);
-	if (l.start == 0)
+	if (vars.x == 0)
 	{
 		saved_p = dup(p[0]);
 		close(p[0]);
 		close(p[1]);
 	}
-	else if (l.start < l.end)
+	else if (vars.x < vars.y)
 	{
 		close(saved_p);
 		close(p[1]);
@@ -126,38 +124,38 @@ int	close_and_save_p(int p[2], t_limit l, int saved_p)
 	return (saved_p);
 }
 
-void	my_exec(t_node *node, t_parse *ps, char **env)
+void	my_exec(t_node *node, t_others *others, char **env)
 {
 	int		p[2];
-	t_limit	l;
+	t_vars_x_y	vars;
 	int		saved_p;
 
-	l.start = -1;
-	l.end = ps->n_pipes;
-	if_heredoc(node);
-	while (++l.start <= l.end)
+	vars.x = -1;
+	vars.y = others->n_pipes;
+	is_heredoc(node);
+	while (++vars.x <= vars.y)
 	{
-		if (l.end != 0 && pipe(p) == -1)
+		if (vars.y != 0 && pipe(p) == -1)
 			error_msg("Pipe error\n");
 		else if (fork() == FORKED_CHILD)
 		{
-			if (l.end == 0)
-				execute_cmd(node, env, ps);
-			ft_handle_pipes(p, saved_p, l);
-			if (l.start < l.end)
-				execute_cmd(node->l, env, ps);
+			if (vars.y == 0)
+				execute_cmd(node, env, others);
+			ft_handle_pipes(p, saved_p, vars);
+			if (vars.x < vars.y)
+				execute_cmd(node->l, env, others);
 			else
-				execute_cmd(node->r, env, ps);
+				execute_cmd(node->r, env, others);
 		}
-		else if (l.end != 0)
-			saved_p = close_and_save_p(p, l, saved_p);
+		else if (vars.y != 0)
+			saved_p = close_and_save_p(p, vars, saved_p);
 		else
 		{
 			wait(NULL);
 			if (node->fd_h != -1)
 				close(node->fd_h);
 		}
-		if (l.end != 0 && node->r->type != COMMAND)
+		if (vars.y != 0 && node->r->type != COMMAND)
 			node = node->r;
 	}
 }

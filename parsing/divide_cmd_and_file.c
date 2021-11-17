@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 00:01:23 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:31:49 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,30 +56,30 @@ char	g_print_tokens[9][20] = {
 	"REDIRECTION",
 };
 
-char	**return_files(t_parse *ps, char *cmd, int nbr_files)
+char	**return_files(t_others *others, char *cmd, int nbr_files)
 {
 	char	**ret;
 	int		i;
-	t_limit	l;
+	t_vars_x_y	vars;
 	t_token	token;
 
 	ret = malloc(sizeof(char *) * (nbr_files + 2));
 	if (!ret)
 		return (NULL);
 	i = 0;
-	l.end = -1;
-	l.start = 0;
-	while (cmd[++l.end])
+	vars.y = -1;
+	vars.x = 0;
+	while (cmd[++vars.y])
 	{
-		c_and_next(&ps->c, &ps->next, cmd, l.end);
-		token = get_token(ps->c, ps->next);
-		if (l.end == 0 && token == REDIRECTION)
+		c_and_next(&others->c, &others->next, cmd, vars.y);
+		token = get_token(others->c, others->next);
+		if (vars.y == 0 && token == REDIRECTION)
 			continue ;
 		else if (token == REDIRECTION)
-			ret[i++] = cut_string_for_divide(cmd, &l.start, &l.end);
+			ret[i++] = cut_string_for_divide(cmd, &vars.x, &vars.y);
 	}
-	l.start++;
-	ret[i] = cut_string_for_divide(cmd, &l.start, &l.end);
+	vars.x++;
+	ret[i] = cut_string_for_divide(cmd, &vars.x, &vars.y);
 	ret[i + 1] = NULL;
 	return (ret);
 }
@@ -98,80 +98,108 @@ char	**return_files(t_parse *ps, char *cmd, int nbr_files)
  */
 
 
-int	find_next_token()
-{
+// int	find_next_token()
+// {
 	
+// }
+void	get_rid_of_spaces(char **arg)
+{
+	while (is_space(**arg) && **arg != '\0')
+		(*arg)++;
 }
 
-int	check_if_redirection_first(t_parse *ps, char *cmd, t_node *node, int pos)
+void	get_rid_of_set(char **arg, char *set)
+{
+	while ((find_c_in_str(**arg, set) || is_space(**arg)) && **arg != '\0')
+		(*arg)++;
+}
+
+int	check_if_redirection_first(t_others *others, char *cmd, t_node *node)
 {
 	t_token	token;
-	t_limit	l;
 	int		i;
+	int		size_until_next_space;
 	
-	c_and_next(&ps->c, &ps->next, cmd, 0);
-	token = get_token(ps->c, ps->next);
-	l.end = -1;
+	c_and_next(&others->c, &others->next, cmd, 0);
+	token = get_token(others->c, others->next);
 	i = -1;
-	if (token == REDIRECTION)
+	while (token == REDIRECTION)
 	{
-		node->filename[++i] = ft_substr(cmd, );
-		while (cmd[++l.end])
+		if (i == -1)
+			node->filename = malloc(sizeof(char *) * 2);
+		else			
+			node->filename = realloc(node->filename, sizeof(char *) * (i + 2));
+		get_rid_of_set(&cmd, "<>");
+		size_until_next_space = ft_strlen_c(cmd, ' ');
+		node->filename[++i] = ft_substr(cmd, 0, size_until_next_space);
+		cmd += size_until_next_space;
+		get_rid_of_spaces(&cmd);
+		c_and_next(&others->c, &others->next, cmd, 0);
+		token = get_token(others->c, others->next);
 	}
-	return (l.end);
+	node->filename[i + 1] = NULL;
+	return (i);
 }
 
-t_node	*split_red_and_cmd(t_parse *ps, t_node *curr, t_token f_token)
+
+t_node	*split_red_and_cmd(t_others *others, t_node *curr, t_token f_token)
 {
-	t_limit	l;
+	t_vars_x_y	vars;
 	t_token	token;
 	char	*cmd;
 	int		option;
 	
 	cmd = ft_strdup_and_free(&curr->cmd);
-	l.start = 0;
-	l.end = -1;
-	option = 0;
-	option = check_if_redirection_first(ps, cmd, curr, 0);
-	while (cmd[++l.end + option])
+	vars.x = 0;
+	vars.y = -1;
+	option = check_if_redirection_first(others, cmd, curr);
+	// if (option != 0)
+	// {
+	// 	// if (option == ft_strlen(cmd))
+	// 	// {
+			
+	// 	// }
+	// 	curr->cmd = ft_substr(cmd, option, ft_strlen(cmd));
+	// }
+	while (cmd[++vars.y] && option == 0)
 	{
-		c_and_next(&ps->c, &ps->next, cmd, l.end);
-		token = get_token(ps->c, ps->next);
+		c_and_next(&others->c, &others->next, cmd, vars.y);
+		token = get_token(others->c, others->next);
 		if (token == f_token)
 		{
-			l.start = l.end;
-			curr->cmd = ft_substr(cmd, 0, l.end);
+			vars.x = vars.y;
+			curr->cmd = ft_substr(cmd, 0, vars.y);
 			break ;
 		}
 	}
-	if (l.start != 0)
-		curr->filename = return_files(ps, (cmd + l.end + 1), curr->n_red);
+	if (vars.x != 0 && option == 0)
+		curr->filename = return_files(others, (cmd + vars.y + 1), curr->n_red);
 	return (curr);
 }
 
 /**
- * 
+ *
  * @definition: Divide the command and the file (ls -la < file.txt >> file2.txt)
  * It becomes (node->cmd = ls -la) and 
  * (node->red[0] = TO_INFILE and node->filename[0] = file.txt) and
  * (node->red[1] = TO_APPEND and node->filename[1] = file2.txt).
- * 
- * 
+ *
+ *
  * @params: node -> Current tree with the commands and files
  * st -> geral struct 
- * 
+ *
  * @return_value: Add command , files and red to the node struct
- * 
+ *
  */
 
-void	divide_cmd_and_file(t_node **node, t_parse *st)
+void	divide_cmd_and_file(t_node **node, t_others *others)
 {
 	t_node	*curr;
 
 	curr = *node;
 	if (is_empty_tree(curr))
 	{
-		curr = split_red_and_cmd(st, curr, REDIRECTION);
+		curr = split_red_and_cmd(others, curr, REDIRECTION);
 		if (curr->cmd == NULL)
 			exit(4);
 	}
@@ -180,12 +208,12 @@ void	divide_cmd_and_file(t_node **node, t_parse *st)
 		while (curr->l->end_of_tree != true)
 		{
 			if (curr->l->n_red != 0)
-				curr->l = split_red_and_cmd(st, curr->l, REDIRECTION);
+				curr->l = split_red_and_cmd(others, curr->l, REDIRECTION);
 			curr = curr->r;
 		}
 		if (curr->l->n_red != 0)
-			curr->l = split_red_and_cmd(st, curr->l, REDIRECTION);
+			curr->l = split_red_and_cmd(others, curr->l, REDIRECTION);
 		if (curr->r->n_red != 0)
-			curr->r = split_red_and_cmd(st, curr->r, REDIRECTION);
+			curr->r = split_red_and_cmd(others, curr->r, REDIRECTION);
 	}
 }

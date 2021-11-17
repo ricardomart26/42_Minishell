@@ -12,9 +12,9 @@ Fazer strndup
 
 * Inserir comando: ls -la > file.txt | wc -l
 
-1. Fazer parsing da string ate encontrar um Pipe '|', e guardar na estrutura t_parse.
-  1.1 t_parse - Tokens encontrados durante o parsing.
-    1.1.1 - t_token Recebe a var c do t_parse, e define que tipo de caracter é, e envia o que encontrou para o t_parse. 
+1. Fazer parsing da string ate encontrar um Pipe '|', e guardar na estrutura t_others.
+  1.1 t_others - Tokens encontrados durante o parsing.
+    1.1.1 - t_token Recebe a var c do t_others, e define que tipo de caracter é, e envia o que encontrou para o t_others. 
   1.2 Quando encontra um pipe, adiciona o comando ao t_node left, e se nao encontrar mais nenhum Pipe, adiciona o comando final ao 
   t_node right.
   

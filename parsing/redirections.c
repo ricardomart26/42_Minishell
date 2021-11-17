@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 23:55:19 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 22:59:06 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * 
  */
 
-t_red	*get_red(t_node *curr, t_parse *st, char *cmd)
+t_red	*get_red(t_node *curr, t_others *others, char *cmd)
 {
 	int		pos;
 	int		n_red;
@@ -33,13 +33,13 @@ t_red	*get_red(t_node *curr, t_parse *st, char *cmd)
 	malloc_guard((void **)&curr->red, 1, sizeof(t_red));
 	while (cmd[++pos])
 	{
-		c_and_next(&st->c, &st->next, cmd, pos);
-		token = get_token(st->c, st->next);
-		check_quotes(token, &st->open_dq, &st->open_q);
-		if (token == REDIRECTION && (!st->open_dq && !st->open_q))
+		c_and_next(&others->c, &others->next, cmd, pos);
+		token = get_token(others->c, others->next);
+		check_quotes(token, &others->open_dq, &others->open_q);
+		if (token == REDIRECTION && (!others->open_dq && !others->open_q))
 		{
 			
-			curr->red[n_red++] = check_red(st->c, st->next);
+			curr->red[n_red++] = check_red(others->c, others->next);
 			printf("curr red %d\n", curr->red[n_red - 1]);
 			curr->red = realloc(curr->red, (n_red + 1) * sizeof(t_red));
 			if (curr->red[n_red - 1] == TO_HEREDOC
@@ -62,21 +62,21 @@ t_red	*get_red(t_node *curr, t_parse *st, char *cmd)
  * 
  */
 
-void	parse_red(t_parse *st, t_node **node)
+void	parse_red(t_others *others, t_node **node)
 {
 	t_node	*curr;
 
 	curr = *node;
 	if (is_empty_tree(curr))
 	{
-		curr->red = get_red(curr, st, curr->cmd);
+		curr->red = get_red(curr, others, curr->cmd);
 		return ;
 	}
 	while (curr->r->end_of_tree != true)
 	{
-		curr->l->red = get_red(curr->l, st, curr->l->cmd);
+		curr->l->red = get_red(curr->l, others, curr->l->cmd);
 		curr = curr->r;
 	}
-	curr->l->red = get_red(curr->l, st, curr->l->cmd);
-	curr->r->red = get_red(curr->r, st, curr->r->cmd);
+	curr->l->red = get_red(curr->l, others, curr->l->cmd);
+	curr->r->red = get_red(curr->r, others, curr->r->cmd);
 }

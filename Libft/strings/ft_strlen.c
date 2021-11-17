@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:05 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 20:40:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 21:32:18 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ int	ft_strlen_c(const char *str, char c)
 	i = 0;
 	while (str[i] != '\0' && str[i] != c)
 		i++;
-	if (str[i] == '\0')
-		return (-1);
 	return (i);
 }
 

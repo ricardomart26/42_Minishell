@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_find_c_in_str.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/12 16:08:38 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:35:07 by rimartin         ###   ########.fr       */
+/*   Created: 2021/11/17 23:33:03 by rimartin          #+#    #+#             */
+/*   Updated: 2021/11/17 23:33:22 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+bool	find_c_in_str(int c, char *str)
 {
-	if (!lst)
-		return ;
-	del(lst->content);
-	free(lst);
+	while (*str)
+	{
+		if (c == *str)
+			return (true);
+		str++;
+	}
+	return (false);
 }

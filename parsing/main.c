@@ -6,19 +6,19 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 23:54:18 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:38:07 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_parse	*singleton_ps(t_parse *ps)
+t_others	*singleton_ps(t_others *helper)
 {
-	static t_parse	*new_ps = NULL;
+	static t_others	*new_helper = NULL;
 
-	if (!new_ps && ps)
-		new_ps = ps;
-	return (new_ps);
+	if (!new_helper && helper)
+		new_helper = helper;
+	return (new_helper);
 }
 
 /**
@@ -43,6 +43,7 @@ void	only_one_cmd(char *exp, t_node *node)
 	node->first_cmd = true;
 	node->type = COMMAND;
 	node->fd_h = -1;
+	node->has_heredoc = false;
 	node->cmd = ft_strdup(exp);
 }
 
@@ -63,23 +64,23 @@ int	get_readline_and_history(t_global *g)
 // }
 
 
-// int	validate_line(char *exp)
-// {
-// 	int error_code;
+// // int	validate_line(char *exp)
+// // {
+// // 	int		error_code;
+// // 	char	**splited;
+// // 	int		i;
 
-// 	check_if_its_command();
-	
-// }
+		
+// // }
 
 int	main(int ac, char **av, char **env)
 {
 	t_global		g;
-	static t_parse	empty_ps;
+	static t_others	empty_ps;
 	static t_node	*empty_node;
 
 	(void) ac;
 	(void) av;
-	g.ps.env = ft_strdup_dp((const char **)env);
 	// Fazer os sinais
 	while (1)
 	{
@@ -89,7 +90,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		// if (validate_line(g.ps.exp) == -1)
 		// 	error_msg("Wrong input\n");
-		expand_vars(g.ps.exp, 0, -1, false);
+		// expand_vars(g.ps.exp, 0, -1, false);
 		g.node = abstract_tree_parser(g.node, &g.ps);
 		singleton_ps(&g.ps);
 		my_exec(g.node, &g.ps, env);

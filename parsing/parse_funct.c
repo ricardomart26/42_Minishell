@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 22:14:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 12:06:59 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:33:10 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,29 +38,6 @@ void	c_and_next(int *c, int *next, char *str, int i)
 		*next = str[i + 1];
 	else
 		*next = 0;
-}
-
-/**
- * 
- * @definition: Procura um caracter dentro de uma string
- * 
- * @params: c -> Caracter a procurar
- * str -> String para procurar o caracter
- *  
- * @return_value: Retorna 1 se encontrar
- * Retorna 0 se nao encontrar
- * 
- */
-
-bool	find_c_in_str(int c, char *str)
-{
-	while (*str)
-	{
-		if (c == *str)
-			return (true);
-		str++;
-	}
-	return (false);
 }
 
 /**

@@ -16,6 +16,7 @@
 		"sstream": "c",
 		"minishell.h": "c",
 		"memory_resource": "c",
-		"memory": "c"
+		"memory": "c",
+		"__bit_reference": "c"
 	}
 }

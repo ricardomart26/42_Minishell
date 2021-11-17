@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 05:00:46 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 14:43:05 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 14:08:58 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ void	do_infile(char *filename)
 	if (access(filename, R_OK) == -1)
 		perror("bash: Permission denied");
 	fd = open(filename, O_RDONLY);
+	fprintf(stderr, "file: %d\n", fd);
 	if (fd == -1)
-		error_msg("Error creating a file\n");
+		error_msg("Error creating a file in infile\n");
 	dup2(fd, STDIN_FILENO);
 }
 
@@ -43,9 +44,10 @@ void	do_outfile(char *filename)
 	int	fd;
 
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC);
-	fprintf(stderr, "file opened\n");
+	fprintf(stderr, "file opened %d\n", fd);
+	fprintf(stderr, "filename %s\n", filename);
 	if (fd == -1)
-		error_msg("Error creating the file\n");
+		error_msg("Error creating the file in outfile\n");
 	if (access(filename, W_OK) == -1)
 		perror("bash: Permission denied");
 	dup2(fd, STDOUT_FILENO);

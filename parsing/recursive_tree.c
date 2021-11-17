@@ -6,13 +6,13 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 16:25:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:03:41 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l)
+t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_x_y *vars)
 {
 	t_node	*node;
 	int		i;
@@ -21,10 +21,10 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l)
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	if (l->start == 0)
+	if (vars->x == 0)
 		node->first_cmd = true;
 	node->type = COMMAND;
-	size = l->end - l->start;
+	size = vars->y - vars->x;
 	node->fd_h = -1;
 	node->end_of_tree = false;
 	if (final)
@@ -33,7 +33,7 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l)
 	node->pipe = pipe;
 	i = -1;
 	while (++i < size)
-		node->cmd[i] = exp[l->start + i];
+		node->cmd[i] = exp[vars->x + i];
 	node->cmd[i] = '\0';
 	return (node);
 }
@@ -41,7 +41,7 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l)
 /**
  * 
  * @definition: Pipe parser vai dividir os commandos até ao pipe "|", atraves do
- * start e end. Enquanto nao chegar ao ultimo commando adicionamos o node a 
+ * x e end. Enquanto nao chegar ao ultimo commando adicionamos o node a 
  * esquerda, o ultimo comando adicionamos a direita e indicamos o final da tree 
  * com a variavel end_of_true para conseguirmos iterar pela tree e sabermos o 
  * final da mesma. 
@@ -53,7 +53,7 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l)
  * 
  */
 
-void	handle_ast_nodes(t_node *node, char *exp, t_limit *l, int pipes)
+void	handle_ast_nodes(t_node *node, char *exp, t_vars_x_y *l, int pipes)
 {
 	t_node	*temp;
 
@@ -114,53 +114,53 @@ void	handle_ast_nodes(t_node *node, char *exp, t_limit *l, int pipes)
  * 
  */
 
-void	rec_parse_pipes(char *exp, t_node *node, t_limit *l, int pipes)
+void	rec_parsing_of_pipes(char *exp, t_node *node, t_vars_x_y *vars, int pipes)
 {
-	t_token	curr_token;
-	t_parse	st;
+	t_token		curr_token;
+	t_others	helper;
 
-	st.open_dq = 0;
-	st.open_q = 0;
-	while (exp[l->end])
+	helper.open_dq = 0;
+	helper.open_q = 0;
+	while (exp[vars->y])
 	{
-		st.c = exp[l->end];
-		curr_token = get_token(st.c, 0);
-		check_quotes(curr_token, &st.open_dq, &st.open_q);
-		if (curr_token == PIPE && (!st.open_dq && !st.open_q))
+		helper.c = exp[vars->y];
+		curr_token = get_token(helper.c, 0);
+		check_quotes(curr_token, &helper.open_dq, &helper.open_q);
+		if (curr_token == PIPE && (!helper.open_dq && !helper.open_q))
 		{
-			handle_ast_nodes(node, exp, l, pipes);
-			l->end += 1;
-			l->start = l->end;
+			handle_ast_nodes(node, exp, vars, pipes);
+			vars->y += 1;
+			vars->x = vars->y;
 			if (node->l->end_of_tree != true)
-				rec_parse_pipes(exp, node->r, l, pipes - 1);
+				rec_parsing_of_pipes(exp, node->r, vars, pipes - 1);
 			else
-				rec_parse_pipes(exp, node, l, pipes - 1);
+				rec_parsing_of_pipes(exp, node, vars, pipes - 1);
 			return ;
 		}
-		l->end++;
+		vars->y++;
 	}
-	handle_ast_nodes(node, exp, l, pipes);
+	handle_ast_nodes(node, exp, vars, pipes);
 }
 
-t_node	*abstract_tree_parser(t_node *node, t_parse *st)
+t_node	*abstract_tree_parser(t_node *node, t_others *others)
 {
-	t_limit	l;
+	t_vars_x_y	l;
 	t_node	*root;
 
-	l.start = 0;
-	l.end = 0;
-	st->n_pipes = count_tokens(st, PIPE);
-	st->amount_red = count_tokens(st, REDIRECTION);
+	l.x = 0;
+	l.y = 0;
+	others->n_pipes = count_tokens(others, PIPE);
+	others->amount_red = count_tokens(others, REDIRECTION);
 	node = malloc(sizeof(t_node));
 	root = node;
-	if (st->n_pipes == 0)
-		only_one_cmd(st->exp, node);
+	if (others->n_pipes == 0)
+		only_one_cmd(others->exp, node);
 	else
-		rec_parse_pipes(st->exp, node, &l, st->n_pipes);
-	if (st->n_pipes == 1)
+		rec_parsing_of_pipes(others->exp, node, &l, others->n_pipes);
+	if (others->n_pipes == 1)
 		node->type = PIPESS;
-	parse_red(st, &root);
-	if (st->amount_red)
-		divide_cmd_and_file(&node, st);
+	parse_red(others, &root);
+	if (others->amount_red)
+		divide_cmd_and_file(&node, others);
 	return (root);
 }

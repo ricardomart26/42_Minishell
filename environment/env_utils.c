@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:17:27 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/13 15:43:37 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 22:57:13 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	get_size_env(char *env, int pos)
 // {
 // 	if (lst)
 // 	{
-// 		del(lst->keyword);
-// 		del(lst->value);
+// 		del(lothers->keyword);
+// 		del(lothers->value);
 // 		free(lst);
 // 	}
 // }

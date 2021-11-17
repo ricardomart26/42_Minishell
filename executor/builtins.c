@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/16 19:48:02 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:02:17 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,17 @@ int	echo(char **line, int flag_n, int error_code, t_listas *listas)
 	return (error_code);
 }
 
-int	exit_builtin(t_parse *st, t_lista *env, t_node **node)
+int	exit_builtin(t_others *others, t_lista *env, t_node **node)
 {
 	fprintf(stderr, "teste 5\n");
 	if (env)
 		ft_lstclear((t_list **)&env, free);
-	free(st->exp);
+	free(others->exp);
 	free_nodes(node);
 	return (0);
 }
 
-int	builtins(t_parse *st, t_node **node, char **env, char **line)
+int	builtins(t_others *others, t_node **node, char **env, char **line)
 {
 	int			echo_n;
 	int			error_code;
@@ -99,7 +99,6 @@ int	builtins(t_parse *st, t_node **node, char **env, char **line)
 	echo_n = 0;
 	error_code = 3;
 	listas = NULL;
-	printf("teste 69\n");
 	list_init(listas, env);
 	line = ft_split_quotes((*node)->cmd);
 	printf("line[0] %s sssss\n", line[0]);
@@ -115,7 +114,7 @@ int	builtins(t_parse *st, t_node **node, char **env, char **line)
 		echo(line, echo_n, error_code, listas);
 	}
 	if (ft_strncmp(line[0], "exit", ft_strlen(line[0])) == 0)
-		exit_builtin(st, listas->linked_env, node);
+		exit_builtin(others, listas->linked_env, node);
 	if (ft_strncmp(line[0], "export", ft_strlen(line[0])) == 0)
 		ft_export(line[1], listas->linked_env, listas->sort);
 	if (ft_strncmp(line[0], "env", ft_strlen(line[0])) == 0)

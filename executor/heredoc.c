@@ -6,13 +6,13 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 14:41:59 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 14:42:48 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 21:09:18 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	if_heredoc_do_heredoc(t_node *node)
+void	do_heredoc(t_node *node)
 {
 	int	i;
 
@@ -26,24 +26,24 @@ void	if_heredoc_do_heredoc(t_node *node)
 }
 
 
-void	if_heredoc(t_node *node)
+void	is_heredoc(t_node *node)
 {
 	if (is_empty_tree(node))
 	{
 		if (node->n_red != 0)
-			if_heredoc_do_heredoc(node);
+			do_heredoc(node);
 		return ;
 	}
 	while (node->r->type == PIPE)
 	{
 		if (node->l->n_red != 0)
-			if_heredoc_do_heredoc(node->l);
+			do_heredoc(node->l);
 		node = node->r;
 	}
 	if (node->l->n_red != 0)
-		if_heredoc_do_heredoc(node->l);
+		do_heredoc(node->l);
 	if (node->r->n_red != 0)
-		if_heredoc_do_heredoc(node->r);
+		do_heredoc(node->r);
 }
 
 void	rl_heredoc(t_node *node, char *del)

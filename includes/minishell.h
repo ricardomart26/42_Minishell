@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 19:42:20 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/17 23:33:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "../Libft/includes/libft.h"
 # include <sys/wait.h>
 # include <fcntl.h>
+# include "tokens.h"
 
 # define SPACES " \n\t\r\a"
 # define READ_END 0
@@ -29,11 +30,11 @@
 
 typedef struct s_node	t_node;
 
-typedef struct s_limit
+typedef struct s_vars_x_y
 {
-	int	start;
-	int	end;
-}	t_limit;
+	int	x;
+	int	y;
+}	t_vars_x_y;
 
 typedef enum s_type
 {
@@ -48,7 +49,7 @@ typedef struct s_split
 	bool	q;
 }	t_split;
 
-typedef struct s_parse
+typedef struct s_others
 {
 	int		n_pipes;
 	int		amount_red;
@@ -56,11 +57,8 @@ typedef struct s_parse
 	bool	open_dq;
 	int		c;
 	int		next;
-	int		start;
-	int		end;
 	char	*exp;
-	char	**env;
-}	t_parse;
+}	t_others;
 
 typedef enum s_red
 {
@@ -72,17 +70,6 @@ typedef enum s_red
 	TO_HEREDOC
 }	t_red;
 
-typedef enum s_token
-{
-	EMPTY,
-	CHAR,
-	SPACE,
-	PIPE,
-	DQ,
-	Q,
-	ENV,
-	REDIRECTION
-}	t_token;
 
 struct s_node
 {
@@ -112,62 +99,78 @@ typedef struct s_listas
 	t_lista	*sort;
 }	t_listas;
 
-typedef struct s_context
-{
-	int	fd[2];
-	int	fd_close;
-}	t_context;
-
 typedef struct s_global
 {
-	t_parse	ps;
-	t_lista	*linked_env;
-	t_node	*node;
+	t_others	ps;
+	t_lista		*linked_env;
+	t_node		*node;
 }	t_global;
 
-void	list_sort(t_lista *lst);
-int		ft_export(char *var, t_lista *envp, t_lista *sort);
-int		ft_env(t_lista *lst);
-int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
-void	list_init(t_listas *listas, char **env);
-void	deallocate(t_lista **root);
-void	list_sort(t_lista *lst);
-int		char_check(char *str, char c);
-int		copy_check(char *var, t_lista *sort, t_lista *envp);
+/******************************/
+/*	   Builtins Functions     */
+/******************************/
 
-void	check_redirections_on_command(t_node *node);
-void	rl_heredoc(t_node *node, char *del);
-void	if_heredoc(t_node *node);
+void		list_sort(t_lista *lst);
+int			ft_export(char *var, t_lista *envp, t_lista *sort);
+int			ft_env(t_lista *lst);
+int			ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
+void		list_init(t_listas *listas, char **env);
+void		deallocate(t_lista **root);
+void		list_sort(t_lista *lst);
+int			char_check(char *str, char c);
+int			copy_check(char *var, t_lista *sort, t_lista *envp);		
+int			builtins(t_others *others, t_node **node, char **env, char **cmd);
 
-bool	find_quotes(char c, bool *dq, bool *q);
-int		count_tokens(t_parse *st, t_token find_token);
-bool	is_empty_tree(t_node *node);
-bool	find_c_in_str(int c, char *str);
-bool	check_quotes(t_token token, bool *open_dq, bool *open_q);
-t_token	get_token(int c, int next);
-t_red	check_red(int c, int next);
-void	parse_red(t_parse *st, t_node **node);
-void	c_and_next(int *c, int *next, char *str, int i);
-void	divide_cmd_and_file(t_node **node, t_parse *st);
-void	free_nodes(t_node **node);
-void	expand_vars(char *line, int pos, int i, bool brackets);
-void	do_infile(char *filename);
-void	do_outfile(char *filename);
-void	do_append(char *filename);
-void	rl_heredoc(t_node *node, char *del);
-char	**ft_split_quotes(char const *s);
-int		set_brackets_to_true(char *line, int i, bool *brackets);
+/******************************/
+/*	  Redirection Functions   */
+/******************************/
 
-void	rec_parse_pipes(char *exp, t_node *node, t_limit *l, int pipes);
-void	rec_pipe_parser(t_node *node, char *exp, t_limit *l, int pipes);
-t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_limit *l);
-t_parse	*singleton_ps(t_parse *ps);
-void	exec(t_node *node);
-t_node	*abstract_tree_parser(t_node *node, t_parse *st);
-void	only_one_cmd(char *exp, t_node *node);
-void	my_exec(t_node *node, t_parse *ps, char **env);
-char	*magic_eraser_quotes(char *str, bool dq, bool q);
-int		builtins(t_parse *st, t_node **node, char **env, char **cmd);
-void	free_nodes(t_node **node);
+void		check_redirections_on_command(t_node *node);
+void		rl_heredoc(t_node *node, char *del);
+void		is_heredoc(t_node *node);		
+void		do_infile(char *filename);
+t_red		check_red(int c, int next);
+void		parse_red(t_others *others, t_node **node);
+void		do_outfile(char *filename);
+void		do_append(char *filename);
+
+/******************************/
+/*	    Parsing Functions     */
+/******************************/
+
+bool		find_quotes(char c, bool *dq, bool *q);
+char		**ft_split_quotes(char const *s);
+void		divide_cmd_and_file(t_node **node, t_others *others);
+bool		check_quotes(t_token token, bool *open_dq, bool *open_q);
+t_token		get_token(int c, int next);
+void		c_and_next(int *c, int *next, char *str, int i);
+int			count_tokens(t_others *others, t_token find_token);
+char		*magic_eraser_quotes(char *str, bool dq, bool q);
+
+/******************************/
+/*	      AST Functions       */
+/******************************/
+
+void		only_one_cmd(char *exp, t_node *node);
+t_node		*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_x_y *l);
+bool		is_empty_tree(t_node *node);
+t_node		*abstract_tree_parser(t_node *node, t_others *others);
+
+/******************************/
+/*	     Piping Functions     */
+/******************************/
+
+void		my_exec(t_node *node, t_others *others, char **env);
+
+/******************************/
+/*	     Utils Functions      */
+/******************************/
+
+void		free_nodes(t_node **node);
+
+/******************************/
+/*	   Builtins Functions     */
+/******************************/
+
 
 #endif
