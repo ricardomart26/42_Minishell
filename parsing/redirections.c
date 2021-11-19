@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 22:59:06 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/19 19:13:40 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * 
  */
 
-t_red	*get_red(t_node *curr, t_others *others, char *cmd)
+t_red	*get_red(t_node *curr, t_parser *parser, char *cmd)
 {
 	int		pos;
 	int		n_red;
@@ -33,17 +33,15 @@ t_red	*get_red(t_node *curr, t_others *others, char *cmd)
 	malloc_guard((void **)&curr->red, 1, sizeof(t_red));
 	while (cmd[++pos])
 	{
-		c_and_next(&others->c, &others->next, cmd, pos);
-		token = get_token(others->c, others->next);
-		check_quotes(token, &others->open_dq, &others->open_q);
-		if (token == REDIRECTION && (!others->open_dq && !others->open_q))
+		c_and_next(&parser->c, &parser->next_c, cmd, pos);
+		token = get_token(parser->c, parser->next_c);
+		check_quotes(token, &parser->open_dq, &parser->open_q);
+		if (token == REDIRECTION && (!parser->open_dq && !parser->open_q))
 		{
-			
-			curr->red[n_red++] = check_red(others->c, others->next);
-			printf("curr red %d\n", curr->red[n_red - 1]);
+			curr->red[n_red++] = check_red(parser->c, parser->next_c);
 			curr->red = realloc(curr->red, (n_red + 1) * sizeof(t_red));
 			if (curr->red[n_red - 1] == TO_HEREDOC
-			|| curr->red[n_red - 1] == TO_APPEND)
+				|| curr->red[n_red - 1] == TO_APPEND)
 				pos++;
 		}
 	}
@@ -62,21 +60,21 @@ t_red	*get_red(t_node *curr, t_others *others, char *cmd)
  * 
  */
 
-void	parse_red(t_others *others, t_node **node)
+void	parse_red(t_parser *parser, t_node **node)
 {
 	t_node	*curr;
 
 	curr = *node;
 	if (is_empty_tree(curr))
 	{
-		curr->red = get_red(curr, others, curr->cmd);
+		curr->red = get_red(curr, parser, curr->cmd);
 		return ;
 	}
 	while (curr->r->end_of_tree != true)
 	{
-		curr->l->red = get_red(curr->l, others, curr->l->cmd);
+		curr->l->red = get_red(curr->l, parser, curr->l->cmd);
 		curr = curr->r;
 	}
-	curr->l->red = get_red(curr->l, others, curr->l->cmd);
-	curr->r->red = get_red(curr->r, others, curr->r->cmd);
+	curr->l->red = get_red(curr->l, parser, curr->l->cmd);
+	curr->r->red = get_red(curr->r, parser, curr->r->cmd);
 }

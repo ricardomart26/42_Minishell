@@ -17,6 +17,8 @@
 		"minishell.h": "c",
 		"memory_resource": "c",
 		"memory": "c",
-		"__bit_reference": "c"
+		"__bit_reference": "c",
+		"tokens.h": "c",
+		"__node_handle": "c"
 	}
 }

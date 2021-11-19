@@ -6,13 +6,18 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:33:16 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:56:02 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
+// typedef struct s_split
+// {
+// 	char	**tab;
+// 	bool	dq;
+// 	bool	q;
+// }	t_split;
 
 bool	find_quotes(char c, bool *dq, bool *q)
 {
@@ -73,7 +78,6 @@ int	ft_cw(const char *s, bool dq, bool q)
 		if (s[i] == '\0')
 			break ;
 	}
-	// printf("cw: %d\n", c);
 	return (c);
 }
 
@@ -92,7 +96,6 @@ char	**collect(char const *s, int start, bool dq, bool q)
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
 		r[k++] = ft_substr(s, start, size - start);
-		// printf("collect r[%d] %s\n", k - 1, r[k - 1]);
 		start = size;
 	}
 	r[k] = NULL;

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:31:49 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/19 19:16:07 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,12 @@ char	*cut_string_for_divide(char *cmd, int *start, int *end)
  * 
  */
 
-char	g_print_tokens[9][20] = {
-	"EMPTY",
-	"CHAR",
-	"SPACE",
-	"PIPE",
-	"DQ",
-	"Q",
-	"ENV",
-	"REDIRECTION",
-};
-
-char	**return_files(t_others *others, char *cmd, int nbr_files)
+char	**return_files(t_parser *parser, char *cmd, int nbr_files)
 {
-	char	**ret;
-	int		i;
+	char		**ret;
+	int			i;
 	t_vars_x_y	vars;
-	t_token	token;
+	t_token		token;
 
 	ret = malloc(sizeof(char *) * (nbr_files + 2));
 	if (!ret)
@@ -71,11 +60,9 @@ char	**return_files(t_others *others, char *cmd, int nbr_files)
 	vars.x = 0;
 	while (cmd[++vars.y])
 	{
-		c_and_next(&others->c, &others->next, cmd, vars.y);
-		token = get_token(others->c, others->next);
-		if (vars.y == 0 && token == REDIRECTION)
-			continue ;
-		else if (token == REDIRECTION)
+		c_and_next(&parser->c, &parser->next_c, cmd, vars.y);
+		token = get_token(parser->c, parser->next_c);
+		if (token == REDIRECTION)
 			ret[i++] = cut_string_for_divide(cmd, &vars.x, &vars.y);
 	}
 	vars.x++;
@@ -97,83 +84,35 @@ char	**return_files(t_others *others, char *cmd, int nbr_files)
  * 
  */
 
-
-// int	find_next_token()
-// {
-	
-// }
-void	get_rid_of_spaces(char **arg)
-{
-	while (is_space(**arg) && **arg != '\0')
-		(*arg)++;
-}
-
-void	get_rid_of_set(char **arg, char *set)
-{
-	while ((find_c_in_str(**arg, set) || is_space(**arg)) && **arg != '\0')
-		(*arg)++;
-}
-
-int	check_if_redirection_first(t_others *others, char *cmd, t_node *node)
-{
-	t_token	token;
-	int		i;
-	int		size_until_next_space;
-	
-	c_and_next(&others->c, &others->next, cmd, 0);
-	token = get_token(others->c, others->next);
-	i = -1;
-	while (token == REDIRECTION)
-	{
-		if (i == -1)
-			node->filename = malloc(sizeof(char *) * 2);
-		else			
-			node->filename = realloc(node->filename, sizeof(char *) * (i + 2));
-		get_rid_of_set(&cmd, "<>");
-		size_until_next_space = ft_strlen_c(cmd, ' ');
-		node->filename[++i] = ft_substr(cmd, 0, size_until_next_space);
-		cmd += size_until_next_space;
-		get_rid_of_spaces(&cmd);
-		c_and_next(&others->c, &others->next, cmd, 0);
-		token = get_token(others->c, others->next);
-	}
-	node->filename[i + 1] = NULL;
-	return (i);
-}
-
-
-t_node	*split_red_and_cmd(t_others *others, t_node *curr, t_token f_token)
+t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 {
 	t_vars_x_y	vars;
-	t_token	token;
-	char	*cmd;
-	int		option;
-	
+	t_token		token;
+	char		*cmd;
+
 	cmd = ft_strdup_and_free(&curr->cmd);
 	vars.x = 0;
 	vars.y = -1;
-	option = check_if_redirection_first(others, cmd, curr);
-	// if (option != 0)
-	// {
-	// 	// if (option == ft_strlen(cmd))
-	// 	// {
-			
-	// 	// }
-	// 	curr->cmd = ft_substr(cmd, option, ft_strlen(cmd));
-	// }
-	while (cmd[++vars.y] && option == 0)
+	cmd = check_if_redirection_first(parser, cmd, curr);
+	if (*cmd == '\0')
+		curr->cmd = NULL;
+	while (cmd[++vars.y])
 	{
-		c_and_next(&others->c, &others->next, cmd, vars.y);
-		token = get_token(others->c, others->next);
+		c_and_next(&parser->c, &parser->next_c, cmd, vars.y);
+		token = get_token(parser->c, parser->next_c);
 		if (token == f_token)
 		{
 			vars.x = vars.y;
+			printf("vars y %d\n", vars.y);
 			curr->cmd = ft_substr(cmd, 0, vars.y);
+			printf("curr cmd %s\n", curr->cmd);
 			break ;
 		}
 	}
-	if (vars.x != 0 && option == 0)
-		curr->filename = return_files(others, (cmd + vars.y + 1), curr->n_red);
+	if (token == TO_HEREDOC || token == TO_APPEND)
+		vars.y++;
+	if (vars.x != 0)
+		curr->filename = return_files(parser, (cmd + vars.y + 1), curr->n_red);
 	return (curr);
 }
 
@@ -192,28 +131,24 @@ t_node	*split_red_and_cmd(t_others *others, t_node *curr, t_token f_token)
  *
  */
 
-void	divide_cmd_and_file(t_node **node, t_others *others)
+void	divide_cmd_and_file(t_node **node, t_parser *parser)
 {
 	t_node	*curr;
 
 	curr = *node;
 	if (is_empty_tree(curr))
-	{
-		curr = split_red_and_cmd(others, curr, REDIRECTION);
-		if (curr->cmd == NULL)
-			exit(4);
-	}
+		curr = split_red_and_cmd(parser, curr, REDIRECTION);
 	else
 	{
 		while (curr->l->end_of_tree != true)
 		{
 			if (curr->l->n_red != 0)
-				curr->l = split_red_and_cmd(others, curr->l, REDIRECTION);
+				curr->l = split_red_and_cmd(parser, curr->l, REDIRECTION);
 			curr = curr->r;
 		}
 		if (curr->l->n_red != 0)
-			curr->l = split_red_and_cmd(others, curr->l, REDIRECTION);
+			curr->l = split_red_and_cmd(parser, curr->l, REDIRECTION);
 		if (curr->r->n_red != 0)
-			curr->r = split_red_and_cmd(others, curr->r, REDIRECTION);
+			curr->r = split_red_and_cmd(parser, curr->r, REDIRECTION);
 	}
 }

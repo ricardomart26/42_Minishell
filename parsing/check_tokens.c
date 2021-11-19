@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:42:06 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:02:26 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:56:35 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
  * 
  */
 
-int	count_tokens(t_others *others, t_token find_token)
+int	count_tokens(t_parser *parser, t_token find_token)
 {
 	int		i;
 	int		counter;
@@ -35,16 +35,16 @@ int	count_tokens(t_others *others, t_token find_token)
 
 	i = -1;
 	counter = 0;
-	while (others->exp[++i])
+	while (parser->exp[++i])
 	{
-		others->c = others->exp[i];
-		if (others->exp[i + 1])
-			others->next = others->exp[i + 1];
+		parser->c = parser->exp[i];
+		if (parser->exp[i + 1])
+			parser->next_c = parser->exp[i + 1];
 		else
-			others->next = 0;
-		token = get_token(others->c, others->next);
-		check_quotes(token, &others->open_dq, &others->open_q);
-		if (token == find_token && (!others->open_dq && !others->open_q))
+			parser->next_c = 0;
+		token = get_token(parser->c, parser->next_c);
+		check_quotes(token, &parser->open_dq, &parser->open_q);
+		if (token == find_token && (!parser->open_dq && !parser->open_q))
 			counter++;
 	}
 	return (counter);

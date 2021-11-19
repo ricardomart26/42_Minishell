@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/16 19:52:14 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/19 19:10:02 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	deallocate(t_lista **root)
 {
-	t_lista *temp;
-	t_lista *current;
+	t_lista	*temp;
+	t_lista	*current;
 
 	current = *root;
 	while (current != NULL)
@@ -27,27 +27,25 @@ void	deallocate(t_lista **root)
 	*root = NULL;
 }
 
-void 	list_init(t_listas *listas, char **env)
+void	list_init(t_listas *listas, char **env)
 {
-	int index;
+	int	index;
 
 	index = 0;
 	while (env[index] != NULL)
 	{
 		ft_lstadd_back((void *)&listas->linked_env, ft_lstnew((void *)ft_strdup(env[index])));
-		printf("Got out?\n");
 		ft_lstadd_back((void *)&listas->sort, ft_lstnew((void *)ft_strdup(env[index])));
-		printf("Got out?\n");
 		index++;
 	}
 }
 
-void list_sort(t_lista *lst)
+void	list_sort(t_lista *lst)
 {
-	t_lista *current;
-	t_lista *after;
-	char *temp;
-	int index;
+	t_lista	*current;
+	t_lista	*after;
+	char	*temp;
+	int		index;
 
 	index = 0;
 	current = lst;
@@ -75,10 +73,9 @@ void list_sort(t_lista *lst)
 						after->content = ft_strdup(temp);
 					}
 					else if ((unsigned char)current->content[index] < (unsigned char)after->content[index])
-						break;
+						break ;
 				}
 			}
-	
 			after = after->next;
 		}
 		printf("declare -x %s\n", current->content);
@@ -87,7 +84,7 @@ void list_sort(t_lista *lst)
 	printf("declare -x %s\n", current->content);
 }
 
-int		char_check(char *str, char c)
+int	char_check(char *str, char c)
 {
 	int	index;
 
@@ -101,7 +98,7 @@ int		char_check(char *str, char c)
 	return (-1);
 }
 
-int		copy_check(char *var, t_lista *sort, t_lista *envp)
+int	copy_check(char *var, t_lista *sort, t_lista *envp)
 {
 	int		index;
 	t_lista	*current;
@@ -114,7 +111,7 @@ int		copy_check(char *var, t_lista *sort, t_lista *envp)
 	{
 		while (current != NULL)
 		{
-			if (ft_strncmp(var, current->content, ft_strlen(current->content)) == 0)
+			if (!ft_strncmp(var, current->content, ft_strlen(current->content)))
 				return (-1);
 			current = current->next;
 		}

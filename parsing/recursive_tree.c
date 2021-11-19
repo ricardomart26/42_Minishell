@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:03:41 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/19 17:30:48 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_x_y *vars)
 		node->first_cmd = true;
 	node->type = COMMAND;
 	size = vars->y - vars->x;
-	node->fd_h = -1;
 	node->end_of_tree = false;
 	if (final)
 		node->end_of_tree = true;
@@ -53,7 +52,7 @@ t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_x_y *vars)
  * 
  */
 
-void	handle_ast_nodes(t_node *node, char *exp, t_vars_x_y *l, int pipes)
+void	handle_ast_nodes(t_node *node, char *exp, t_vars_x_y *vars, int pipes)
 {
 	t_node	*temp;
 
@@ -61,16 +60,16 @@ void	handle_ast_nodes(t_node *node, char *exp, t_vars_x_y *l, int pipes)
 	temp->type = PIPESS;
 	if (pipes > 1)
 	{
-		temp->l = rec_node_tree_init(exp, true, false, l);
+		temp->l = rec_node_tree_init(exp, true, false, vars);
 		temp->r = malloc(sizeof(t_node));
 		temp->r->l = NULL;
 		temp->r->end_of_tree = false;
 		temp->r->type = PIPESS;
 	}
 	else if (pipes == 1)
-		temp->l = rec_node_tree_init(exp, true, true, l);
+		temp->l = rec_node_tree_init(exp, true, true, vars);
 	else
-		temp->r = rec_node_tree_init(exp, false, true, l);
+		temp->r = rec_node_tree_init(exp, false, true, vars);
 }
 
 /**
@@ -111,13 +110,13 @@ void	handle_ast_nodes(t_node *node, char *exp, t_vars_x_y *l, int pipes)
  * @params: char *exp;
  *  
  * @return_value: Returns the node with all the commands inside.
- * 
+ *
  */
 
-void	rec_parsing_of_pipes(char *exp, t_node *node, t_vars_x_y *vars, int pipes)
+void	parsing_of_pipes(char *exp, t_node *node, t_vars_x_y *vars, int pipes)
 {
 	t_token		curr_token;
-	t_others	helper;
+	t_parser	helper;
 
 	helper.open_dq = 0;
 	helper.open_q = 0;
@@ -132,9 +131,9 @@ void	rec_parsing_of_pipes(char *exp, t_node *node, t_vars_x_y *vars, int pipes)
 			vars->y += 1;
 			vars->x = vars->y;
 			if (node->l->end_of_tree != true)
-				rec_parsing_of_pipes(exp, node->r, vars, pipes - 1);
+				parsing_of_pipes(exp, node->r, vars, pipes - 1);
 			else
-				rec_parsing_of_pipes(exp, node, vars, pipes - 1);
+				parsing_of_pipes(exp, node, vars, pipes - 1);
 			return ;
 		}
 		vars->y++;
@@ -142,25 +141,25 @@ void	rec_parsing_of_pipes(char *exp, t_node *node, t_vars_x_y *vars, int pipes)
 	handle_ast_nodes(node, exp, vars, pipes);
 }
 
-t_node	*abstract_tree_parser(t_node *node, t_others *others)
+t_node	*abstract_tree_parser(t_node *node, t_parser *parser)
 {
-	t_vars_x_y	l;
-	t_node	*root;
+	t_vars_x_y	vars;
+	t_node		*root;
 
-	l.x = 0;
-	l.y = 0;
-	others->n_pipes = count_tokens(others, PIPE);
-	others->amount_red = count_tokens(others, REDIRECTION);
+	vars.x = 0;
+	vars.y = 0;
+	parser->n_pipes = count_tokens(parser, PIPE);
+	parser->n_of_redirections = count_tokens(parser, REDIRECTION);
 	node = malloc(sizeof(t_node));
 	root = node;
-	if (others->n_pipes == 0)
-		only_one_cmd(others->exp, node);
+	if (parser->n_pipes == 0)
+		only_one_cmd(parser->exp, node);
 	else
-		rec_parsing_of_pipes(others->exp, node, &l, others->n_pipes);
-	if (others->n_pipes == 1)
+		parsing_of_pipes(parser->exp, node, &vars, parser->n_pipes);
+	if (parser->n_pipes == 1)
 		node->type = PIPESS;
-	parse_red(others, &root);
-	if (others->amount_red)
-		divide_cmd_and_file(&node, others);
+	parse_red(parser, &root);
+	if (parser->n_of_redirections != 0)
+		divide_cmd_and_file(&node, parser);
 	return (root);
 }

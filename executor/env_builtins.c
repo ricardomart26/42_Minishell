@@ -6,13 +6,13 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/15 08:24:14 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/19 19:09:50 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		first_unset(char *path, t_lista *lst)
+int	first_unset(char *path, t_lista *lst)
 {
 	int		index;
 	t_lista	*to_remove;
@@ -30,10 +30,10 @@ int		first_unset(char *path, t_lista *lst)
 	return (1);
 }
 
-int		unset1(char *path, t_lista *lst)
+int	unset1(char *path, t_lista *lst)
 {
-	t_lista *current;
-	t_lista *to_remove;
+	t_lista	*current;
+	t_lista	*to_remove;
 	int		index;
 
 	index = 0;
@@ -43,7 +43,8 @@ int		unset1(char *path, t_lista *lst)
 	while (current->next != NULL)
 	{
 		index = char_check(current->next->content, '=');
-		if (ft_strncmp(current->next->content, path, index) == 0 || (index == -1 && ft_strncmp(current->next->content, path, ft_strlen(path)) == 0))
+		if (!ft_strncmp(current->next->content, path, index) || (index == -1
+				&& !ft_strncmp(current->next->content, path, ft_strlen(path))))
 		{
 			to_remove = current->next;
 			current->next = current->next->next;
@@ -55,10 +56,10 @@ int		unset1(char *path, t_lista *lst)
 	return (1);
 }
 
-int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)//nao funciona com o primeiro da lista ver -> first_unset()
+int	ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)
 {
-	t_lista *current;
-	t_lista *to_remove;
+	t_lista	*current;
+	t_lista	*to_remove;
 	int		index;
 
 	index = 0;
@@ -82,7 +83,8 @@ int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)//nao funciona com
 		return (0);
 	return (1);
 }
-int ft_export(char *var, t_lista *envp, t_lista *sort)
+
+int	ft_export(char *var, t_lista *envp, t_lista *sort)
 {
 	if (var == NULL)
 		list_sort(sort);
@@ -100,7 +102,7 @@ int ft_export(char *var, t_lista *envp, t_lista *sort)
 
 int	ft_env(t_lista *lst)
 {
-	t_lista *current;
+	t_lista	*current;
 
 	current = lst;
 	while (current != NULL)
