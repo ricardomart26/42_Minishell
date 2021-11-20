@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 16:40:53 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/19 10:43:54 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 20:58:34 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*check_if_redirection_first(t_parser *parser, char *cmd, t_node *node)
 	int		i;
 	int		size_until_next_space;
 
+	printf("See this one: cmd %s\n", cmd);
 	c_and_next(&parser->c, &parser->next_c, cmd, 0);
 	token = get_token(parser->c, parser->next_c);
 	i = 0;
@@ -44,6 +45,8 @@ char	*check_if_redirection_first(t_parser *parser, char *cmd, t_node *node)
 		node->filename[i++] = ft_substr(cmd, 0, size_until_next_space);
 		cmd += size_until_next_space;
 		get_rid_of_spaces(&cmd);
+		if (*cmd == '\0')
+			break ;
 		c_and_next(&parser->c, &parser->next_c, cmd, 0);
 		token = get_token(parser->c, parser->next_c);
 	}

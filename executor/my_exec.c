@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 19:54:07 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 21:13:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ void	execute_cmd(t_node *node, char **env)
 	char	*cmd_path;
 	char	**sp_path;
 
-	check_redirections_on_command(node);
+	if (node->n_red != 0)
+		check_redirections_on_command(node);
 	sp_path = ft_split(get_env_path(env), ':');
-	cmd = ft_split_quotes(ft_strtrim(node->cmd, " "));
+	cmd = ft_split_quotes(ft_strtrim(node->cmd, " "), 1);
+	printf("cmd %s\n", cmd[0]);
 	cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
 	while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
 		&& free_no_void((void *)cmd_path))
@@ -36,7 +38,8 @@ void	execute_cmd(t_node *node, char **env)
 	if (node->cmd == NULL)
 		exit(3);
 	if (execve(cmd_path, cmd, env) == -1)
-		printf("bash: %s: command not found\n", node->cmd);
+		printf("bash: %s: command not found\n", magic_eraser_quotes(node->cmd, false, false));
+	exit(4);
 }
 
 void	ft_handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes)
