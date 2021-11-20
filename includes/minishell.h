@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 12:32:53 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:59:02 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ typedef struct s_global
 /******************************/
 /*	    Parsing Functions     */
 /******************************/
+
+char    *expand_vars(char *line_var, t_lista *lst_envp);
 
 bool	find_quotes(char c, bool *dq, bool *q);
 char	**ft_split_quotes(char const *s);
