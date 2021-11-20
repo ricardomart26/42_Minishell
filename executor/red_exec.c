@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 05:00:46 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 14:08:58 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:37:22 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	do_outfile(char *filename)
 {
 	int	fd;
 
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	fprintf(stderr, "file opened %d\n", fd);
-	fprintf(stderr, "filename %s\n", filename);
+	fprintf(stderr, "filename %s com nada a frente\n", filename);
 	if (fd == -1)
 		error_msg("Error creating the file in outfile\n");
 	if (access(filename, W_OK) == -1)

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/19 19:12:26 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:32:53 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	deallocate(t_lista **root);
 void	list_sort(t_lista *lst);
 int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);		
-int		builtins(t_parser *parser, t_node **node, char **env, char **cmd);
+int		builtins(char *exp, t_node **node, char **env, char **cmd);
 int		is_builtin(char **line);
 int		echo(char **line, int flag_n, int error_code, t_listas *listas);
 
@@ -152,7 +152,7 @@ t_node	*abstract_tree_parser(t_node *node, t_parser *parser);
 /*	     Piping Functions     */
 /******************************/
 
-void	my_exec(t_node *node, t_parser *parser, char **env);
+void	my_exec(t_node *node, int n_pipes, char **env);
 
 /******************************/
 /*	     Utils Functions      */

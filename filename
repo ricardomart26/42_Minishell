@@ -1,0 +1,16 @@
+total 192
+drwxr-xr-x  15 rimartin  2020_lisbon    510 Nov 20 12:37 .
+drwxr-xr-x  11 rimartin  2020_lisbon    374 Nov 19 16:54 ..
+-rw-r--r--@  1 rimartin  2020_lisbon   6148 Nov  6 16:39 .DS_Store
+drwxr-xr-x  15 rimartin  2020_lisbon    510 Nov 19 19:19 .git
+drwxr-xr-x   3 rimartin  2020_lisbon    102 Nov  9 17:21 .vscode
+drwxr-xr-x  16 rimartin  2020_lisbon    544 Nov 19 10:55 Libft
+-rw-r--r--   1 rimartin  2020_lisbon    691 Nov 16 12:37 Makefile
+-rw-r--r--   1 rimartin  2020_lisbon   1668 Nov 18 15:55 README.md
+drwxr-xr-x   5 rimartin  2020_lisbon    170 Nov 15 16:23 environment
+drwxr-xr-x   9 rimartin  2020_lisbon    306 Nov 19 19:07 executor
+-rwxr-xr-x   1 rimartin  2020_lisbon      0 Nov 20 12:37 filename
+drwxr-xr-x   4 rimartin  2020_lisbon    136 Nov 18 16:08 includes
+-rwxr-xr-x   1 rimartin  2020_lisbon  79784 Nov 20 12:37 minishell
+drwxr-xr-x   3 rimartin  2020_lisbon    102 Nov 19 19:12 minishell.dSYM
+drwxr-xr-x  13 rimartin  2020_lisbon    442 Nov 18 16:40 parsing

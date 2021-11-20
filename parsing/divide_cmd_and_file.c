@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/19 19:16:07 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:29:52 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,7 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 		if (token == f_token)
 		{
 			vars.x = vars.y;
-			printf("vars y %d\n", vars.y);
 			curr->cmd = ft_substr(cmd, 0, vars.y);
-			printf("curr cmd %s\n", curr->cmd);
 			break ;
 		}
 	}

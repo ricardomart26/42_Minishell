@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/19 18:41:23 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:55:16 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ int	main(int ac, char **av, char **env)
 	t_global		g;
 	static t_parser	empty_parser;
 	static t_node	*empty_node;
+	t_listas		*listas;
 
 	(void) ac;
 	(void) av;
+	list_init(listas, env);
 	while (1)
 	{
 		g.parser = empty_parser;
@@ -77,8 +79,9 @@ int	main(int ac, char **av, char **env)
 		g.node = abstract_tree_parser(g.node, &g.parser);
 		if (g.node->cmd != NULL && is_empty_tree(g.node)
 			&& is_builtin(ft_split_quotes(g.node->cmd)))
-			builtins(&g.parser, &g.node, env, ft_split_quotes(g.node->cmd));
-		my_exec(g.node, &g.parser, env);
+			builtins(g.parser.exp, &g.node, env, ft_split_quotes(g.node->cmd));
+		else
+			my_exec(g.node, g.parser.n_pipes, env);
 		free(g.parser.exp);
 		g.parser.exp = NULL;
 		free_nodes(&g.node);

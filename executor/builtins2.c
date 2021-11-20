@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:44:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/19 19:00:55 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 12:45:29 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	echo(char **line, int flag_n, int error_code, t_listas *listas)
 	index = 1;
 	if (flag_n == 1)
 		index = 2;
+	printf("teste 2\n");
 	while (line[index])
 	{
 		if (line[index][0] == '$')
@@ -83,6 +84,7 @@ int	echo(char **line, int flag_n, int error_code, t_listas *listas)
 					return (0);
 			}
 		}
+		printf("%s", line[index]);
 		if (line[index + 1])
 			printf(" ");
 		index++;
