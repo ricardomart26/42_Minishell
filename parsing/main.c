@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 12:58:53 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 20:34:21 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ char	*expand_vars2(char *line, t_lista *current)
 		if (ft_strncmp(current->content, line, ft_strlen(line)) == 0)
 		{
 			start = char_check(current->content, '=');
-			line = ft_substr(current->content, start + 1, ft_strlen(current->content));
+			line = ft_substr(current->content, start + 1, 
+				ft_strlen(current->content));
 		}
 	}
 	return (line);
@@ -109,20 +110,21 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	list_init(listas, env);
+	listas = NULL;
+	list_init(&listas, env);
 	while (1)
 	{
 		g.parser = empty_parser;
 		g.node = empty_node;
 		if (get_readline_and_history(&g) == -1)
 			continue ;
-		// if (validate_line(g.parser.exp) == -1)
-		// 	error_msg("Wrong input\n");
-		// expand_vars(g.parser.exp, 0, -1, false);
+		if (validate_line(g.parser.exp) == -1)
+			error_msg("Wrong input\n");
+		g.parser.exp = expand_vars(g.parser.exp, listas->linked_env);
 		g.node = abstract_tree_parser(g.node, &g.parser);
 		if (g.node->cmd != NULL && is_empty_tree(g.node)
 			&& is_builtin(ft_split_quotes(g.node->cmd)))
-			builtins(g.parser.exp, &g.node, env, ft_split_quotes(g.node->cmd));
+			builtins(g.parser.exp, &g.node, listas, ft_split_quotes(g.node->cmd));
 		else
 			my_exec(g.node, g.parser.n_pipes, env);
 		free(g.parser.exp);

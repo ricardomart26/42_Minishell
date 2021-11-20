@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/18 15:56:02 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 20:38:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,14 @@ char	**collect(char const *s, int start, bool dq, bool q)
 	int		k;
 	char	**r;
 
-	r = malloc(sizeof(char *) * (ft_cw(s, false, false) + 1));
+	r = malloc(sizeof(char *) * ((ft_cw(s, false, false) + 1)));
 	k = 0;
 	while (s[start])
 	{
-		while (s[start] == ' ')
+		while (s[start] == ' ' && s[start] != '\0')
 			start++;
+		if (!s[start])
+			continue ;
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
 		r[k++] = ft_substr(s, start, size - start);
@@ -102,7 +104,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 	return (r);
 }
 
-char	**ft_split_quotes(const char *s)
+char	**ft_split_quotes(const char *s, int option)
 {
 	int		i;
 	int		x;
@@ -111,7 +113,10 @@ char	**ft_split_quotes(const char *s)
 	x = 0;
 	r = collect(s, x, false, false);
 	i = -1;
-	while (r[++i])
-		r[i] = magic_eraser_quotes(r[i], false, false);
+	if (option == 1)
+	{
+		while (r[++i])
+			r[i] = magic_eraser_quotes(r[i], false, false);	
+	}
 	return (r);
 }

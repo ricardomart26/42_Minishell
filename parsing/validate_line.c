@@ -1,24 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   validate_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/13 13:42:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 19:32:26 by rimartin         ###   ########.fr       */
+/*   Created: 2021/11/20 20:34:44 by rimartin          #+#    #+#             */
+/*   Updated: 2021/11/20 20:40:06 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-t_list	*ft_lstlast(t_list *lst)
+int	check_if_token_next_to_each_other(char **line)
 {
-	while (lst)
+	int	i;
+	int	save_i;
+	
+	i = -1;
+	while (line[++i])
 	{
-		if (lst->next == NULL)
-			return (lst);
-		lst = lst->next;
+		while (line[i][])
+		if (line[i] == '|')		
 	}
-	return (lst);
+	return (0);
+}
+
+int validate_line(char *line)
+{
+	char	**split_line;
+	int		i;
+
+	split_line = ft_split_quotes((const char *)line, 0);
+	if (check_if_token_next_to_each_other(split_line))
+		return (-1);
+
+	return (0);
 }

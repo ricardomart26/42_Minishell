@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/20 12:55:40 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 19:44:37 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,10 @@ int	exit_builtin(char *exp, t_lista *env, t_node **node)
 	return (0);
 }
 
-int	builtins(char *exp, t_node **node, char **env, char **line)
+int	builtins(char *exp, t_node **node, t_listas *listas, char **line)
 {
 	int			echo_n;
 	int			error_code;
-	t_listas	*listas;
 
 	echo_n = 0;
 	error_code = 3;

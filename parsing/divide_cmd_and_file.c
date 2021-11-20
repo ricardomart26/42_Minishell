@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 12:29:52 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 20:03:40 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*cut_string_for_divide(char *cmd, int *start, int *end)
 	int		i;
 	int		size;
 
+	printf("cmd %s\n", cmd);
 	if (*start >= *end || *end > ft_strlen(cmd))
 		exit(4);
 	size = *end - *start;
@@ -107,7 +108,7 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 			break ;
 		}
 	}
-	if (token == TO_HEREDOC || token == TO_APPEND)
+	if (find_c_in_str(cmd[vars.y], "<>"))
 		vars.y++;
 	if (vars.x != 0)
 		curr->filename = return_files(parser, (cmd + vars.y + 1), curr->n_red);

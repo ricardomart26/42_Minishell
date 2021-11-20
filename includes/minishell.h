@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 12:59:02 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 20:38:54 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ typedef struct s_listas
 typedef struct s_global
 {
 	t_parser	parser;
-	t_lista		*linked_env;
 	t_node		*node;
 }	t_global;
 
@@ -101,7 +100,7 @@ typedef struct s_global
 char    *expand_vars(char *line_var, t_lista *lst_envp);
 
 bool	find_quotes(char c, bool *dq, bool *q);
-char	**ft_split_quotes(char const *s);
+char	**ft_split_quotes(char const *s, int option);
 void	divide_cmd_and_file(t_node **node, t_parser *parser);
 bool	check_quotes(t_token token, bool *open_dq, bool *open_q);
 t_token	get_token(int c, int next);
@@ -118,12 +117,11 @@ void	list_sort(t_lista *lst);
 int		ft_export(char *var, t_lista *envp, t_lista *sort);
 int		ft_env(t_lista *lst);
 int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
-void	list_init(t_listas *listas, char **env);
+void	list_init(t_listas **listas, char **env);
 void	deallocate(t_lista **root);
-void	list_sort(t_lista *lst);
 int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);		
-int		builtins(char *exp, t_node **node, char **env, char **cmd);
+int		builtins(char *exp, t_node **node, t_listas *listas, char **cmd);
 int		is_builtin(char **line);
 int		echo(char **line, int flag_n, int error_code, t_listas *listas);
 

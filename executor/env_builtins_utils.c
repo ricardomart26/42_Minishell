@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 12:53:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 19:46:48 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@ void	deallocate(t_lista **root)
 	*root = NULL;
 }
 
-void	list_init(t_listas *listas, char **env)
+void	list_init(t_listas **listas, char **env)
 {
 	int	index;
 
 	index = 0;
-	printf("env[%d] %s\n", index, env[index]);
-	listas = malloc(sizeof(t_listas) * 2);
-	while (env[index] != NULL)
+	*listas = malloc(sizeof(t_listas));
+
+	(*listas)->linked_env = (t_lista *)ft_lstnew(ft_strdup(env[index]));
+	(*listas)->sort = (t_lista *)ft_lstnew(ft_strdup(env[index]));
+	while (env[index + 1] != NULL)
 	{
-		ft_lstadd_back((void *)&listas->linked_env, ft_lstnew((void *)env[index]));
-		ft_lstadd_back((void *)&listas->sort, ft_lstnew((void *)env[index]));
-		free(env[index]);
+		ft_lstadd_back((void *)&(*listas)->linked_env, ft_lstnew((void *)ft_strdup(env[index + 1])));
+		ft_lstadd_back((void *)&(*listas)->sort, ft_lstnew((void *)ft_strdup(env[index + 1])));
 		index++;
 	}
 }
@@ -63,6 +64,7 @@ void	list_sort(t_lista *lst)
 				temp = ft_strdup(current->content);
 				current->content = ft_strdup(after->content);
 				after->content = ft_strdup(temp);
+				free(temp);
 			}
 			else if ((unsigned char)current->content[0] == (unsigned char)after->content[0])
 			{

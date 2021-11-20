@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/19 19:09:50 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/20 13:27:08 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	first_unset(char *path, t_lista *lst)
 
 	current = lst;
 	index = char_check(current->content, '=');
-	if (ft_strncmp(current->content, path, index) == 0 || (index == -1 && ft_strncmp(current->content, path, ft_strlen(path)) == 0))
+	if (ft_strncmp(current->content, path, index) == 0 
+		|| (index == -1 && ft_strncmp(current->content, path, ft_strlen(path)) == 0))
 	{
 		to_remove = current;
 		current = current->next;
