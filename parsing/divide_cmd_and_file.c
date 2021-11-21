@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 22:03:56 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 22:50:35 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,11 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 	vars.x = 0;
 	vars.y = -1;
 	cmd = check_if_redirection_first(parser, cmd, curr);
-	if (*cmd == '\0')
+	if (ft_strlen(cmd) == 0)
+	{
 		curr->cmd = NULL;
+		return (curr); 
+	}
 	while (cmd[++vars.y])
 	{
 		c_and_next(&parser->c, &parser->next_c, cmd, vars.y);
@@ -105,7 +108,7 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 		{
 			vars.x = vars.y;
 			curr->cmd = ft_substr(cmd, 0, vars.y);
-			printf("curr->cmd %s\n", curr->cmd);
+			// printf("curr->cmd %s\n", curr->cmd);
 			break ;
 		}
 	}
@@ -114,11 +117,7 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 	if (vars.x != 0)
 		curr->filename = return_files(parser, (cmd + vars.y), curr->n_red);
 	else
-	{
-		printf("See this one cmd %s\n", cmd);
-		curr->cmd = ft_substr(cmd, 0, vars.y);
-			
-	}
+			curr->cmd = ft_substr(cmd, 0, vars.y);
 	return (curr);
 }
 

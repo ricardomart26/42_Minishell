@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 22:02:31 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 23:06:27 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	**ft_split_quotes(const char *s, int option)
 	if (option == 1)
 	{
 		while (r[++i])
-			r[i] = magic_eraser_quotes(r[i], false, false);	
+			r[i] = magic_eraser_quotes(r[i], false, false);
 	}
 	return (r);
 }
