@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 20:03:40 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 17:11:55 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,10 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 			break ;
 		}
 	}
-	if (find_c_in_str(cmd[vars.y], "<>"))
+	while (find_c_in_str(cmd[vars.y], "<>"))
 		vars.y++;
 	if (vars.x != 0)
-		curr->filename = return_files(parser, (cmd + vars.y + 1), curr->n_red);
+		curr->filename = return_files(parser, (cmd + vars.y), curr->n_red);
 	return (curr);
 }
 

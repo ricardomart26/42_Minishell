@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/20 19:44:37 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 17:04:02 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	cd(char *path)
 	if (chdir(path) != 0)
 	{
 		printf("ERROR: NO DIRECTORY");
-		return (1);
+		return (0);
 	}
 	return (0);
 }
