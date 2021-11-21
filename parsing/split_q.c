@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 20:38:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 22:02:31 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ int	inspect_while_quotes_or_spaces(char const *s, int i, bool dq, bool q)
 	while (s[i] != ' ' && s[i])
 	{
 		find_quotes(s[i], &dq, &q);
-		while (dq || q)
+		while ((dq || q) && s[i] == '\0')
 			find_quotes(s[(++i)], &dq, &q);
-		i++;
+		if (s[i] != '\0')
+			i++;
 	}
 	return (i);
 }
@@ -67,16 +68,20 @@ int	ft_cw(const char *s, bool dq, bool q)
 	int		i;
 	int		c;
 
-	i = -1;
+	i = 0;
 	c = 0;
-	while (s[++i])
+	printf("s %s\n", s);
+	while (*(s + i))
 	{
-		while (s[i] == ' ')
+		while (s[i] == ' ' && s[i] != '\0')
 			i++;
+		// printf("i before %d\n", i);
 		i = inspect_while_quotes_or_spaces(s, i, dq, q);
+		// printf("i after %d\n", i);
 		c++;
 		if (s[i] == '\0')
 			break ;
+		i++;
 	}
 	return (c);
 }
@@ -87,6 +92,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 	int		k;
 	char	**r;
 
+	// printf("s %s\n", s);
 	r = malloc(sizeof(char *) * ((ft_cw(s, false, false) + 1)));
 	k = 0;
 	while (s[start])

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 17:11:55 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 22:03:56 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 		{
 			vars.x = vars.y;
 			curr->cmd = ft_substr(cmd, 0, vars.y);
+			printf("curr->cmd %s\n", curr->cmd);
 			break ;
 		}
 	}
@@ -112,6 +113,12 @@ t_node	*split_red_and_cmd(t_parser *parser, t_node *curr, t_token f_token)
 		vars.y++;
 	if (vars.x != 0)
 		curr->filename = return_files(parser, (cmd + vars.y), curr->n_red);
+	else
+	{
+		printf("See this one cmd %s\n", cmd);
+		curr->cmd = ft_substr(cmd, 0, vars.y);
+			
+	}
 	return (curr);
 }
 

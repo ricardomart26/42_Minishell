@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:42:06 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/18 15:56:35 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 20:30:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_red	check_red(int c, int next)
 	return (NOTHING);
 }
 
-t_token	get_token(int c, int next)
+t_token	get_token(int c, int next_c)
 {
 	if (c == '|')
 		return (PIPE);
@@ -73,13 +73,36 @@ t_token	get_token(int c, int next)
 		return (DQ);
 	else if (c == '\'')
 		return (Q);
-	else if (c == '<' && next == '<')
+	else if (c == '<' && next_c == '<')
 		return (REDIRECTION);
-	else if (c == '>' && next == '>')
+	else if (c == '>' && next_c == '>')
 		return (REDIRECTION);
 	else if (c == '<')
 		return (REDIRECTION);
 	else if (c == '>')
+		return (REDIRECTION);
+	return (42);
+}
+
+t_token	get_token_with_c(int *c, int *next_c, char *str, int i)
+{
+	c_and_next(c, next_c, str, i);
+	// printf("(get token with c) c %c and next %c\n", c, next_c);
+	if (*c == '|')
+		return (PIPE);
+	else if (*c == ' ')
+		return (SPACE);
+	else if (*c == '"')
+		return (DQ);
+	else if (*c == '\'')
+		return (Q);
+	else if (*c == '<' && *next_c == '<')
+		return (REDIRECTION);
+	else if (*c == '>' && *next_c == '>')
+		return (REDIRECTION);
+	else if (*c == '<')
+		return (REDIRECTION);
+	else if (*c == '>')
 		return (REDIRECTION);
 	return (42);
 }

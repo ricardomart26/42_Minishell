@@ -1,6 +1,6 @@
 # MAKEFLAGS += silent
 
-CC = gcc -Wall -Wextra -Werror -lreadline -fsanitize=address
+CC = gcc -Wall -Wextra -Werror -lreadline -g -fsanitize=address
 
 NAME = minishell
 

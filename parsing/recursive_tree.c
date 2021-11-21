@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 19:35:14 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/21 17:59:31 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,16 +116,16 @@ void	handle_ast_nodes(t_node *node, char *exp, t_vars_x_y *vars, int pipes)
 void	parsing_of_pipes(char *exp, t_node *node, t_vars_x_y *vars, int pipes)
 {
 	t_token		curr_token;
-	t_parser	helper;
+	t_parser	parser;
 
-	helper.open_dq = 0;
-	helper.open_q = 0;
+	parser.open_dq = 0;
+	parser.open_q = 0;
 	while (exp[vars->y])
 	{
-		helper.c = exp[vars->y];
-		curr_token = get_token(helper.c, 0);
-		check_quotes(curr_token, &helper.open_dq, &helper.open_q);
-		if (curr_token == PIPE && (!helper.open_dq && !helper.open_q))
+		parser.c = exp[vars->y];
+		curr_token = get_token(parser.c, 0);
+		check_quotes(curr_token, &parser.open_dq, &parser.open_q);
+		if (curr_token == PIPE && (!parser.open_dq && !parser.open_q))
 		{
 			handle_ast_nodes(node, exp, vars, pipes);
 			vars->y += 1;
