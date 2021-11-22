@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 13:27:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:36:57 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ int	first_unset(char *path, t_lista *lst)
 {
 	int		index;
 	t_lista	*to_remove;
-	t_lista	*current;
+	t_lista	*curr;
 
-	current = lst;
-	index = char_check(current->content, '=');
-	if (ft_strncmp(current->content, path, index) == 0 
-		|| (index == -1 && ft_strncmp(current->content, path, ft_strlen(path)) == 0))
+	curr = lst;
+	index = char_check(curr->content, '=');
+	if (!ft_strncmp(curr->content, path, index) || (index == -1
+			&& !ft_strncmp(curr->content, path, ft_strlen(path))))
 	{
-		to_remove = current;
-		current = current->next;
+		to_remove = curr;
+		curr = curr->next;
 		free(to_remove);
 		return (0);
 	}
@@ -95,7 +95,8 @@ int	ft_export(char *var, t_lista *envp, t_lista *sort)
 		{
 			ft_lstadd_back((void *)&sort, ft_lstnew((void *)ft_strdup(var)));
 			if (char_check(var, '=') != -1)
-				ft_lstadd_back((void *)&envp, ft_lstnew((void *)ft_strdup(var)));
+				ft_lstadd_back((void *)&envp,
+					ft_lstnew((void *)ft_strdup(var)));
 		}
 	}
 	return (0);

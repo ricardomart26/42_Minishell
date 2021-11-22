@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 16:40:53 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 22:51:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 22:32:22 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ void	get_rid_of_set_and_spaces(char **arg, char *set)
 		(*arg)++;
 }
 
-char	*check_if_redirection_first(t_parser *parser, char *cmd, t_node *node)
+char	*if_file_first(t_parser *parser, char *cmd, t_node *node)
 {
 	t_token	token;
 	int		i;
 	int		size_until_next_space;
 
-	// printf("See this one: cmd %s\n", cmd);
 	token = get_token_with_c(&parser->c, &parser->next_c, cmd, 0);
 	i = 0;
 	while (token == REDIRECTION)

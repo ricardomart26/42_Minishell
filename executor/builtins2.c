@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:44:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 20:58:00 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:21:21 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ bool	is_builtin_out_of_child(t_node *node, int index_for_pipes, int n_pipes)
 {
 	if (index_for_pipes < n_pipes)
 	{
-		if (is_builtin(ft_split_quotes(node->cmd, 1)))
+		if (is_builtin(split_quotes(node->cmd, 1)))
 			return (true);
 	}
 	else
 	{
-		if (is_builtin(ft_split_quotes(node->cmd, 1)))
+		if (is_builtin(split_quotes(node->cmd, 1)))
 			return (true);
 	}
 	return (false);
@@ -58,8 +58,8 @@ int	vars_echo(char *line, t_lista *lst)
 		if (ft_strncmp(current->content, line, ft_strlen(line)) == 0)
 		{
 			index = char_check(current->content, '=');
-			printf("%s\n", ft_substr(current->content, index, 
-				ft_strlen(current->content) - index));
+			printf("%s\n", ft_substr(current->content, index,
+					ft_strlen(current->content) - index));
 			return (0);
 		}
 		current = current->next;

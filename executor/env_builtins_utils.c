@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 19:46:48 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:34:40 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ void	list_init(t_listas **listas, char **env)
 
 	index = 0;
 	*listas = malloc(sizeof(t_listas));
-
 	(*listas)->linked_env = (t_lista *)ft_lstnew(ft_strdup(env[index]));
 	(*listas)->sort = (t_lista *)ft_lstnew(ft_strdup(env[index]));
 	while (env[index + 1] != NULL)
 	{
-		ft_lstadd_back((void *)&(*listas)->linked_env, ft_lstnew((void *)ft_strdup(env[index + 1])));
-		ft_lstadd_back((void *)&(*listas)->sort, ft_lstnew((void *)ft_strdup(env[index + 1])));
+		ft_lstadd_back((void *)&(*listas)->linked_env,
+			ft_lstnew((void *)ft_strdup(env[index + 1])));
+		ft_lstadd_back((void *)&(*listas)->sort,
+			ft_lstnew((void *)ft_strdup(env[index + 1])));
 		index++;
 	}
 }

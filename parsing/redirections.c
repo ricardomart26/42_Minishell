@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 22:26:56 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:09:55 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,10 @@ t_red	*get_red(t_node *curr, t_parser *parser, char *cmd)
 	while (cmd[++pos])
 	{
 		token = get_token_with_c(&parser->c, &parser->next_c, cmd, pos);
-		// printf("cmd %s\n", cmd);
-		// printf("token %d\n", token);
 		check_quotes(token, &parser->open_dq, &parser->open_q);
 		if (token == REDIRECTION && (!parser->open_dq && !parser->open_q))
 		{
 			curr->red[n_red++] = check_red(parser->c, parser->next_c);
-			printf("c %c and next %c\n", parser->c, parser->next_c);
-			printf("red %d\n", curr->red[n_red - 1]);
 			curr->red = realloc(curr->red, (n_red + 1) * sizeof(t_red));
 			if (curr->red[n_red - 1] == TO_HEREDOC
 				|| curr->red[n_red - 1] == TO_APPEND)

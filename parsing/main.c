@@ -6,20 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 23:07:20 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 23:49:10 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_parser	*singleton_ps(t_parser *helper)
-{
-	static t_parser	*new_helper = NULL;
-
-	if (!new_helper && helper)
-		new_helper = helper;
-	return (new_helper);
-}
 
 /**
  * 
@@ -41,7 +32,7 @@ void	only_one_cmd(char *exp, t_node *node)
 	node->r = NULL;
 	node->end_of_tree = true;
 	node->first_cmd = true;
-	node->type = COMMAND;
+	node->type = IS_A_COMMAND;
 	node->has_heredoc = false;
 	node->cmd = ft_strdup(exp);
 }
@@ -54,53 +45,10 @@ int	get_readline_and_history(t_global *g)
 	if (ft_strlen(g->parser.exp) == 0)
 		return (-1);
 	add_history(g->parser.exp);
+	if (not_valid_line((const char *)g->parser.exp))
+		return (-1);
 	return (0);
 }
-
-char	*expand_vars2(char *line, t_lista *current)
-{
-	int	start;
-
-	start = 0;
-	if (line[0] == '$' && ft_strlen(line) != 1)
-	{
-		line = ft_substr(line, 1, ft_strlen(line) - 1);
-		while (ft_strncmp(current->content, line, ft_strlen(line) != 0 
-				&& current != NULL))
-				current = current->next;
-		if (ft_strncmp(current->content, line, ft_strlen(line)) == 0)
-		{
-			start = char_check(current->content, '=');
-			line = ft_substr(current->content, start + 1, 
-				ft_strlen(current->content));
-		}
-	}
-	return (line);
-}
-
-char	*expand_vars(char *line_var, t_lista *lst_envp)
-{
-	t_lista	*current;
-	char	**line;
-	int		index;
-
-	index = 0;
-	current = lst_envp;
-	line = ft_split(line_var, ' ');
-	while (line[index])
-	{
-		line[index] = expand_vars2(line[index], current);
-		index++;
-	}
-	index = 1;
-	while (line[index])
-	{
-		line[0] = ft_strjoin(line[0], ft_strjoin(" ", line[index]));
-		index++;
-	}
-	return (line[0]);
-}
-
 
 int	main(int ac, char **av, char **env)
 {
@@ -119,19 +67,14 @@ int	main(int ac, char **av, char **env)
 		g.node = empty_node;
 		if (get_readline_and_history(&g) == -1)
 			continue ;
-		if (not_valid_line((const char *)g.parser.exp))
-			continue ;
-		g.parser.exp = expand_vars(g.parser.exp, listas->linked_env);
-		g.node = abstract_tree_parser(g.node, &g.parser);
-		printf("commando %s\n", g.node->cmd);
+		g.parser.exp = new_expand_vars(g.parser.exp, listas->linked_env);
+		abstract_tree_parser(&g.node, &g.parser);
 		if (g.node->cmd != NULL && is_empty_tree(g.node)
-			&& is_builtin(ft_split_quotes(g.node->cmd, 1)))
-			builtins(g.parser.exp, &g.node, listas, ft_split_quotes(g.node->cmd, 1));
+			&& is_builtin(split_quotes(g.node->cmd, 1)))
+			builtins(&g.parser, &g.node, listas, split_quotes(g.node->cmd, 1));
 		else
 			my_exec(g.node, g.parser.n_pipes, env);
-		free(g.parser.exp);
-		g.parser.exp = NULL;
-		free_nodes(&g.node);
+		free_nodes(&g.node, &g.parser);
 	}
 	return (0);
 }

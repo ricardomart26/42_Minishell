@@ -6,19 +6,22 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 21:21:35 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 22:55:52 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	free_no_void(void *str)
+int	is_command_with_path(char *command_in_node, char **env)
 {
-	free(str);
-	return (1);
+	if (execve(command_in_node,
+			split_quotes(command_in_node, 1), env) == -1)
+		printf("bash: %s: command not found\n",
+			eraser_quotes(command_in_node, false, false));
+	return (0);
 }
 
-void	execute_cmd(t_node *node, char **env)
+void	execute_cmd(t_node *node, char **env, char *command_in_node)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -26,106 +29,54 @@ void	execute_cmd(t_node *node, char **env)
 
 	if (node->n_red != 0)
 		check_redirections_on_command(node);
-	sp_path = ft_split(get_env_path(env), ':');
-	cmd = NULL;
-	if (!node->cmd)
-		exit(4);	
-	cmd = ft_split_quotes(ft_strtrim(node->cmd, " "), 1);
-	cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
-	while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
-		&& free_no_void((void *)cmd_path))
-		cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
 	if (node->has_heredoc)
 		heredoc_redirection_and_unlink_file();
+	if (!command_in_node)
+		exit(4);
+	if (is_command_with_path(command_in_node, env))
+		;
+	sp_path = ft_split(get_env_path(env), ':');
+	cmd = split_quotes(command_in_node, 1);
+	cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
+	while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
+		&& free_with_return((void *)cmd_path))
+		cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
 	if (execve(cmd_path, cmd, env) == -1)
-		printf("bash: %s: command not found\n", magic_eraser_quotes(node->cmd, false, false));
+		printf("bash: %s: command not found\n",
+			eraser_quotes(node->cmd, false, false));
 	exit(4);
 }
 
-void	ft_handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes)
+void	child_exploration(t_node *node, t_pipes *p, int n_pipes, char **env)
 {
-	if (index_for_pipes == 0)
-	{
-		close(p[0]);
-		dup2(p[1], STDOUT_FILENO);
-		close(p[1]);
-	}
-	else if (index_for_pipes < n_pipes)
-	{
-		close(p[0]);
-		dup2(save_fd, STDIN_FILENO);
-		close(save_fd);
-		dup2(p[1], STDOUT_FILENO);
-		close(p[1]);
-	}
+	if (n_pipes == 0)
+		execute_cmd(node, env, ft_strtrim(node->cmd, " "));
+	handle_pipes(p->pfd, p->save_fd, p->index_for_pipes, n_pipes);
+	if (p->index_for_pipes < n_pipes)
+		execute_cmd(node->l, env, ft_strtrim(node->l->cmd, " "));
 	else
-	{
-		close(p[1]);
-		close(p[0]);
-		dup2(save_fd, STDIN_FILENO);
-		close(save_fd);
-	}
+		execute_cmd(node->r, env, ft_strtrim(node->r->cmd, " "));
 }
-
-int	close_and_save_p(int pfd[2], int index_for_pipes, int n_pipes, int save_fd)
-{
-	wait(NULL);
-	if (index_for_pipes == 0)
-	{
-		save_fd = dup(pfd[0]);
-		close(pfd[0]);
-		close(pfd[1]);
-	}
-	else if (index_for_pipes < n_pipes)
-	{
-		close(save_fd);
-		close(pfd[1]);
-		save_fd = dup(pfd[0]);
-		close(pfd[0]);
-	}
-	else
-	{
-		close(save_fd);
-		close(pfd[0]);
-		close(pfd[1]);
-	}
-	return (save_fd);
-}
-
-// save_stdin = dup(STDIN_FILENO)
-// save_stdout = dup(STDOUT_FILENO)
 
 void	my_exec(t_node *node, int n_pipes, char **env)
 {
-	int		pfd[2];
-	int		save_fd;
-	int		index_for_pipes;
+	t_pipes	p;
 
-	index_for_pipes = -1;
+	p.index_for_pipes = -1;
 	seek_for_heredoc(node);
 	if (is_empty_tree(node) && node->cmd == NULL)
 		return ;
-	while (++index_for_pipes <= n_pipes)
+	while (++p.index_for_pipes <= n_pipes)
 	{
-		if (n_pipes != 0 && pipe(pfd) == -1)
+		if (n_pipes != 0 && pipe(p.pfd) == -1)
 			error_msg("Pipe error\n");
 		else if (fork() == FORKED_CHILD)
-		{
-			if (n_pipes == 0)
-				execute_cmd(node, env);
-			ft_handle_pipes(pfd, save_fd, index_for_pipes, n_pipes);
-			if (index_for_pipes < n_pipes)
-				execute_cmd(node->l, env);
-			else
-				execute_cmd(node->r, env);
-		}
-		else if (n_pipes != 0)
-			save_fd = close_and_save_p(pfd, index_for_pipes, n_pipes, save_fd);
+			child_exploration(node, &p, n_pipes, env);
 		else
-			wait(NULL);
+			p.save_fd = close_and_save_p(&p, n_pipes);
 		if (node->has_heredoc)
 			unlink(".temp_txt");
-		if (n_pipes != 0 && node->r->type != COMMAND)
+		if (n_pipes != 0 && node->r->type != IS_A_COMMAND)
 			node = node->r;
 	}
 }

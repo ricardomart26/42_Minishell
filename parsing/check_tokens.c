@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:42:06 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 20:30:44 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 15:53:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_token	get_token(int c, int next_c)
 t_token	get_token_with_c(int *c, int *next_c, char *str, int i)
 {
 	c_and_next(c, next_c, str, i);
-	// printf("(get token with c) c %c and next %c\n", c, next_c);
 	if (*c == '|')
 		return (PIPE);
 	else if (*c == ' ')

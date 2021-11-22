@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 23:06:27 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 23:47:50 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,10 @@ int	inspect_while_quotes_or_spaces(char const *s, int i, bool dq, bool q)
 {
 	while (find_quotes(s[i], &dq, &q) && s[i])
 	{
-		while (find_quotes(s[i], &dq, &q))
-		{
-			while ((dq || q) && s[i])
-				find_quotes(s[++i], &dq, &q);
-			while (s[i] != ' ' && s[i])
-				i++;
-		}
+		while ((dq || q) && s[i])
+			find_quotes(s[++i], &dq, &q);
+		while (s[i] != ' ' && s[i])
+			i++;
 	}
 	while (s[i] != ' ' && s[i])
 	{
@@ -70,14 +67,11 @@ int	ft_cw(const char *s, bool dq, bool q)
 
 	i = 0;
 	c = 0;
-	printf("s %s\n", s);
 	while (*(s + i))
 	{
 		while (s[i] == ' ' && s[i] != '\0')
 			i++;
-		// printf("i before %d\n", i);
 		i = inspect_while_quotes_or_spaces(s, i, dq, q);
-		// printf("i after %d\n", i);
 		c++;
 		if (s[i] == '\0')
 			break ;
@@ -92,7 +86,6 @@ char	**collect(char const *s, int start, bool dq, bool q)
 	int		k;
 	char	**r;
 
-	// printf("s %s\n", s);
 	r = malloc(sizeof(char *) * ((ft_cw(s, false, false) + 1)));
 	k = 0;
 	while (s[start])
@@ -103,14 +96,16 @@ char	**collect(char const *s, int start, bool dq, bool q)
 			continue ;
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
-		r[k++] = ft_substr(s, start, size - start);
+		printf("size %d start %d\n", size, start);
+		r[k++] = ft_substr(s, start, (size - start));
+		printf("r %s\n", r[k -1]);
 		start = size;
 	}
 	r[k] = NULL;
 	return (r);
 }
 
-char	**ft_split_quotes(const char *s, int option)
+char	**split_quotes(const char *s, int option)
 {
 	int		i;
 	int		x;
@@ -122,7 +117,7 @@ char	**ft_split_quotes(const char *s, int option)
 	if (option == 1)
 	{
 		while (r[++i])
-			r[i] = magic_eraser_quotes(r[i], false, false);
+			r[i] = eraser_quotes(r[i], false, false);
 	}
 	return (r);
 }

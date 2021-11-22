@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 22:18:58 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 23:40:11 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,18 @@
 # define WRITE_END 1
 # define FORKED_CHILD 0
 
-typedef struct s_vars_x_y
+static int	error_code = 0;
+
+typedef struct s_vars_i_j
 {
-	int	x;
-	int	y;
-}	t_vars_x_y;
+	int	i;
+	int	j;
+}	t_vars_i_j;
 
 typedef enum s_type
 {
-	COMMAND,
-	PIPESS
+	IS_A_COMMAND,
+	IS_A_PIPE
 }	t_type;
 
 typedef enum s_red
@@ -87,6 +89,13 @@ typedef struct s_listas
 	t_lista	*sort;
 }	t_listas;
 
+typedef struct s_pipes
+{
+	int	pfd[2];	
+	int	save_fd;
+	int	index_for_pipes;
+}	t_pipes;
+
 typedef struct s_global
 {
 	t_parser	parser;
@@ -97,15 +106,23 @@ typedef struct s_global
 /*	    Parsing Functions     */
 /******************************/
 
-char    *expand_vars(char *line_var, t_lista *lst_envp);
+char	*expand_vars(char *line_var, t_lista *lst_envp);
 bool	find_quotes(char c, bool *dq, bool *q);
-char	**ft_split_quotes(char const *s, int option);
-void	divide_cmd_and_file(t_node **node, t_parser *parser);
+char	**split_quotes(char const *s, int option);
+void	get_cmd_and_file(t_node **node, t_parser *parser);
+void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd);
+bool	command_doesnt_exist(char *cmd, t_node *curr);
 bool	check_quotes(t_token token, bool *open_dq, bool *open_q);
 int		count_tokens(t_parser *parser, t_token find_token);
-char	*magic_eraser_quotes(char *str, bool dq, bool q);
-char	*check_if_redirection_first(t_parser *parser, char *cmd, t_node *node);
+char	*eraser_quotes(char *str, bool dq, bool q);
 int		not_valid_line(const char *line);
+char	*expand_vars(char *line_var, t_lista *lst_envp);
+char	*pwd_for_me(void);
+char	*if_file_first(t_parser *parser, char *cmd, t_node *node);
+char	**return_files(t_parser *parser, char *cmd, int nbr_files);
+char	*new_expand_vars(char *exp, t_lista *lst_env);
+void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd);
+
 /******************************/
 /*	   Builtins Functions     */
 /******************************/
@@ -118,9 +135,10 @@ void	list_init(t_listas **listas, char **env);
 void	deallocate(t_lista **root);
 int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);		
-int		builtins(char *exp, t_node **node, t_listas *listas, char **cmd);
+int		builtins(t_parser *parser, t_node **node, t_listas *listas, char **cmd);
 int		is_builtin(char **line);
 int		echo(char **line, int flag_n, int error_code, t_listas *listas);
+char	*eraser_quotes(char *str, bool dq, bool q);
 
 /******************************/
 /*	  Redirection Functions   */
@@ -141,21 +159,24 @@ void	do_append(char *filename);
 /******************************/
 
 void	only_one_cmd(char *exp, t_node *node);
-t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_x_y *l);
+t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_i_j *l);
 bool	is_empty_tree(t_node *node);
-t_node	*abstract_tree_parser(t_node *node, t_parser *parser);
+void	abstract_tree_parser(t_node **node, t_parser *parser);
 
 /******************************/
 /*	     Piping Functions     */
 /******************************/
 
 void	my_exec(t_node *node, int n_pipes, char **env);
+int		close_and_save_p(t_pipes *p, int n_pipes);
+void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes);
 
 /******************************/
 /*	     Utils Functions      */
 /******************************/
 
-void	free_nodes(t_node **node);
+void	free_nodes(t_node **node, t_parser *parser);
+int		free_with_return(void *str);
 
 /******************************/
 /*	   Builtins Functions     */

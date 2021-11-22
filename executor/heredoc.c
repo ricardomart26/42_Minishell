@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 14:41:59 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 21:59:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 20:46:08 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	do_heredoc(t_node *node)
 	int	i;
 
 	i = 0;
-	// fprintf(stderr, "tester type of red %d\n", node->red[i]);
 	while (node->red[i] != NOTHING)
 	{
 		if (node->red[i] == TO_HEREDOC)
@@ -43,7 +42,7 @@ void	seek_for_heredoc(t_node *node)
 			do_heredoc(node);
 		return ;
 	}
-	while (node->r->type == PIPE)
+	while (node->r->type == IS_A_PIPE)
 	{
 		if (node->l->n_red != 0)
 			do_heredoc(node->l);

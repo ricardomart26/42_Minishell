@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:01:59 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/20 21:11:33 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:33:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ int	cl(char *str, bool dq, bool q)
 			ret++;
 			while ((dq || q) && str[i] != '\0')
 			{
-				// printf("str[%d] %c, dq %d, q %d\n", i, str[i], dq, q);
 				find_quotes(str[i + 1], &dq, &q);
 				i++;
-				// printf("str[%d] %c, dq %d, q %d\n", i, str[i], dq, q);
 			}
 			ret++;
 		}
@@ -39,7 +37,7 @@ int	cl(char *str, bool dq, bool q)
 	return (ret);
 }
 
-char	*magic_eraser_quotes(char *str, bool dq, bool q)
+char	*eraser_quotes(char *str, bool dq, bool q)
 {
 	char	*ret;
 	int		i;

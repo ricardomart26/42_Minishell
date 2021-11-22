@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/21 17:04:02 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:22:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,15 @@ int	cd(char *path)
 	return (0);
 }
 
-int	exit_builtin(char *exp, t_lista *env, t_node **node)
+int	exit_builtin(t_parser *parser, t_lista *env, t_node **node)
 {
 	if (env)
 		ft_lstclear((t_list **)&env, free);
-	free(exp);
-	free_nodes(node);
+	free_nodes(node, parser);
 	return (0);
 }
 
-int	builtins(char *exp, t_node **node, t_listas *listas, char **line)
+int	builtins(t_parser *parser, t_node **node, t_listas *listas, char **line)
 {
 	int			echo_n;
 	int			error_code;
@@ -60,7 +59,7 @@ int	builtins(char *exp, t_node **node, t_listas *listas, char **line)
 		echo(line, echo_n, error_code, listas);
 	}
 	if (!ft_strncmp(line[0], "exit", ft_strlen(line[0])))
-		exit_builtin(exp, listas->linked_env, node);
+		exit_builtin(parser, listas->linked_env, node);
 	if (!ft_strncmp(line[0], "export", ft_strlen(line[0])))
 		ft_export(line[1], listas->linked_env, listas->sort);
 	if (!ft_strncmp(line[0], "env", ft_strlen(line[0])))

@@ -19,6 +19,7 @@
 		"memory": "c",
 		"__bit_reference": "c",
 		"tokens.h": "c",
-		"__node_handle": "c"
+		"__node_handle": "c",
+		"complex": "c"
 	}
 }

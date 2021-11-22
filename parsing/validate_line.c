@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 20:34:44 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/21 23:06:14 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:15:11 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,28 @@ int	error(char *error, char error_char)
 
 int	repeated_redirections(char **split_line, bool is_true)
 {
-	t_vars_x_y	vars;
+	t_vars_i_j	vars;
 	char		c;
 
-	vars.x = -1;
+	vars.i = -1;
 	c = 0;
-	while (split_line[++vars.x])
+	while (split_line[++vars.i])
 	{
-		is_true = find_c_in_str(split_line[vars.x][0], "<>");
+		is_true = find_c_in_str(split_line[vars.i][0], "<>");
 		if (is_true)
 		{
-			if (split_line[vars.x + 1] == NULL)
+			if (split_line[vars.i + 1] == NULL)
 				return (error("syntax error near unexpected token ", c));
-			c = split_line[vars.x + 1][0];
+			c = split_line[vars.i + 1][0];
 			is_true = find_c_in_str(c, "<>");
 			if (is_true)
 				return (error("syntax error near unexpected token ", c));
-			if (split_line[vars.x][1] == '\0')
+			if (split_line[vars.i][1] == '\0')
 				continue ;
+			c = split_line[vars.i][0];
+			if ((split_line[vars.i][0] == '>' && split_line[vars.i][1] == '<')
+			|| (split_line[vars.i][0] == '<' && split_line[vars.i][1] == '>'))
+				return (error("syntax error near unexpected token ", c));
 		}
 	}
 	return (0);
@@ -47,26 +51,25 @@ int	repeated_redirections(char **split_line, bool is_true)
 
 int	repeated_pipes(char **split_line)
 {
-	t_vars_x_y	vars;
+	t_vars_i_j	vars;
 	char		c;
 
 	c = 0;
-	// printf("Entrou?\n");
 	if (split_line[0][0] == '|')
 		return (error("syntax error near unexpected token ", '|'));
-	vars.x = -1;
-	while (split_line[++vars.x])
+	vars.i = -1;
+	while (split_line[++vars.i])
 	{
-		if (split_line[vars.x][0] == '|')
+		if (split_line[vars.i][0] == '|')
 		{
-			if (split_line[vars.x + 1] == NULL)
+			if (split_line[vars.i + 1] == NULL)
 				return (error("syntax error near unexpected token ", '|'));
-			c = split_line[vars.x + 1][0];
+			c = split_line[vars.i + 1][0];
 			if (c == '|')
 				return (error("syntax error near unexpected token ", '|'));
-			if (split_line[vars.x][1] == '\0')
+			if (split_line[vars.i][1] == '\0')
 				continue ;
-			else if (split_line[vars.x][1] == '|')
+			else if (split_line[vars.i][1] == '|')
 				return (error("syntax error near unexpected token ", '|'));
 		}
 	}
@@ -77,8 +80,7 @@ int	not_valid_line(const char *line)
 {
 	char	**split_line;
 
-	split_line = ft_split_quotes(line, 0);
-	// print_dp((void *)split_line, 1, 0);
+	split_line = split_quotes(line, 0);
 	if (repeated_pipes(split_line))
 		return (258);
 	else if (repeated_redirections(split_line, true))
