@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 23:56:29 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 16:47:29 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,24 @@ char	*expand_vars(char *line_var, t_lista *lst_envp)
 	return (line[0]);
 }
 
-char	*new_expand_vars(char *exp, t_lista *lst_env)
-{
-	t_vars_i_j	vars;
-	char		**split_exp;
+// char	*new_expand_vars(char *exp, t_lista *lst_env)
+// {
+// 	t_vars_i_j	vars;
+// 	char		**split_exp;
 
-	(void)lst_env;
-	vars.i = -1;
-	split_exp = split_quotes(exp, 0);
-	while (split_exp[++vars.i])
-	{
-		printf("split_exp %s\n", split_exp[vars.i]);
-		vars.j = -1;
-		while (split_exp[vars.i][++vars.j])
-		{
-			if (split_exp[vars.i][vars.j] == '$')
-			{
-				
-			}
-		}
-	}
-	return (NULL);
-}
+// 	(void)lst_env;
+// 	vars.i = -1;
+// 	split_exp = split_quotes(exp, 0);
+// 	while (split_exp[++vars.i])
+// 	{
+// 		printf("split_exp %s\n", split_exp[vars.i]);
+// 		vars.j = -1;
+// 		while (split_exp[vars.i][++vars.j])
+// 		{
+// 			if (split_exp[vars.i][vars.j] == '$')
+// 			{
+// 			}
+// 		}
+// 	}
+// 	return (NULL);
+// }

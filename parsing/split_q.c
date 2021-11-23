@@ -6,18 +6,11 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 23:47:50 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 16:47:08 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// typedef struct s_split
-// {
-// 	char	**tab;
-// 	bool	dq;
-// 	bool	q;
-// }	t_split;
 
 bool	find_quotes(char c, bool *dq, bool *q)
 {
@@ -67,13 +60,15 @@ int	ft_cw(const char *s, bool dq, bool q)
 
 	i = 0;
 	c = 0;
-	while (*(s + i))
+	while (s[i])
 	{
 		while (s[i] == ' ' && s[i] != '\0')
 			i++;
 		i = inspect_while_quotes_or_spaces(s, i, dq, q);
 		c++;
-		if (s[i] == '\0')
+		if (i >= ft_strlen(s))
+			break ;
+		if (s[i] == '\0' || s[i + 1] == '\0')
 			break ;
 		i++;
 	}
@@ -96,9 +91,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 			continue ;
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
-		printf("size %d start %d\n", size, start);
 		r[k++] = ft_substr(s, start, (size - start));
-		printf("r %s\n", r[k -1]);
 		start = size;
 	}
 	r[k] = NULL;

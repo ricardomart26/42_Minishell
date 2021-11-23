@@ -12,7 +12,7 @@ LIBFT = Libft
 
 LIBS = -L./$(LIBFT) -lft
 
-SRC = $(wildcard ./parsing/*.c) $(wildcard ./environment/*.c) $(wildcard ./heredoc/*.c) $(wildcard ./executor/*.c)
+SRC = $(wildcard ./parsing/*.c) $(wildcard ./environment/*.c) $(wildcard ./heredoc/*.c) $(wildcard ./executor/*.c) $(wildcard ./builtins/*.c) main.c
 
 OBJ = $(SRC:Obj/%.o=%.c)
 

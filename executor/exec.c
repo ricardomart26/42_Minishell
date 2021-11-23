@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_exec.c                                          :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 22:55:52 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 16:46:09 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,18 @@
 
 int	is_command_with_path(char *command_in_node, char **env)
 {
-	if (execve(command_in_node,
-			split_quotes(command_in_node, 1), env) == -1)
-		printf("bash: %s: command not found\n",
-			eraser_quotes(command_in_node, false, false));
+	char	**only_command;
+	char	*path;
+
+	if (command_in_node[0] == '/')
+	{
+		only_command = split_quotes(ft_strrchr(command_in_node, '/') + 1, 0);
+		path = ft_strndup(command_in_node, ft_strlen_c(command_in_node, ' '));
+		if (execve(path, only_command, env) == -1)
+			printf("bash: %s: command not found\n",
+				eraser_quotes(command_in_node, false, false));
+		return (1);
+	}
 	return (0);
 }
 
@@ -58,7 +66,7 @@ void	child_exploration(t_node *node, t_pipes *p, int n_pipes, char **env)
 		execute_cmd(node->r, env, ft_strtrim(node->r->cmd, " "));
 }
 
-void	my_exec(t_node *node, int n_pipes, char **env)
+void	ft_exec(t_node *node, int n_pipes, char **env)
 {
 	t_pipes	p;
 

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 23:40:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 16:48:11 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define WRITE_END 1
 # define FORKED_CHILD 0
 
-static int	error_code = 0;
+static int	g_error_code = 0;
 
 typedef struct s_vars_i_j
 {
@@ -167,7 +167,7 @@ void	abstract_tree_parser(t_node **node, t_parser *parser);
 /*	     Piping Functions     */
 /******************************/
 
-void	my_exec(t_node *node, int n_pipes, char **env);
+void	ft_exec(t_node *node, int n_pipes, char **env);
 int		close_and_save_p(t_pipes *p, int n_pipes);
 void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes);
 

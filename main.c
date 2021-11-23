@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 23:49:10 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 16:06:30 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ int	main(int ac, char **av, char **env)
 		g.node = empty_node;
 		if (get_readline_and_history(&g) == -1)
 			continue ;
-		g.parser.exp = new_expand_vars(g.parser.exp, listas->linked_env);
+		g.parser.exp = expand_vars(g.parser.exp, listas->linked_env);
 		abstract_tree_parser(&g.node, &g.parser);
 		if (g.node->cmd != NULL && is_empty_tree(g.node)
 			&& is_builtin(split_quotes(g.node->cmd, 1)))
 			builtins(&g.parser, &g.node, listas, split_quotes(g.node->cmd, 1));
 		else
-			my_exec(g.node, g.parser.n_pipes, env);
+			ft_exec(g.node, g.parser.n_pipes, env);
 		free_nodes(&g.node, &g.parser);
 	}
 	return (0);
