@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 16:48:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 19:37:47 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "../Libft/includes/libft.h"
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <errno.h>
 # include "tokens.h"
 
 # define SPACES " \n\t\r\a"
@@ -29,6 +30,13 @@
 # define FORKED_CHILD 0
 
 static int	g_error_code = 0;
+
+typedef enum s_error_code
+{
+	GENERAL_ERROR = 1,
+	COMMAND_NOT_FOUND = 127,
+	// EINTR = 130
+}	t_error_code;
 
 typedef struct s_vars_i_j
 {
@@ -128,8 +136,8 @@ void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd);
 /******************************/
 
 void	list_sort(t_lista *lst);
-int		ft_export(char *var, t_lista *envp, t_lista *sort);
-int		ft_env(t_lista *lst);
+void	ft_export(char *var, t_lista *envp, t_lista *sort);
+void	ft_env(t_lista *lst, char *is_not_null);
 int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
 void	list_init(t_listas **listas, char **env);
 void	deallocate(t_lista **root);
@@ -137,7 +145,7 @@ int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);		
 int		builtins(t_parser *parser, t_node **node, t_listas *listas, char **cmd);
 int		is_builtin(char **line);
-int		echo(char **line, int flag_n, int error_code, t_listas *listas);
+void	echo(char **line, int flag_n, t_listas *listas);
 char	*eraser_quotes(char *str, bool dq, bool q);
 
 /******************************/

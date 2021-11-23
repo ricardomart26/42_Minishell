@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 16:47:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 21:51:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ bool	find_quotes(char c, bool *dq, bool *q)
 	return (false);
 }
 
+// https://projects.intra.42.fr/42cursus-get_next_line/
+
 int	inspect_while_quotes_or_spaces(char const *s, int i, bool dq, bool q)
 {
 	while (find_quotes(s[i], &dq, &q) && s[i])
@@ -45,8 +47,12 @@ int	inspect_while_quotes_or_spaces(char const *s, int i, bool dq, bool q)
 	while (s[i] != ' ' && s[i])
 	{
 		find_quotes(s[i], &dq, &q);
-		while ((dq || q) && s[i] == '\0')
+		// printf("s[%d] %c dq %d q %d\n", i, s[i], dq, q);
+		while ((dq || q) && s[i] != '\0')
+		{
+			// printf(" dentro do loop s[%d] %c\n", i, s[i]);
 			find_quotes(s[(++i)], &dq, &q);
+		}
 		if (s[i] != '\0')
 			i++;
 	}
@@ -92,6 +98,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
 		r[k++] = ft_substr(s, start, (size - start));
+		// printf("r %s\n", r[k - 1]);
 		start = size;
 	}
 	r[k] = NULL;

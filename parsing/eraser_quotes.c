@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   magic_eraser_q.c                                   :+:      :+:    :+:   */
+/*   eraser_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:01:59 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 19:33:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 21:55:53 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,26 @@ char	*eraser_quotes(char *str, bool dq, bool q)
 	i = -1;
 	while (*str)
 	{
-		if (find_quotes(*str, &dq, &q) && str++)
+		// printf("didnt find quotes eraser: %c\n", *str);
+		while (find_quotes(*str, &dq, &q) && str++)
 		{
+			printf("devia estar aqui depois do should have\n");
+			// printf("found quotes eraser: %c\n", *str);
 			while ((dq || q) && *str)
 			{
+				printf("inside the quotes eraser: %c\n", *str);
 				ret[++i] = *(str++);
 				find_quotes(*str, &dq, &q);
 			}
-			str++;
+			// printf("jumped this one: %c\n", *str);
+			if (*str != '\0')
+				str++;
+			// printf("should have ': %c dq: %d q:%d\n", *str, dq, q);
 		}
+		printf("inside ret: %c\n", *str);
 		ret[++i] = *str;
-		if (*str == '\0')
-			break ;
-		str++;
+		if (*str != '\0')
+			str++;
 	}
 	ret[i + 1] = '\0';
 	return (ret);

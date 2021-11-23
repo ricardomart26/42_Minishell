@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 19:36:57 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 19:13:21 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)
 	return (1);
 }
 
-int	ft_export(char *var, t_lista *envp, t_lista *sort)
+void	ft_export(char *var, t_lista *envp, t_lista *sort)
 {
 	if (var == NULL)
 		list_sort(sort);
@@ -99,18 +99,18 @@ int	ft_export(char *var, t_lista *envp, t_lista *sort)
 					ft_lstnew((void *)ft_strdup(var)));
 		}
 	}
-	return (0);
 }
 
-int	ft_env(t_lista *lst)
+void	ft_env(t_lista *lst, char *is_not_null)
 {
 	t_lista	*current;
 
+	if (is_not_null)
+		g_error_code = COMMAND_NOT_FOUND;
 	current = lst;
-	while (current != NULL)
+	while (current != NULL && !g_error_code)
 	{
 		printf("%s\n", (char *)current->content);
 		current = current->next;
 	}
-	return (0);
 }

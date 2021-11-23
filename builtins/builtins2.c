@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:44:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 19:21:21 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 19:44:01 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,6 @@ int	is_builtin(char **line)
 	return (0);
 }
 
-bool	is_builtin_out_of_child(t_node *node, int index_for_pipes, int n_pipes)
-{
-	if (index_for_pipes < n_pipes)
-	{
-		if (is_builtin(split_quotes(node->cmd, 1)))
-			return (true);
-	}
-	else
-	{
-		if (is_builtin(split_quotes(node->cmd, 1)))
-			return (true);
-	}
-	return (false);
-}
-
 int	vars_echo(char *line, t_lista *lst)
 {
 	int		index;
@@ -67,7 +52,7 @@ int	vars_echo(char *line, t_lista *lst)
 	return (1);
 }
 
-int	echo(char **line, int flag_n, int error_code, t_listas *listas)
+void	echo(char **line, int flag_n, t_listas *listas)
 {
 	int	index;
 
@@ -81,15 +66,22 @@ int	echo(char **line, int flag_n, int error_code, t_listas *listas)
 			if (line[index][1] != '?')
 			{
 				if (vars_echo(line[index], listas->linked_env) == 0)
-					return (0);
+					return ;
+			}
+			else
+			{
+				printf("%d ", g_error_code);
+				index++;
 			}
 		}
-		printf("%s", line[index]);
+		if (line[index])
+			printf("%s", line[index]);
+		else
+			break ;
 		if (line[index + 1])
 			printf(" ");
 		index++;
 	}
 	if (flag_n == 0)
 		printf("\n");
-	return (error_code);
 }

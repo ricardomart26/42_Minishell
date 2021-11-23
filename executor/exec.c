@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 16:46:09 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/23 19:38:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_command_with_path(char *command_in_node, char **env)
 		if (execve(path, only_command, env) == -1)
 			printf("bash: %s: command not found\n",
 				eraser_quotes(command_in_node, false, false));
-		return (1);
+		exit(COMMAND_NOT_FOUND);
 	}
 	return (0);
 }
@@ -52,7 +52,7 @@ void	execute_cmd(t_node *node, char **env, char *command_in_node)
 	if (execve(cmd_path, cmd, env) == -1)
 		printf("bash: %s: command not found\n",
 			eraser_quotes(node->cmd, false, false));
-	exit(4);
+	exit(errno);
 }
 
 void	child_exploration(t_node *node, t_pipes *p, int n_pipes, char **env)
