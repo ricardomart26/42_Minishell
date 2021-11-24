@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 19:37:47 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/24 17:41:31 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include "tokens.h"
+# include <signal.h>
 
 # define SPACES " \n\t\r\a"
 # define READ_END 0
@@ -30,6 +31,7 @@
 # define FORKED_CHILD 0
 
 static int	g_error_code = 0;
+
 
 typedef enum s_error_code
 {

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 16:06:30 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/24 19:39:33 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,19 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
+void	sig_int()
+{
+	write(1, "\n", 1);
+	//write(1, "Enter a command: ", 17);
+	rl_forced_update_display ();
+	rl_on_new_line();
+}
+
 int	main(int ac, char **av, char **env)
 {
+	struct sigaction sa;
+	sa.sa_handler = &sig_int;
+	sa.sa_flags = SA_RESTART;
 	t_global		g;
 	static t_parser	empty_parser;
 	static t_node	*empty_node;
@@ -61,6 +72,7 @@ int	main(int ac, char **av, char **env)
 	(void) av;
 	listas = NULL;
 	list_init(&listas, env);
+	sigaction(SIGINT, &sa, NULL);
 	while (1)
 	{
 		g.parser = empty_parser;
