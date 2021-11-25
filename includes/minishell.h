@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/24 17:41:31 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/25 20:51:13 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdbool.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 # include "../Libft/includes/libft.h"
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <errno.h>
 # include "tokens.h"
 # include <signal.h>
+# include <termios.h>
 
 # define SPACES " \n\t\r\a"
 # define READ_END 0
@@ -108,8 +109,9 @@ typedef struct s_pipes
 
 typedef struct s_global
 {
-	t_parser	parser;
-	t_node		*node;
+	t_parser		parser;
+	t_node			*node;
+	struct termios	term;
 }	t_global;
 
 /******************************/

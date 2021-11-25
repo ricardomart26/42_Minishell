@@ -6,11 +6,13 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/24 19:39:33 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/25 21:15:10 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <termios.h>
+#include <readline/history.h>
 
 /**
  * 
@@ -50,20 +52,27 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
-void	sig_int()
+void	sig_int(int sig)
 {
-	write(1, "\n", 1);
-	//write(1, "Enter a command: ", 17);
-	rl_forced_update_display ();
-	rl_on_new_line();
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	//if (sig == SIGQUIT)
 }
 
 int	main(int ac, char **av, char **env)
 {
-	struct sigaction sa;
-	sa.sa_handler = &sig_int;
-	sa.sa_flags = SA_RESTART;
+	//struct sigaction sa;
+	//sa.sa_handler = &sig_int;
+	//sa.sa_flags = SA_RESTART;
 	t_global		g;
+	tcgetattr(0, &g.term);
+	g.term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &g.term);
 	static t_parser	empty_parser;
 	static t_node	*empty_node;
 	t_listas		*listas;
@@ -72,7 +81,8 @@ int	main(int ac, char **av, char **env)
 	(void) av;
 	listas = NULL;
 	list_init(&listas, env);
-	sigaction(SIGINT, &sa, NULL);
+	signal(SIGINT, sig_int);
+	signal(SIGQUIT, sig_int);
 	while (1)
 	{
 		g.parser = empty_parser;
