@@ -1,6 +1,6 @@
 # MAKEFLAGS += silent
 
-CC = gcc -Wall -Wextra -Werror -lreadline -g -fsanitize=address
+CC = gcc -Wall -Wextra -Werror -lreadline -g -fsanitize=address -I ~/.brew/opt/readline/include -L ~/.brew/opt/readline/lib -lreadline
 
 NAME = minishell
 
