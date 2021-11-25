@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 19:38:42 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/24 20:59:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,16 @@ void	execute_cmd(t_node *node, char **env, char *command_in_node)
 		;
 	sp_path = ft_split(get_env_path(env), ':');
 	cmd = split_quotes(command_in_node, 1);
-	cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
-	while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
-		&& free_with_return((void *)cmd_path))
+	printf("command %s\n", command_in_node);
+	printf("cmd %s\n", cmd[0]);
+	// if (access(command_in_node, F_OK) == ecve(command_in_node, cmd, env);
+	// else
+	// {
 		cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
+		while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
+			&& free_with_return((void *)cmd_path))
+			cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
+	// }
 	if (execve(cmd_path, cmd, env) == -1)
 		printf("bash: %s: command not found\n",
 			eraser_quotes(node->cmd, false, false));
