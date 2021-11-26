@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 03:03:24 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 05:58:34 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,21 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
-void	sig_int(int sig)
+void	get_tyy_attributes(struct termios term)
 {
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		//rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	//if (sig == SIGQUIT)
+	tcgetattr(0, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &term);
+}
+
+void	init_all(t_global *g, t_listas **listas, char **env)
+{
+	init_all(&g, &listas, &env);
+	get_tyy_attributes(g.term);
+	listas = NULL;
+	list_init(&listas, env);
+	signal(SIGINT, sig_int);
+	signal(SIGQUIT, sig_int);
 }
 
 int	main(int ac, char **av, char **env)
@@ -70,13 +75,6 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	tcgetattr(0, &g.term);
-	g.term.c_lflag &= ~ECHOCTL;
-	tcsetattr(0, TCSANOW, &g.term);
-	listas = NULL;
-	list_init(&listas, env);
-	signal(SIGINT, sig_int);
-	signal(SIGQUIT, sig_int);
 	while (1)
 	{
 		g.parser = empty_parser;
