@@ -20,6 +20,8 @@
 		"__bit_reference": "c",
 		"tokens.h": "c",
 		"__node_handle": "c",
-		"complex": "c"
-	}
+		"complex": "c",
+		"termios.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "Disabled"
 }

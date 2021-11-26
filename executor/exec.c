@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/24 20:59:44 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:38:45 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,28 @@ int	is_command_with_path(char *command_in_node, char **env)
 	return (0);
 }
 
+char	*find_path_of_cmd(char **path, char *cmd)
+{
+	int		i;
+	char	*get_path;
+
+	i = -1;
+	get_path = ft_str3join(path[++i], "/", cmd);
+	while (access(get_path, F_OK) == -1)
+	{
+		free(get_path);
+		get_path = ft_str3join(path[++i], "/", cmd);
+	}
+	if (path[i] == NULL)
+		return (NULL);
+	return (get_path);
+}
+
 void	execute_cmd(t_node *node, char **env, char *command_in_node)
 {
 	char	**cmd;
-	char	*cmd_path;
 	char	**sp_path;
+	char	*get_path;
 
 	if (node->n_red != 0)
 		check_redirections_on_command(node);
@@ -45,17 +62,8 @@ void	execute_cmd(t_node *node, char **env, char *command_in_node)
 		;
 	sp_path = ft_split(get_env_path(env), ':');
 	cmd = split_quotes(command_in_node, 1);
-	printf("command %s\n", command_in_node);
-	printf("cmd %s\n", cmd[0]);
-	// if (access(command_in_node, F_OK) == ecve(command_in_node, cmd, env);
-	// else
-	// {
-		cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
-		while (access(cmd_path, F_OK) == -1 && *(sp_path++) != NULL
-			&& free_with_return((void *)cmd_path))
-			cmd_path = ft_str3join(*sp_path, "/", cmd[0]);
-	// }
-	if (execve(cmd_path, cmd, env) == -1)
+	get_path = find_path_of_cmd(sp_path, cmd[0]);
+	if (execve(get_path, cmd, env) == -1)
 		printf("bash: %s: command not found\n",
 			eraser_quotes(node->cmd, false, false));
 	exit(errno);

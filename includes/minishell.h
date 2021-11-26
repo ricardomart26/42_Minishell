@@ -6,24 +6,26 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/24 17:41:31 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/25 23:26:17 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include "../Libft/includes/libft.h"
-# include <sys/wait.h>
 # include <fcntl.h>
+# include <stdio.h>
 # include <errno.h>
 # include "tokens.h"
+# include <stdlib.h>
+# include <unistd.h>
 # include <signal.h>
+# include <stdbool.h>
+# include <termios.h>
+# include <sys/wait.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include "../Libft/includes/libft.h"
 
 # define SPACES " \n\t\r\a"
 # define READ_END 0
@@ -32,19 +34,11 @@
 
 static int	g_error_code = 0;
 
-
 typedef enum s_error_code
 {
 	GENERAL_ERROR = 1,
 	COMMAND_NOT_FOUND = 127,
-	// EINTR = 130
 }	t_error_code;
-
-typedef struct s_vars_i_j
-{
-	int	i;
-	int	j;
-}	t_vars_i_j;
 
 typedef enum s_type
 {
@@ -87,6 +81,12 @@ typedef struct s_parser
 	char	*exp;
 }	t_parser;
 
+typedef struct s_vars_i_j
+{
+	int	i;
+	int	j;
+}	t_vars_i_j;
+
 typedef struct s_lista
 {
 	char			*content;
@@ -108,8 +108,9 @@ typedef struct s_pipes
 
 typedef struct s_global
 {
-	t_parser	parser;
-	t_node		*node;
+	t_parser		parser;
+	t_node			*node;
+	struct termios	term;
 }	t_global;
 
 /******************************/
@@ -132,6 +133,7 @@ char	*if_file_first(t_parser *parser, char *cmd, t_node *node);
 char	**return_files(t_parser *parser, char *cmd, int nbr_files);
 char	*new_expand_vars(char *exp, t_lista *lst_env);
 void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd);
+char	*replace_value(char *exp, char *value, t_vars_i_j v, int len);
 
 /******************************/
 /*	   Builtins Functions     */

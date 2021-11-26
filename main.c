@@ -6,13 +6,12 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 20:28:39 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:20:41 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <termios.h>
-#include <unistd.h>
+
 /**
  * 
  * @definition: When only one command without pipes, store it inside the node
@@ -51,34 +50,20 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
-
-void hide_keystrokes() {
-    struct termios tty;
-    tcgetattr(STDIN_FILENO, &tty);
-    tty.c_lflag &= ~ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-}
-
-void show_keystrokes() {
-    struct termios tty;
-    tcgetattr(STDIN_FILENO, &tty);
-    tty.c_lflag |= ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-}
-
-void	sig_int()
+void	sig_int(int sig)
 {
-	write(1, "\n", 1);
-	write(1, "Enter a command: ", 17);
-	rl_on_new_line();
-	rl_redisplay();
-	hide_keystrokes();
-	show_keystrokes();
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		//rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	//if (sig == SIGQUIT)
 }
 
 int	main(int ac, char **av, char **env)
 {
-	struct sigaction sa;
 	t_global		g;
 	static t_parser	empty_parser;
 	static t_node	*empty_node;
@@ -86,11 +71,13 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
+	tcgetattr(0, &g.term);
+	g.term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &g.term);
 	listas = NULL;
-	sa.sa_flags = SA_RESTART;
-	sa.sa_handler = &sig_int;
 	list_init(&listas, env);
-	sigaction(SIGINT, &sa, NULL);
+	signal(SIGINT, sig_int);
+	signal(SIGQUIT, sig_int);
 	while (1)
 	{
 		g.parser = empty_parser;

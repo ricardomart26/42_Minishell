@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:41:55 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 14:45:30 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:09:55 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ typedef enum s_token
 {
 	EMPTY,
 	CHAR,
-	SPACE,
 	PIPE,
 	DQ,
 	Q,

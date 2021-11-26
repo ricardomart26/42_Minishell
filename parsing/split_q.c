@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:09:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:20:22 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ bool	find_quotes(char c, bool *dq, bool *q)
 	}
 	return (false);
 }
-
 
 int	inspect_while_quotes_or_spaces(char const *s, int i, bool dq, bool q)
 {

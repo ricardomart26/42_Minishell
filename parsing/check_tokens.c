@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:42:06 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 22:48:25 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:12:09 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ t_token	get_token(int c, int next_c)
 {
 	if (c == '|')
 		return (PIPE);
-	else if (c == ' ')
-		return (SPACE);
 	else if (c == '"')
 		return (DQ);
 	else if (c == '\'')
@@ -89,8 +87,6 @@ t_token	get_token_with_c(int *c, int *next_c, char *str, int i)
 	c_and_next(c, next_c, str, i);
 	if (*c == '|')
 		return (PIPE);
-	else if (*c == ' ')
-		return (SPACE);
 	else if (*c == '"')
 		return (DQ);
 	else if (*c == '\'')

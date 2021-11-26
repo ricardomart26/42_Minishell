@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:44:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 19:44:01 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:25:09 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,13 @@ void	echo(char **line, int flag_n, t_listas *listas)
 		index = 2;
 	while (line[index])
 	{
-		if (line[index][0] == '$')
+		if (line[index][0] == '$' && line[index][1] != '?')
 		{
-			if (line[index][1] != '?')
-			{
-				if (vars_echo(line[index], listas->linked_env) == 0)
-					return ;
-			}
-			else
-			{
-				printf("%d ", g_error_code);
-				index++;
-			}
+			if (vars_echo(line[index], listas->linked_env) == 0)
+				return ;
 		}
+		else if (line[index][0] == '$' && index++)
+			printf("%d ", g_error_code);
 		if (line[index])
 			printf("%s", line[index]);
 		else
