@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 22:52:00 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/23 19:38:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 03:04:22 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,13 @@ void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes)
 
 int	close_and_save_p(t_pipes *p, int n_pipes)
 {
-	waitpid(0, &g_error_code, 0);
-	if (errno != 0)
-		printf("%d\n", errno);
+	int status;
+	
+	waitpid(0, &status, 0);
+	if (status == 32512)
+		g_error_code = 127;
+	else
+		g_error_code = 0;
 	if (n_pipes == 0)
 		return (0);
 	if (p->index_for_pipes == 0)

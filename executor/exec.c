@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:38:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 02:18:01 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	is_command_with_path(char *command_in_node, char **env)
 		if (execve(path, only_command, env) == -1)
 			printf("bash: %s: command not found\n",
 				eraser_quotes(command_in_node, false, false));
+		printf("%d\n", COMMAND_NOT_FOUND);
 		exit(COMMAND_NOT_FOUND);
 	}
 	return (0);
@@ -36,11 +37,9 @@ char	*find_path_of_cmd(char **path, char *cmd)
 
 	i = -1;
 	get_path = ft_str3join(path[++i], "/", cmd);
-	while (access(get_path, F_OK) == -1)
-	{
-		free(get_path);
+	while (get_path && access(get_path, F_OK) == -1 
+			&& free_with_return(get_path))
 		get_path = ft_str3join(path[++i], "/", cmd);
-	}
 	if (path[i] == NULL)
 		return (NULL);
 	return (get_path);
@@ -66,7 +65,8 @@ void	execute_cmd(t_node *node, char **env, char *command_in_node)
 	if (execve(get_path, cmd, env) == -1)
 		printf("bash: %s: command not found\n",
 			eraser_quotes(node->cmd, false, false));
-	exit(errno);
+	printf("cmd not found %d\n", COMMAND_NOT_FOUND);
+	exit(COMMAND_NOT_FOUND);
 }
 
 void	child_exploration(t_node *node, t_pipes *p, int n_pipes, char **env)

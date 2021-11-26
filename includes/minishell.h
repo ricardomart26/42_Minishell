@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:26:17 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 03:00:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <stdbool.h>
 # include <termios.h>
 # include <sys/wait.h>
+# include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include "../Libft/includes/libft.h"
@@ -142,7 +143,7 @@ char	*replace_value(char *exp, char *value, t_vars_i_j v, int len);
 void	list_sort(t_lista *lst);
 void	ft_export(char *var, t_lista *envp, t_lista *sort);
 void	ft_env(t_lista *lst, char *is_not_null);
-int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
+int		ft_unset(char *path, t_lista **lst_env, t_lista **lst_sort);
 void	list_init(t_listas **listas, char **env);
 void	deallocate(t_lista **root);
 int		char_check(char *str, char c);

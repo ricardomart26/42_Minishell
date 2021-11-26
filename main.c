@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:20:41 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 03:03:24 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 void	only_one_cmd(char *exp, t_node *node)
 {
 	node->n_red = 0;
-	node->l = NULL;
 	node->l = NULL;
 	node->r = NULL;
 	node->end_of_tree = true;

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 23:19:56 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 00:01:02 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 01:01:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*replace_value
 	t_vars_i_j	l;
 	int			save_i;
 
-	temp = ft_strdup_and_free(&exp);
+    temp = ft_strdup_and_free(&exp);
 	exp = malloc(sizeof(char) * get_size(temp, ft_strlen(value), len) + 1);
 	l.i = -1;
 	l.j = 0;

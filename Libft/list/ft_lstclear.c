@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:08:47 by rimartin          #+#    #+#             */
-/*   Updated: 2021/02/25 18:26:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/26 01:26:33 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,13 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
 	t_list	*temp;
 
-	temp = *lst;
-	if (lst != NULL)
+	if (del == NULL)
+		return ;
+	while (lst && *lst)
 	{
-		while (temp != NULL)
-		{
-			del((*lst)->content);
-			temp = (*lst)->next;
-			free(*lst);
-		}
+		temp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = temp;
 	}
 	*lst = NULL;
 }
