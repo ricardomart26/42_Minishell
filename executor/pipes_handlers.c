@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 22:52:00 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 16:24:20 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 17:15:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	treat_error(int status)
 	if (status == 32512)
 		g.error_code = 127;
 	else if (status == 512)
-		g.error_code = 0;
+		g.error_code = 2;
 	else
 		g.error_code = 0;
 }
