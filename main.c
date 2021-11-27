@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 16:44:27 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 17:33:20 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	main(int ac, char **av, char **env)
 		if (get_readline_and_history(&g) == -1)
 			continue ;
 		g.parser.exp = new_expand_vars(g.parser.exp, listas->linked_env);
+		printf("%s\n", g.parser.exp);
 		abstract_tree_parser(&g.node, &g.parser);
 		if (g.node->cmd != NULL && is_empty_tree(g.node)
 			&& is_builtin(split_quotes(g.node->cmd, 1)))
