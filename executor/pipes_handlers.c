@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 22:52:00 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 17:21:09 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/27 18:53:34 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	close_and_save_p(t_pipes *p, int n_pipes)
 	int	status;
 
 	waitpid(0, &status, 0);
-	g.error_code = status/256;
+	if (g.error_code != 130)
+		g.error_code = status/256;
 	//printf("%d\n", status);
 	//treat_error(status);
 	if (n_pipes == 0)

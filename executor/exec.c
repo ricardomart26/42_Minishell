@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 16:15:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 18:52:52 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	ft_exec(t_node *node, int n_pipes, char **env)
 		return ;
 	while (++p.index_for_pipes <= n_pipes)
 	{
+		g.error_code = 0;
 		if (n_pipes != 0 && pipe(p.pfd) == -1)
 			error_msg("Pipe error\n");
 		else if (fork() == FORKED_CHILD)
