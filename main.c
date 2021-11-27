@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 17:33:20 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/27 23:05:08 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,40 +30,39 @@ void	only_one_cmd(char *exp, t_node *node)
 	node->l = NULL;
 	node->r = NULL;
 	node->end_of_tree = true;
-	node->first_cmd = true;
 	node->type = IS_A_COMMAND;
 	node->has_heredoc = false;
 	node->cmd = ft_strdup(exp);
 }
 
-int	get_readline_and_history(t_global *g)
+int	get_readline_and_history(void)
 {
-	g->parser.exp = readline("Enter a command: ");
-	if (!g->parser.exp)
+	g_gl.exp = readline("Enter a command: ");
+	if (!g_gl.exp)
 		exit(1);
-	while (find_c_in_str(*g->parser.exp, SPACES))
-		g->parser.exp++;
-	if (!g->parser.exp)
-		exit(1);
-	if (ft_strlen(g->parser.exp) == 0)
+	while (find_c_in_str(*g_gl.exp, SPACES))
+		g_gl.exp++;
+	if (ft_strlen(g_gl.exp) == 0)
 		return (-1);
-	add_history(g->parser.exp);
-	if (not_valid_line((const char *)g->parser.exp))
+	add_history(g_gl.exp);
+	if (not_valid_line((const char *)g_gl.exp))
 		return (-1);
 	return (0);
 }
 
-void	get_tyy_attributes()
+void	get_tyy_attributes(void)
 {
-	tcgetattr(0, &g.term);
-	g.term.c_lflag &= ~ECHOCTL;
-	tcsetattr(0, TCSANOW, &g.term);
+	tcgetattr(0, &g_gl.term);
+	g_gl.term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &g_gl.term);
 }
 
+
+// Sera que funciona so com uma var sigaction, se mudar o handler depois? Exprimentar com o mendes
 void	init_all(t_listas **listas, char **env)
 {
-	struct sigaction sa;
-	struct sigaction sa_1;
+	struct sigaction	sa;
+	struct sigaction	sa_1;
 
 	get_tyy_attributes();
 	sa.sa_handler = &sig_int;
@@ -76,7 +75,6 @@ void	init_all(t_listas **listas, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	static t_parser	empty_parser;
 	static t_node	*empty_node;
 	t_listas		*listas;
 
@@ -85,19 +83,18 @@ int	main(int ac, char **av, char **env)
 	init_all(&listas, env);
 	while (1)
 	{
-		g.parser = empty_parser;
-		g.node = empty_node;
-		if (get_readline_and_history(&g) == -1)
+		printf("exp %s\n", g_gl.exp);
+		g_gl.node = empty_node;
+		if (get_readline_and_history() == -1)
 			continue ;
-		g.parser.exp = new_expand_vars(g.parser.exp, listas->linked_env);
-		printf("%s\n", g.parser.exp);
-		abstract_tree_parser(&g.node, &g.parser);
-		if (g.node->cmd != NULL && is_empty_tree(g.node)
-			&& is_builtin(split_quotes(g.node->cmd, 1)))
-			builtins(&g.parser, &g.node, listas, split_quotes(g.node->cmd, 1));
+		abstract_tree_parser(&g_gl.node, &g_gl.exp, &g_gl.n_pipes, listas->linked_env);
+		if (g_gl.node->cmd != NULL && is_empty_tree(g_gl.node)
+			&& is_builtin(split_quotes(g_gl.node->cmd, 1)))
+			builtins(&g_gl.node, listas,
+				split_quotes(g_gl.node->cmd, 1));
 		else
-			ft_exec(g.node, g.parser.n_pipes, env);
-		free_nodes(&g.node, &g.parser);
+			ft_exec(g_gl.node, g_gl.n_pipes, env);
+		free_nodes(&g_gl.node, &g_gl.exp);
 	}
 	return (0);
 }

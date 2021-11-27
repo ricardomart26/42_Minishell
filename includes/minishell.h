@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 16:20:59 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 23:07:16 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define READ_END 0
 # define WRITE_END 1
 # define FORKED_CHILD 0
-
 
 typedef enum s_error_code
 {
@@ -63,23 +62,10 @@ typedef struct s_node
 	char			**filename;
 	t_red			*red;
 	int				n_red;
-	bool			pipe;
-	bool			first_cmd;
 	bool			end_of_tree;
 	bool			has_heredoc;
 	t_type			type;
 }	t_node;
-
-typedef struct s_parser
-{
-	int		n_pipes;
-	int		n_of_redirections;
-	bool	open_q;
-	bool	open_dq;
-	int		c;
-	int		next_c;
-	char	*exp;
-}	t_parser;
 
 typedef struct s_vars_i_j
 {
@@ -108,36 +94,37 @@ typedef struct s_pipes
 
 typedef struct s_global
 {
-	t_parser		parser;
 	t_node			*node;
 	struct termios	term;
 	int				error_code;
 	int				inside_command;
+	char	*exp;
+	int		n_pipes;
 }	t_global;
 
-t_global	g;
+t_global	g_gl;
 
 /******************************/
 /*	    Parsing Functions     */
 /******************************/
 
-char	*expand_vars(char *line_var, t_lista *lst_envp);
 bool	find_quotes(char c, bool *dq, bool *q);
 char	**split_quotes(char const *s, int option);
-void	get_cmd_and_file(t_node **node, t_parser *parser);
-void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd);
+void	get_cmd_and_file(t_node **node);
 bool	command_doesnt_exist(char *cmd, t_node *curr);
 bool	check_quotes(t_token token, bool *open_dq, bool *open_q);
-int		count_tokens(t_parser *parser, t_token find_token);
-char	*eraser_quotes(char *str, bool dq, bool q);
+void	count_pipes(char *exp, int *n_of_pipes);
 int		not_valid_line(const char *line);
-char	*expand_vars(char *line_var, t_lista *lst_envp);
-char	*pwd_for_me(void);
-char	*if_file_first(t_parser *parser, char *cmd, t_node *node);
-char	**return_files(t_parser *parser, char *cmd, int nbr_files);
-char	*new_expand_vars(char *exp, t_lista *lst_env);
-void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd);
+char	*if_file_first(char *cmd, t_node *node);
+char	**return_files(char *cmd, int nbr_files);
+void	new_expand_vars(char **exp, t_lista *lst_env);
+void	file_or_cmd_in_front(t_node **c, t_vars_i_j v, char *cmd);
 char	*replace_value(char *exp, char *value, t_vars_i_j v, int len);
+char	*eraser_quotes(char *str, bool dq, bool q);
+
+
+
+void	split_file_and_cmd(t_node **curr);
 
 /******************************/
 /*	   Builtins Functions     */
@@ -148,13 +135,11 @@ void	ft_export(char *var, t_lista *envp, t_lista *sort);
 void	ft_env(t_lista *lst, char *is_not_null);
 int		ft_unset(char *path, t_lista **lst_env, t_lista **lst_sort);
 void	list_init(t_listas **listas, char **env);
-void	deallocate(t_lista **root);
 int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);		
-int		builtins(t_parser *parser, t_node **node, t_listas *listas, char **cmd);
+int		builtins(t_node **node, t_listas *listas, char **cmd);
 int		is_builtin(char **line);
 void	echo(char **line, int flag_n, t_listas *listas);
-char	*eraser_quotes(char *str, bool dq, bool q);
 
 /******************************/
 /*	  Redirection Functions   */
@@ -164,20 +149,16 @@ void	check_redirections_on_command(t_node *node);
 void	rl_heredoc(t_node *node, char *del);
 void	seek_for_heredoc(t_node *node);
 void	heredoc_redirection_and_unlink_file(void);
-void	do_infile(char *filename);
-t_red	check_red(int c, int next);
-void	parse_red(t_parser *parser, t_node **node);
-void	do_outfile(char *filename);
-void	do_append(char *filename);
+t_red	check_red(char *str);
+void	parse_red(t_node **node);
 
 /******************************/
 /*	      AST Functions       */
 /******************************/
 
 void	only_one_cmd(char *exp, t_node *node);
-t_node	*rec_node_tree_init(char *exp, bool pipe, bool final, t_vars_i_j *l);
 bool	is_empty_tree(t_node *node);
-void	abstract_tree_parser(t_node **node, t_parser *parser);
+void	abstract_tree_parser(t_node **node, char **exp, int *n_pipes, t_lista *linked_env);
 
 /******************************/
 /*	     Piping Functions     */
@@ -191,7 +172,7 @@ void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes);
 /*	     Utils Functions      */
 /******************************/
 
-void	free_nodes(t_node **node, t_parser *parser);
+void	free_nodes(t_node **node, char **exp);
 int		free_with_return(void *str);
 
 /******************************/

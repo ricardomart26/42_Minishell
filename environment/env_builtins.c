@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 16:17:17 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 20:39:52 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,9 @@ void	ft_env(t_lista *lst, char *is_not_null)
 	t_lista	*current;
 
 	if (is_not_null)
-		g.error_code = COMMAND_NOT_FOUND;
+		g_gl.error_code = COMMAND_NOT_FOUND;
 	current = lst;
-	while (current != NULL && !g.error_code)
+	while (current != NULL && !g_gl.error_code)
 	{
 		printf("%s\n", (char *)current->content);
 		current = current->next;

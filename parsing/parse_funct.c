@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 22:14:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:33:10 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:00:32 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,25 @@ bool	is_empty_tree(t_node *node)
 	return (false);
 }
 
-void	c_and_next(int *c, int *next, char *str, int i)
+/**
+ * 
+ * @definition: Recebe o caracter atual e o proximo (se existir)
+ * 
+ * @params: *c -> 
+ * *next ->
+ * *str ->
+ * i ->
+ *  
+ * @return_value: (void)
+ * 
+ */
+
+void	current_char_and_next(int *c, int *next, char *str)
 {
-	*c = str[i];
-	if (str[i + 1])
-		*next = str[i + 1];
-	else
-		*next = 0;
+	*c = str[0];
+	*next = 0;
+	if (str[1])
+		*next = str[1];
 }
 
 /**

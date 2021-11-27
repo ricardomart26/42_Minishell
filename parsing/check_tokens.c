@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:42:06 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:12:09 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:41:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,31 @@
  * 
  */
 
-int	count_tokens(t_parser *parser, t_token find_token)
+void	count_pipes(char *exp, int *n_pipes)
 {
 	int		i;
-	int		counter;
+	bool	open_dq;
+	bool	open_q;
 	t_token	token;
 
+	open_dq = false;
+	open_q = false;
 	i = -1;
-	counter = 0;
-	while (parser->exp[++i])
+	while (exp[++i])
 	{
-		parser->c = parser->exp[i];
-		if (parser->exp[i + 1])
-			parser->next_c = parser->exp[i + 1];
-		else
-			parser->next_c = 0;
-		token = get_token(parser->c, parser->next_c);
-		check_quotes(token, &parser->open_dq, &parser->open_q);
-		if (token == find_token && (!parser->open_dq && !parser->open_q))
-			counter++;
+		token = get_token(exp + i);
+		check_quotes(token, &open_dq, &open_q);
+		if (token == PIPE && (!open_dq && !open_q))
+			(*n_pipes)++;
 	}
-	return (counter);
 }
 
-t_red	check_red(int c, int next)
+t_red	check_red(char *str)
 {
+	int	c;
+	int	next;
+
+	current_char_and_next(&c, &next, str);
 	if (c == '<' && next == '<')
 		return (TO_HEREDOC);
 	else if (c == '>' && next == '>')
@@ -63,8 +63,12 @@ t_red	check_red(int c, int next)
 	return (NOTHING);
 }
 
-t_token	get_token(int c, int next_c)
+t_token	get_token(char *str)
 {
+	int	c;
+	int	next_c;
+
+	current_char_and_next(&c, &next_c, str);
 	if (c == '|')
 		return (PIPE);
 	else if (c == '"')
@@ -78,26 +82,6 @@ t_token	get_token(int c, int next_c)
 	else if (c == '<')
 		return (REDIRECTION);
 	else if (c == '>')
-		return (REDIRECTION);
-	return (42);
-}
-
-t_token	get_token_with_c(int *c, int *next_c, char *str, int i)
-{
-	c_and_next(c, next_c, str, i);
-	if (*c == '|')
-		return (PIPE);
-	else if (*c == '"')
-		return (DQ);
-	else if (*c == '\'')
-		return (Q);
-	else if (*c == '<' && *next_c == '<')
-		return (REDIRECTION);
-	else if (*c == '>' && *next_c == '>')
-		return (REDIRECTION);
-	else if (*c == '<')
-		return (REDIRECTION);
-	else if (*c == '>')
 		return (REDIRECTION);
 	return (42);
 }

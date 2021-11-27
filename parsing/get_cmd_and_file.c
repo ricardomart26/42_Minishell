@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:43:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 22:30:26 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 23:10:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,11 @@ char	*get_only_file(char *cmd, int *start, int *end)
  * 
  */
 
-char	**return_files(t_parser *parser, char *cmd, int nbr_files)
+char	**return_files(char *cmd, int nbr_files)
 {
 	char		**ret;
 	int			i;
 	t_vars_i_j	vars;
-	t_token		token;
 
 	ret = malloc(sizeof(char *) * (nbr_files + 2));
 	if (!ret)
@@ -70,9 +69,7 @@ char	**return_files(t_parser *parser, char *cmd, int nbr_files)
 	vars.i = 0;
 	while (cmd[++vars.j])
 	{
-		c_and_next(&parser->c, &parser->next_c, cmd, vars.j);
-		token = get_token(parser->c, parser->next_c);
-		if (token == REDIRECTION)
+		if (get_token(cmd + vars.j) == REDIRECTION)
 			ret[i++] = get_only_file(cmd, &vars.i, &vars.j);
 	}
 	vars.i++;
@@ -94,33 +91,29 @@ char	**return_files(t_parser *parser, char *cmd, int nbr_files)
  * 
  */
 
-t_node	*split_file_and_cmd(t_parser *parser, t_node *curr)
+void	split_file_and_cmd(t_node **curr)
 {
 	t_vars_i_j	vars;
-	t_token		token;
 	char		*cmd;
 
-	cmd = ft_strdup_and_free(&curr->cmd);
+	cmd = ft_strdup_and_free(&(*curr)->cmd);
 	vars.i = 0;
 	vars.j = -1;
-	cmd = if_file_first(parser, ft_strtrim(cmd, " "), curr);
-	if (command_doesnt_exist(cmd, curr))
-		return (curr);
+	cmd = if_file_first(ft_strtrim(cmd, " "), *curr);
+	if (command_doesnt_exist(cmd, (*curr)))
+		return ;
 	while (cmd[++vars.j])
 	{
-		c_and_next(&parser->c, &parser->next_c, cmd, vars.j);
-		token = get_token(parser->c, parser->next_c);
-		if (token == REDIRECTION)
+		if (get_token(cmd + vars.j) == REDIRECTION)
 		{
 			vars.i = vars.j;
-			curr->cmd = ft_substr(cmd, 0, vars.j);
+			(*curr)->cmd = ft_substr(cmd, 0, vars.j);
 			break ;
 		}
 	}
 	while (find_c_in_str(cmd[vars.j], "<>"))
 		vars.j++;
-	file_or_cmd_in_front(curr, vars, parser, cmd);
-	return (curr);
+	file_or_cmd_in_front(curr, vars, cmd);
 }
 
 /**
@@ -138,24 +131,24 @@ t_node	*split_file_and_cmd(t_parser *parser, t_node *curr)
  *
  */
 
-void	get_cmd_and_file(t_node **node, t_parser *parser)
+void	get_cmd_and_file(t_node **node)
 {
 	t_node	*curr;
 
 	curr = *node;
 	if (is_empty_tree(curr))
-		curr = split_file_and_cmd(parser, curr);
+		split_file_and_cmd(&curr);
 	else
 	{
 		while (curr->l->end_of_tree != true)
 		{
 			if (curr->l->n_red != 0)
-				curr->l = split_file_and_cmd(parser, curr->l);
+				split_file_and_cmd(&curr->l);
 			curr = curr->r;
 		}
 		if (curr->l->n_red != 0)
-			curr->l = split_file_and_cmd(parser, curr->l);
+			split_file_and_cmd(&curr->l);
 		if (curr->r->n_red != 0)
-			curr->r = split_file_and_cmd(parser, curr->r);
+			split_file_and_cmd(&curr->r);
 	}
 }

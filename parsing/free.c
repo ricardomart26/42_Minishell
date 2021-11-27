@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:58:36 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 01:31:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 23:05:38 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,21 @@ void	free_one_node(t_node **node)
 	free(*node);
 }
 
-void	free_nodes(t_node **node, t_parser *parser)
+void	free_nodes(t_node **node, char **exp)
 {
-	free(parser->exp);
-	parser->exp = NULL;
+	g_gl.n_pipes = 0;
+	free(*exp);
+	*exp = NULL;
 	if (is_empty_tree(*node))
-	{
 		free_one_node(node);
-		return ;
-	}
-	while ((*node)->r->type == IS_A_PIPE)
+	else
 	{
+		while ((*node)->r->type == IS_A_PIPE)
+		{
+			free_one_node(&(*node)->l);
+			*node = (*node)->r;
+		}
 		free_one_node(&(*node)->l);
-		*node = (*node)->r;
+		free_one_node(&(*node)->r);
 	}
-	free_one_node(&(*node)->l);
-	free_one_node(&(*node)->r);
-	free(*node);
 }

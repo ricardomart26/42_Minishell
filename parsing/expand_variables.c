@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 17:50:14 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/27 20:16:01 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,13 @@ void	join_strings(char **exp, char **split_exp)
 	}
 }
 
-char	*new_expand_vars(char *exp, t_lista *lst_env)
+void	new_expand_vars(char **exp, t_lista *lst_env)
 {
 	t_vars_i_j	v;
 	char		**split_exp;
 
-	(void)lst_env;
 	v.i = -1;
-	split_exp = split_quotes(exp, 0);
+	split_exp = split_quotes(*exp, 0);
 	while (split_exp[++v.i])
 	{
 		while (split_exp[v.i] != NULL && split_exp[v.i][0] == '\'')
@@ -97,9 +96,8 @@ char	*new_expand_vars(char *exp, t_lista *lst_env)
 				&& split_exp[v.i][v.j + 1] != '?')
 				get_variable_value(&split_exp[v.i], lst_env);
 			if (v.j >= ft_strlen(split_exp[v.i]))
-				break;
+				break ;
 		}
 	}
-	join_strings(&exp, split_exp);
-	return (exp);
+	join_strings(exp, split_exp);
 }

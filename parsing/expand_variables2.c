@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 23:19:56 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 17:43:37 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/27 20:15:27 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,19 @@ int	get_size(char *exp, int len_of_value, int len_of_var_in_dollar)
 	return (size_to_alloc);
 }
 
+char	*alloc(char *value, char *temp, int len)
+{
+	char	*ret;
+
+	if (value)
+		ret = malloc(sizeof(char) * get_size(temp, ft_strlen(value), len) + 1);
+	else
+		ret = malloc(sizeof(char) * ft_strlen(temp) - len + 1);
+	if (!ret)
+		return (NULL);
+	return (ret);
+}
+
 char	*replace_value(char *exp, char *value, t_vars_i_j v, int len)
 {
 	char		*temp;
@@ -31,10 +44,7 @@ char	*replace_value(char *exp, char *value, t_vars_i_j v, int len)
 	int			save_i;
 
 	temp = ft_strdup_and_free(&exp);
-	if (value)
-		exp = malloc(sizeof(char) * get_size(temp, ft_strlen(value), len) + 1);
-	else
-		exp = malloc(sizeof(char) * ft_strlen(temp) - len + 1);
+	exp = alloc(value, temp, len);
 	l.i = -1;
 	l.j = 0;
 	save_i = 0;

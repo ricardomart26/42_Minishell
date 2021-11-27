@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:41:55 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:09:55 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:00:57 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ typedef enum s_token
 	REDIRECTION
 }	t_token;
 
-t_token	get_token_with_c(int *c, int *next, char *str, int i);
-t_token	get_token(int c, int next);
-void	c_and_next(int *c, int *next, char *str, int i);
+t_token	get_token(char *str);
+// t_token	get_token(int c, int next);
+void	current_char_and_next(int *c, int *next, char *str);
 
 #endif

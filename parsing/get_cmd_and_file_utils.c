@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 21:21:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 21:22:12 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 22:51:54 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ bool	command_doesnt_exist(char *cmd, t_node *curr)
 	return (false);
 }
 
-void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, t_parser *p, char *cmd)
+void	file_or_cmd_in_front(t_node **c, t_vars_i_j v, char *cmd)
 {
 	if (v.i != 0)
-		c->filename = return_files(p, (cmd + v.j), c->n_red);
+		(*c)->filename = return_files((cmd + v.j), (*c)->n_red);
 	else
-		c->cmd = ft_substr(cmd, 0, v.j);
+		(*c)->cmd = ft_substr(cmd, 0, v.j);
 }

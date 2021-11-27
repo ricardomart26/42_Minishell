@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 16:40:53 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 22:32:22 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:04:58 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,13 @@ void	get_rid_of_set_and_spaces(char **arg, char *set)
 		(*arg)++;
 }
 
-char	*if_file_first(t_parser *parser, char *cmd, t_node *node)
+char	*if_file_first(char *cmd, t_node *node)
 {
-	t_token	token;
 	int		i;
 	int		size_until_next_space;
 
-	token = get_token_with_c(&parser->c, &parser->next_c, cmd, 0);
 	i = 0;
-	while (token == REDIRECTION)
+	while (get_token(cmd) == REDIRECTION)
 	{
 		if (i == 0)
 			node->filename = malloc(sizeof(char *) * 2);
@@ -45,7 +43,6 @@ char	*if_file_first(t_parser *parser, char *cmd, t_node *node)
 		get_rid_of_spaces(&cmd);
 		if (*cmd == '\0')
 			break ;
-		token = get_token_with_c(&parser->c, &parser->next_c, cmd, 0);
 	}
 	if (i != 0)
 		node->filename[i] = NULL;

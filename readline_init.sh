@@ -23,14 +23,14 @@ else
 fi
 
 #    CHECK if the config is in zshrc
-if grep 'source $HOME/.brewconfig.zsh' ~/.zshrc ; then
+if grep 'source $HOME/.brewconfig_gl.zsh' ~/.zshrc ; then
     echo "zshrc is configured correctly."
 else
     echo "Adding config to .zshrc..."
     if [[ $? != 0 ]] ; then
         exit
     else
-        echo 'source $HOME/.brewconfig.zsh' >> ~/.zshrc
+        echo 'source $HOME/.brewconfig_gl.zsh' >> ~/.zshrc
         source ~/.zshrc
     fi
 fi
@@ -40,7 +40,7 @@ fi
 if brew list | grep pkg-config ; then
     echo "OK!"
 else
-    echo "pkg-config not found, installing..."
+    echo "pkg-config not found, installing_gl..."
     if [[ $? != 0 ]] ; then
         exit
     else
