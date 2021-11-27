@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 05:58:34 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 16:44:27 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,12 @@ void	only_one_cmd(char *exp, t_node *node)
 int	get_readline_and_history(t_global *g)
 {
 	g->parser.exp = readline("Enter a command: ");
+	if (!g->parser.exp)
+		exit(1);
 	while (find_c_in_str(*g->parser.exp, SPACES))
 		g->parser.exp++;
+	if (!g->parser.exp)
+		exit(1);
 	if (ft_strlen(g->parser.exp) == 0)
 		return (-1);
 	add_history(g->parser.exp);
@@ -49,32 +53,36 @@ int	get_readline_and_history(t_global *g)
 	return (0);
 }
 
-void	get_tyy_attributes(struct termios term)
+void	get_tyy_attributes()
 {
-	tcgetattr(0, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(0, TCSANOW, &term);
+	tcgetattr(0, &g.term);
+	g.term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &g.term);
 }
 
-void	init_all(t_global *g, t_listas **listas, char **env)
+void	init_all(t_listas **listas, char **env)
 {
-	init_all(&g, &listas, &env);
-	get_tyy_attributes(g.term);
-	listas = NULL;
-	list_init(&listas, env);
-	signal(SIGINT, sig_int);
-	signal(SIGQUIT, sig_int);
+	struct sigaction sa;
+	struct sigaction sa_1;
+
+	get_tyy_attributes();
+	sa.sa_handler = &sig_int;
+	sa_1.sa_handler = SIG_IGN;
+	sa.sa_flags = SA_RESTART;
+	list_init(listas, env);
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa_1, NULL);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_global		g;
 	static t_parser	empty_parser;
 	static t_node	*empty_node;
 	t_listas		*listas;
 
 	(void) ac;
 	(void) av;
+	init_all(&listas, env);
 	while (1)
 	{
 		g.parser = empty_parser;

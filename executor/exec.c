@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 05:54:27 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 16:15:36 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	ft_exec(t_node *node, int n_pipes, char **env)
 {
 	t_pipes	p;
 
+	g.inside_command = 1;
 	p.index_for_pipes = -1;
 	seek_for_heredoc(node);
 	if (is_empty_tree(node) && node->cmd == NULL)
@@ -99,4 +100,5 @@ void	ft_exec(t_node *node, int n_pipes, char **env)
 		if (n_pipes != 0 && node->r->type != IS_A_COMMAND)
 			node = node->r;
 	}
+	g.inside_command = 0;
 }
