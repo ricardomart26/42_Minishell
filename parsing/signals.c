@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 05:58:23 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 17:04:22 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 18:42:29 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@ void	sig_int(int sig)
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
+		else
+			g.error_code = 130;
 	}
 }

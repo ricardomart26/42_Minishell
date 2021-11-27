@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 22:52:00 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 17:15:36 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 19:57:08 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,13 @@ void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes)
 	}
 }
 
-void	treat_error(int status)
-{
-	if (status == 32512)
-		g.error_code = 127;
-	else if (status == 512)
-		g.error_code = 2;
-	else
-		g.error_code = 0;
-}
-
 int	close_and_save_p(t_pipes *p, int n_pipes)
 {
 	int	status;
 
 	waitpid(0, &status, 0);
-	treat_error(status);
+	if (g.error_code != 130)
+		g.error_code = status/256;
 	if (n_pipes == 0)
 		return (0);
 	if (p->index_for_pipes == 0)

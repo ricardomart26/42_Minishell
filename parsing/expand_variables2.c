@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 23:19:56 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 05:51:04 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 17:43:37 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ char	*replace_value(char *exp, char *value, t_vars_i_j v, int len)
 	int			save_i;
 
 	temp = ft_strdup_and_free(&exp);
-	exp = malloc(sizeof(char) * get_size(temp, ft_strlen(value), len) + 1);
+	if (value)
+		exp = malloc(sizeof(char) * get_size(temp, ft_strlen(value), len) + 1);
+	else
+		exp = malloc(sizeof(char) * ft_strlen(temp) - len + 1);
 	l.i = -1;
 	l.j = 0;
 	save_i = 0;
@@ -41,7 +44,7 @@ char	*replace_value(char *exp, char *value, t_vars_i_j v, int len)
 		if (l.i == v.j)
 		{
 			l.j = 0;
-			while (l.j < ft_strlen(value) && value[l.j] != '\0')
+			while (value && l.j < ft_strlen(value) && value[l.j] != '\0')
 				exp[l.i++] = value[l.j++];
 			l.j = len;
 		}

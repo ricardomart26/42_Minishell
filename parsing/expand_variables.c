@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/26 00:00:55 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/27 17:50:14 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ char	*new_expand_vars(char *exp, t_lista *lst_env)
 			if (split_exp[v.i][v.j] == '$' && split_exp[v.i][v.j + 1] != '\0'
 				&& split_exp[v.i][v.j + 1] != '?')
 				get_variable_value(&split_exp[v.i], lst_env);
+			if (v.j >= ft_strlen(split_exp[v.i]))
+				break;
 		}
 	}
 	join_strings(&exp, split_exp);
