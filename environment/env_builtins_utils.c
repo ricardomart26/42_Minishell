@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 19:34:40 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:41:19 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,30 @@ void	list_sort(t_lista *lst)
 		while (after != NULL)
 		{
 			index = 0;
-			if ((unsigned char)current->content[0] > (unsigned char)after->content[0])
+			if ((unsigned char)current->content[0]
+				> (unsigned char)after->content[0])
 			{
 				temp = ft_strdup(current->content);
 				current->content = ft_strdup(after->content);
 				after->content = ft_strdup(temp);
 				free(temp);
 			}
-			else if ((unsigned char)current->content[0] == (unsigned char)after->content[0])
+			else if ((unsigned char)current->content[0]
+				== (unsigned char)after->content[0])
 			{
-				while ((unsigned char)current->content[index] == (unsigned char)after->content[index])
+				while ((unsigned char)current->content[index]
+					== (unsigned char)after->content[index])
 				{
 					index++;
-					if ((unsigned char)current->content[index] > (unsigned char)after->content[index])
+					if ((unsigned char)current->content[index]
+						> (unsigned char)after->content[index])
 					{
 						temp = ft_strdup(current->content);
 						current->content = ft_strdup(after->content);
 						after->content = ft_strdup(temp);
 					}
-					else if ((unsigned char)current->content[index] < (unsigned char)after->content[index])
+					else if ((unsigned char)current->content[index]
+						< (unsigned char)after->content[index])
 						break ;
 				}
 			}

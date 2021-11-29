@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/27 22:56:38 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:28:59 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	cd(char *path, t_lista *lst_envp)
 		path = ft_strdup(get_home_var(lst_envp, path));
 	if (chdir(path) != 0)
 	{
-		printf("ERROR: NO DIRECTORY");
+		printf("ERROR: NO DIRECTORY\n");
 		g_gl.error_code = GENERAL_ERROR;
 	}
 }
