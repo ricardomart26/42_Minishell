@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:44:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 20:40:37 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:26:37 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,33 +52,48 @@ int	vars_echo(char *line, t_lista *lst)
 	return (1);
 }
 
+int	sub_echo(char **line, t_listas *listas, int index)
+{
+	if (line[index][0] == '$' && line[index][1] != '?')
+	{
+		if (vars_echo(line[index], listas->linked_env) == 0)
+			return (1);
+	}
+	else if (line[index][0] == '$' && index++)
+	{
+		printf("%d ", g_gl.error_code);
+		g_gl.error_code = 0;
+	}
+	if (line[index])
+		printf("%s", line[index]);
+	else
+		return (2);
+	if (line[index + 1])
+		printf(" ");
+	return (0);
+}
+
 void	echo(char **line, int flag_n, t_listas *listas)
 {
 	int	index;
+	int	ret;
 
+	ret = 0;
 	index = 1;
 	if (flag_n == 1)
 		index = 2;
 	if (!line[index])
+	{
 		printf("\n");
+		return ;
+	}
 	while (line[index])
 	{
-		if (line[index][0] == '$' && line[index][1] != '?')
-		{
-			if (vars_echo(line[index], listas->linked_env) == 0)
-				return ;
-		}
-		else if (line[index][0] == '$' && index++)
-		{
-			printf("%d ", g_gl.error_code);
-			g_gl.error_code = 0;
-		}
-		if (line[index])
-			printf("%s", line[index]);
-		else
+		ret = sub_echo(line, listas, index);
+		if (ret == 1)
+			return ;
+		if (ret == 2)
 			break ;
-		if (line[index + 1])
-			printf(" ");
 		index++;
 	}
 	if (flag_n == 0)
