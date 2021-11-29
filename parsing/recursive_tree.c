@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:48:39 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 23:10:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:37:09 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_node	*rec_node_tree_init(char *exp, bool final, t_vars_i_j *vars)
 	while (++i < size)
 		node->cmd[i] = exp[vars->i + i];
 	node->cmd[i] = '\0';
+	get_red(node, node->cmd, false, false);
 	return (node);
 }
 
@@ -138,7 +139,42 @@ void	parsing_of_pipes(char *exp, t_node *node, t_vars_i_j *vars, int pipes)
 	handle_ast_nodes(node, exp, vars, pipes);
 }
 
-void	abstract_tree_parser(t_node **root, char **exp, int *n_pipes, t_lista *linked_env)
+/**
+ * 
+ * @definition: Conta a quantidade de tokens na expressao recebida da readline
+ * Example: Se o token for "\", entao o comando: ls -la | wc -l, vai contar como 
+ * 1. 
+ * 
+ * @params: st -> Estrutura geral (So para nao ter que iniciar certas variaveis
+ * em cada funcao, e para andar com a expressao recebida do readline pelas
+ * funcoes)
+ * st -> find_token vai ser o token que queremos contar
+ *  
+ * @return_value: Retorna o numero de tokens encontrado na expressao
+ * 
+ */
+
+void	count_pipes(char *exp, int *n_pipes)
+{
+	int		i;
+	bool	open_dq;
+	bool	open_q;
+	t_token	token;
+
+	open_dq = false;
+	open_q = false;
+	i = -1;
+	while (exp[++i])
+	{
+		token = get_token(exp + i);
+		check_quotes(token, &open_dq, &open_q);
+		if (token == PIPE && (!open_dq && !open_q))
+			(*n_pipes)++;
+	}
+}
+
+void	abstract_tree_parser(t_node **root,
+			char **exp, int *n_pipes, t_lista *linked_env)
 {
 	t_vars_i_j	vars;
 	t_node		*node;
@@ -155,6 +191,4 @@ void	abstract_tree_parser(t_node **root, char **exp, int *n_pipes, t_lista *link
 		parsing_of_pipes(*exp, node, &vars, (*n_pipes) + 1);
 	if (*n_pipes == 1)
 		node->type = IS_A_PIPE;
-	parse_red(&node);
-	get_cmd_and_file(&node);
 }

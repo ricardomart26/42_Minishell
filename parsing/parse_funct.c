@@ -6,11 +6,51 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 22:14:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 21:00:32 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:07:52 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_red	check_red(char *str)
+{
+	int	c;
+	int	next;
+
+	current_char_and_next(&c, &next, str);
+	if (c == '<' && next == '<')
+		return (TO_HEREDOC);
+	else if (c == '>' && next == '>')
+		return (TO_APPEND);
+	else if (c == '<')
+		return (TO_INFILE);
+	else if (c == '>')
+		return (TO_OUTFILE);
+	return (NOTHING);
+}
+
+t_token	get_token(char *str)
+{
+	int	c;
+	int	next_c;
+
+	current_char_and_next(&c, &next_c, str);
+	if (c == '|')
+		return (PIPE);
+	else if (c == '"')
+		return (DQ);
+	else if (c == '\'')
+		return (Q);
+	else if (c == '<' && next_c == '<')
+		return (REDIRECTION);
+	else if (c == '>' && next_c == '>')
+		return (REDIRECTION);
+	else if (c == '<')
+		return (REDIRECTION);
+	else if (c == '>')
+		return (REDIRECTION);
+	return (42);
+}
 
 /**
  * 

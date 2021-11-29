@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 20:16:01 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 22:16:12 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,24 @@ void	join_strings(char **exp, char **split_exp)
 		free(temp);
 	}
 }
+
+
+// char	*get_home_var(t_lista *lst_env, char *path)
+// {
+// 	t_lista	*temp;
+
+// 	temp = lst_env;
+// 	while (ft_strncmp(temp->content, "HOME", 4) && temp != NULL)
+// 		temp = temp->next;
+// 	if (!ft_strncmp(temp->content, "HOME", 4))
+// 	{
+// 		if (path[1] && path[1] == '/')
+// 			return (ft_strjoin(temp->content + 5, path + 1));
+// 		return (temp->content + 5);
+// 	}
+// 	return (NULL);
+// }
+
 
 void	new_expand_vars(char **exp, t_lista *lst_env)
 {

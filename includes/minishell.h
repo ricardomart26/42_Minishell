@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 23:07:16 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:16:54 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ typedef struct s_global
 	struct termios	term;
 	int				error_code;
 	int				inside_command;
-	char	*exp;
-	int		n_pipes;
+	char			*exp;
+	int				n_pipes;
 }	t_global;
 
 t_global	g_gl;
@@ -116,15 +116,11 @@ bool	check_quotes(t_token token, bool *open_dq, bool *open_q);
 void	count_pipes(char *exp, int *n_of_pipes);
 int		not_valid_line(const char *line);
 char	*if_file_first(char *cmd, t_node *node);
-char	**return_files(char *cmd, int nbr_files);
 void	new_expand_vars(char **exp, t_lista *lst_env);
-void	file_or_cmd_in_front(t_node **c, t_vars_i_j v, char *cmd);
+void	file_or_cmd_in_front(t_node *c, t_vars_i_j v, char *cmd);
 char	*replace_value(char *exp, char *value, t_vars_i_j v, int len);
 char	*eraser_quotes(char *str, bool dq, bool q);
-
-
-
-void	split_file_and_cmd(t_node **curr);
+void	get_red(t_node *curr, char *cmd, bool open_dq, bool open_q);
 
 /******************************/
 /*	   Builtins Functions     */
@@ -150,7 +146,6 @@ void	rl_heredoc(t_node *node, char *del);
 void	seek_for_heredoc(t_node *node);
 void	heredoc_redirection_and_unlink_file(void);
 t_red	check_red(char *str);
-void	parse_red(t_node **node);
 
 /******************************/
 /*	      AST Functions       */
@@ -158,7 +153,8 @@ void	parse_red(t_node **node);
 
 void	only_one_cmd(char *exp, t_node *node);
 bool	is_empty_tree(t_node *node);
-void	abstract_tree_parser(t_node **node, char **exp, int *n_pipes, t_lista *linked_env);
+void	abstract_tree_parser(t_node **node, char **exp,
+			int *n_pipes, t_lista *linked_env);
 
 /******************************/
 /*	     Piping Functions     */

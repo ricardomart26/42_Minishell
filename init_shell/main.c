@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 23:05:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/29 22:15:10 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	only_one_cmd(char *exp, t_node *node)
 	node->type = IS_A_COMMAND;
 	node->has_heredoc = false;
 	node->cmd = ft_strdup(exp);
+	get_red(node, node->cmd, false, false);
 }
 
 int	get_readline_and_history(void)
@@ -50,21 +51,15 @@ int	get_readline_and_history(void)
 	return (0);
 }
 
-void	get_tyy_attributes(void)
-{
-	tcgetattr(0, &g_gl.term);
-	g_gl.term.c_lflag &= ~ECHOCTL;
-	tcsetattr(0, TCSANOW, &g_gl.term);
-}
-
-
-// Sera que funciona so com uma var sigaction, se mudar o handler depois? Exprimentar com o mendes
 void	init_all(t_listas **listas, char **env)
 {
 	struct sigaction	sa;
 	struct sigaction	sa_1;
+	struct termios		term;
 
-	get_tyy_attributes();
+	tcgetattr(0, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &term);
 	sa.sa_handler = &sig_int;
 	sa_1.sa_handler = SIG_IGN;
 	sa.sa_flags = SA_RESTART;
@@ -87,7 +82,8 @@ int	main(int ac, char **av, char **env)
 		g_gl.node = empty_node;
 		if (get_readline_and_history() == -1)
 			continue ;
-		abstract_tree_parser(&g_gl.node, &g_gl.exp, &g_gl.n_pipes, listas->linked_env);
+		abstract_tree_parser(&g_gl.node, &g_gl.exp, &g_gl.n_pipes,
+			listas->linked_env);
 		if (g_gl.node->cmd != NULL && is_empty_tree(g_gl.node)
 			&& is_builtin(split_quotes(g_gl.node->cmd, 1)))
 			builtins(&g_gl.node, listas,

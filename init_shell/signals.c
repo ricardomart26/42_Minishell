@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_cmd_and_file_utils.c                           :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/22 21:21:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 22:51:54 by rimartin         ###   ########.fr       */
+/*   Created: 2021/11/26 05:58:23 by rimartin          #+#    #+#             */
+/*   Updated: 2021/11/29 22:02:34 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	command_doesnt_exist(char *cmd, t_node *curr)
+void	sig_int(int sig)
 {
-	while (*cmd == ' ')
-		cmd++;
-	if (ft_strlen(cmd) == 0)
+	if (sig == SIGINT)
 	{
-		curr->cmd = NULL;
-		return (true);
+		write(1, "\n", 1);
+		printf("penis\n");
+		if (g_gl.inside_command == 0)
+		{
+			rl_on_new_line();
+			// rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		else
+			g_gl.error_code = 130;
 	}
-	return (false);
-}
-
-void	file_or_cmd_in_front(t_node **c, t_vars_i_j v, char *cmd)
-{
-	if (v.i != 0)
-		(*c)->filename = return_files((cmd + v.j), (*c)->n_red);
-	else
-		(*c)->cmd = ft_substr(cmd, 0, v.j);
 }
