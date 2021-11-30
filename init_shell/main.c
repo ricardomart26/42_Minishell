@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/29 22:15:10 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 16:19:18 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	main(int ac, char **av, char **env)
 	init_all(&listas, env);
 	while (1)
 	{
-		printf("exp %s\n", g_gl.exp);
 		g_gl.node = empty_node;
 		if (get_readline_and_history() == -1)
 			continue ;
