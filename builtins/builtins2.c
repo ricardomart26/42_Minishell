@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 18:44:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/29 20:26:37 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/30 19:40:58 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 
 int	is_builtin(char **line)
 {
-	if (ft_strncmp(line[0], "cd", ft_strlen(line[0])) == 0)
+	if (!ft_strncmp(line[0], "cd", ft_strlen(line[0])) && free_dp(line))
 		return (1);
-	else if (ft_strncmp(line[0], "pwd", ft_strlen(line[0])) == 0)
+	else if (!ft_strncmp(line[0], "pwd", ft_strlen(line[0])) && free_dp(line))
 		return (1);
-	else if (ft_strncmp(line[0], "echo", ft_strlen(line[0])) == 0)
+	else if (!ft_strncmp(line[0], "echo", ft_strlen(line[0])) && free_dp(line))
 		return (1);
-	else if (ft_strncmp(line[0], "exit", ft_strlen(line[0])) == 0)
+	else if (!ft_strncmp(line[0], "exit", ft_strlen(line[0])) && free_dp(line))
 		return (1);
-	else if (ft_strncmp(line[0], "export", ft_strlen(line[0])) == 0)
+	else if (!ft_strncmp(line[0], "export", ft_strlen(line[0]))
+		&& free_dp(line))
 		return (1);
-	else if (ft_strncmp(line[0], "env", ft_strlen(line[0])) == 0)
+	else if (!ft_strncmp(line[0], "env", ft_strlen(line[0])) && free_dp(line))
 		return (1);
-	else if (ft_strncmp(line[0], "unset", ft_strlen(line[0])) == 0)
+	else if (!ft_strncmp(line[0], "unset", ft_strlen(line[0])) && free_dp(line))
 		return (1);
 	return (0);
 }

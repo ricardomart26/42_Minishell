@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/29 20:28:59 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/30 22:17:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	cd(char *path, t_lista *lst_envp)
 }
 
 void	
-	exit_builtin(t_lista *env, t_lista *sort, t_node **node)
+	exit_builtin(t_lista *env, t_lista *sort, t_node *node)
 {
 	ft_lstclear((t_list **)&sort, free);
 	ft_lstclear((t_list **)&env, free);
@@ -58,7 +58,7 @@ void
 	exit(0);
 }
 
-int	builtins(t_node **node, t_listas *listas, char **line)
+int	builtins(t_node *node, t_listas *listas, char **line)
 {
 	int			echo_n;
 
@@ -81,6 +81,7 @@ int	builtins(t_node **node, t_listas *listas, char **line)
 	if (!ft_strncmp(line[0], "env", ft_strlen(line[0])))
 		ft_env(listas->linked_env, line[1]);
 	if (line[1] && !ft_strncmp(line[0], "unset", ft_strlen(line[0])))
-		ft_unset(line[1], &listas->linked_env, &listas->sort);
+		ft_unset(line[1], listas->linked_env, listas->sort);
+	free_dp(line);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 15:57:39 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/30 22:18:24 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,11 @@ void	get_red(t_node *curr, char *cmd, bool open_dq, bool open_q);
 void	list_sort(t_lista *lst);
 void	ft_export(char *var, t_lista *envp, t_lista *sort);
 void	ft_env(t_lista *lst, char *is_not_null);
-int		ft_unset(char *path, t_lista **lst_env, t_lista **lst_sort);
+int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
 void	list_init(t_listas **listas, char **env);
 int		char_check(char *str, char c);
 int		copy_check(char *var, t_lista *sort, t_lista *envp);		
-int		builtins(t_node **node, t_listas *listas, char **cmd);
+int		builtins(t_node *node, t_listas *listas, char **cmd);
 int		is_builtin(char **line);
 void	echo(char **line, int flag_n, t_listas *listas);
 
@@ -168,9 +168,9 @@ void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes);
 /*	     Utils Functions      */
 /******************************/
 
-void	free_nodes(t_node **node, char **exp);
+void	free_nodes(t_node *node, char **exp);
 int		free_with_return(void *str);
-
+int		free_dp(char **dp);
 /******************************/
 /*	   Signals Functions     */
 /******************************/

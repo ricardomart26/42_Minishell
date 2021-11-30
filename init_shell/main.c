@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 16:19:18 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 22:20:48 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,11 @@ int	main(int ac, char **av, char **env)
 {
 	static t_node	*empty_node;
 	t_listas		*listas;
+	char			**split_var;
 
 	(void) ac;
 	(void) av;
+	split_var = NULL;
 	init_all(&listas, env);
 	while (1)
 	{
@@ -83,13 +85,16 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		abstract_tree_parser(&g_gl.node, &g_gl.exp, &g_gl.n_pipes,
 			listas->linked_env);
+		if (is_empty_tree(g_gl.node))
+			split_var = split_quotes(g_gl.node->cmd, 1);
 		if (g_gl.node->cmd != NULL && is_empty_tree(g_gl.node)
-			&& is_builtin(split_quotes(g_gl.node->cmd, 1)))
-			builtins(&g_gl.node, listas,
-				split_quotes(g_gl.node->cmd, 1));
+			&& is_builtin(split_var))
+			builtins(g_gl.node, listas, split_var);
 		else
 			ft_exec(g_gl.node, g_gl.n_pipes, env);
-		free_nodes(&g_gl.node, &g_gl.exp);
+		free_nodes(g_gl.node, &g_gl.exp);
+		if (split_var)
+			free_dp(split_var);
 	}
 	return (0);
 }

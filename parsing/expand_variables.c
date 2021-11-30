@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 16:01:55 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/30 21:34:27 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,16 @@ void	join_strings(char **exp, char **split_exp)
 
 	i = 0;
 	free(*exp);
-	*exp = split_exp[0];
+	*exp = ft_strdup(split_exp[0]);
 	while (split_exp[++i])
 	{
 		temp = ft_str3join(*exp, " ", split_exp[i]);
 		free(*exp);
 		*exp = ft_strdup(temp);
 		free(temp);
+		temp = NULL;
 	}
+	free_dp(split_exp);
 }
 
 // char	*get_home_var(t_lista *lst_env, char *path)

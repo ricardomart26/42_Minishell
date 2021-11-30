@@ -6,38 +6,39 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 20:39:52 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:33:22 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	first_unset(char *path, t_lista **lst)
+int	first_unset(char *path, t_lista *lst)
 {
 	int		index;
 	t_lista	*to_remove;
 
-	index = char_check((*lst)->content, '=');
-	if (!ft_strncmp((*lst)->content, path, index) || (index == -1
-			&& !ft_strncmp((*lst)->content, path, ft_strlen(path))))
+	index = char_check(lst->content, '=');
+	if (!ft_strncmp(lst->content, path, index) || (index == -1
+			&& !ft_strncmp(lst->content, path, ft_strlen(path))))
 	{
 		printf("Removeu o primeiro?\n");
-		to_remove = (*lst);
-		(*lst) = (*lst)->next;
+		to_remove = lst;
+		lst = lst->next;
 		free(to_remove);
+		to_remove = NULL;
 		return (0);
 	}
 	return (1);
 }
 
-int	unset1(char *path, t_lista **lst)
+int	unset1(char *path, t_lista *lst)
 {
 	t_lista	*current;
 	t_lista	*to_remove;
 	int		index;
 
 	index = 0;
-	current = *lst;
+	current = lst;
 	if (first_unset(path, lst) == 0)
 		return (0);
 	while (current->next != NULL)
@@ -49,6 +50,7 @@ int	unset1(char *path, t_lista **lst)
 			to_remove = current->next;
 			current->next = current->next->next;
 			free(to_remove);
+			to_remove = NULL;
 			return (0);
 		}
 		current = current->next;
@@ -56,14 +58,14 @@ int	unset1(char *path, t_lista **lst)
 	return (1);
 }
 
-int	ft_unset(char *path, t_lista **lst_env, t_lista **lst_sort)
+int	ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)
 {
 	t_lista	*current;
 	t_lista	*to_remove;
 	int		index;
 
 	index = 0;
-	current = *lst_env;
+	current = lst_env;
 	if (first_unset(path, lst_env) == 0)
 		return (0);
 	while (current->next != NULL)
@@ -74,6 +76,7 @@ int	ft_unset(char *path, t_lista **lst_env, t_lista **lst_sort)
 			to_remove = current->next;
 			current->next = current->next->next;
 			free(to_remove);
+			to_remove = NULL;
 			unset1(path, lst_sort);
 			return (0);
 		}

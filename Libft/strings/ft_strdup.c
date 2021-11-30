@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:32 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/11 20:30:44 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:33:57 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char	*ft_strdup_and_free(char **s1)
 
 	dup = ft_strdup(*s1);
 	free(*s1);
+	s1 = NULL;
 	return (dup);
 }
 

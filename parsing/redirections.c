@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/29 20:11:07 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 19:28:46 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,13 @@ bool	command_doesnt_exist(char *cmd, t_node *curr)
 
 void	split_file_and_cmd(t_node *curr, int i, int j)
 {
-	char		*cmd;
+	char	*cmd;
+	char	*temp;
 
-	cmd = ft_strdup_and_free(&curr->cmd);
-	cmd = if_file_first(ft_strtrim(cmd, " "), curr);
-	if (command_doesnt_exist(cmd, curr))
+	temp = ft_strdup_and_free(&curr->cmd);
+	cmd = if_file_first(ft_strtrim(temp, " "), curr);
+	if (command_doesnt_exist(cmd, curr) && free_with_return(cmd)
+		&& free_with_return(temp))
 		return ;
 	while (cmd[++j])
 	{
@@ -118,8 +120,9 @@ void	split_file_and_cmd(t_node *curr, int i, int j)
 		curr->filename = return_files((cmd + j), curr->n_red, 0, -1);
 	else
 		curr->cmd = ft_substr(cmd, 0, j);
+	free_with_return(cmd);
+	free_with_return(temp);
 }
-
 /**
  * 
  * @definition:

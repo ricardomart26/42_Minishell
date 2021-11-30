@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/25 23:20:22 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 19:51:26 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,16 @@ int	ft_cw(const char *s, bool dq, bool q)
 			i++;
 		i = inspect_while_quotes_or_spaces(s, i, dq, q);
 		c++;
+		printf("i: %d\n", i);
+		printf("len of s %d\n", ft_strlen(s));
 		if (i >= ft_strlen(s))
 			break ;
 		if (s[i] == '\0' || s[i + 1] == '\0')
 			break ;
+		printf("s[%d] %c\n", i, s[i]);
 		i++;
 	}
+	printf("final %d\n", c);
 	return (c);
 }
 
@@ -80,6 +84,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 	int		size;
 	int		k;
 	char	**r;
+	
 
 	r = malloc(sizeof(char *) * ((ft_cw(s, false, false) + 1)));
 	k = 0;
@@ -92,6 +97,7 @@ char	**collect(char const *s, int start, bool dq, bool q)
 		size = start;
 		size = inspect_while_quotes_or_spaces(s, size, dq, q);
 		r[k++] = ft_substr(s, start, (size - start));
+		// printf("r[%d] %s\n", k - 1, r[k - 1]);
 		start = size;
 	}
 	r[k] = NULL;

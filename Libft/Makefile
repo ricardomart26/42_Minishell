@@ -6,7 +6,7 @@
 #    By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/24 20:16:53 by rimartin          #+#    #+#              #
-#    Updated: 2021/11/27 20:52:31 by rimartin         ###   ########.fr        #
+#    Updated: 2021/11/30 17:03:22 by rimartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,8 +78,7 @@ DEPS = $(shell find $(HEADER) -name *.h)
 
 OBJ 	= $(SRC:%.c=%.o)
 
-CC		= gcc -Wall -Werror -Wextra -I $(HEADER) -g -fsanitize=address
-
+CC		= gcc -Wall -Werror -Wextra -I $(HEADER)
 OBJ_DIR = Objs
 
 HEADER	= includes

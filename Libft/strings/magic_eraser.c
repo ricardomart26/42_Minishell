@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 21:45:26 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/12 21:46:21 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:34:09 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ char	*magic_eraser(char *str, char *set, bool f)
 		ret[++i] = *(str++);
 	}
 	if (f)
+	{
 		free(str);
+		str = NULL;
+	}
 	ret[i] = '\0';
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 20:34:44 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 19:15:11 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 17:22:54 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,10 @@ int	not_valid_line(const char *line)
 	char	**split_line;
 
 	split_line = split_quotes(line, 0);
-	if (repeated_pipes(split_line))
+	if (repeated_pipes(split_line) && free_dp(split_line))
 		return (258);
-	else if (repeated_redirections(split_line, true))
+	else if (repeated_redirections(split_line, true) && free_dp(split_line))
 		return (258);
+	free_dp(split_line);
 	return (0);
 }

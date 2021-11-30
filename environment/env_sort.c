@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_sort.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmendes <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 15:55:54 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/30 15:56:58 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/30 21:33:29 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	sub_sort(t_lista *after, t_lista *current)
 		current->content = ft_strdup(after->content);
 		after->content = ft_strdup(temp);
 		free(temp);
+		temp = NULL;
 	}
 	else if ((unsigned char)current->content[0]
 		== (unsigned char)after->content[0])

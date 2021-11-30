@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 04:26:10 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/04 22:42:51 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:33:40 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	ft_strsave(int fd, char **line, char **store)
 	{
 		*line = ft_strdup(store[fd]);
 		free(store[fd]);
-		store[fd] = 0;
+		store[fd] = NULL;
 		return (0);
 	}
 }
