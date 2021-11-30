@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/29 20:41:19 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/11/30 15:57:10 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,56 +45,6 @@ void	list_init(t_listas **listas, char **env)
 	}
 }
 
-void	list_sort(t_lista *lst)
-{
-	t_lista	*current;
-	t_lista	*after;
-	char	*temp;
-	int		index;
-
-	index = 0;
-	current = lst;
-	while (current->next != NULL)
-	{
-		after = current->next;
-		while (after != NULL)
-		{
-			index = 0;
-			if ((unsigned char)current->content[0]
-				> (unsigned char)after->content[0])
-			{
-				temp = ft_strdup(current->content);
-				current->content = ft_strdup(after->content);
-				after->content = ft_strdup(temp);
-				free(temp);
-			}
-			else if ((unsigned char)current->content[0]
-				== (unsigned char)after->content[0])
-			{
-				while ((unsigned char)current->content[index]
-					== (unsigned char)after->content[index])
-				{
-					index++;
-					if ((unsigned char)current->content[index]
-						> (unsigned char)after->content[index])
-					{
-						temp = ft_strdup(current->content);
-						current->content = ft_strdup(after->content);
-						after->content = ft_strdup(temp);
-					}
-					else if ((unsigned char)current->content[index]
-						< (unsigned char)after->content[index])
-						break ;
-				}
-			}
-			after = after->next;
-		}
-		printf("declare -x %s\n", current->content);
-		current = current->next;
-	}
-	printf("declare -x %s\n", current->content);
-}
-
 int	char_check(char *str, char c)
 {
 	int	index;
@@ -109,12 +59,30 @@ int	char_check(char *str, char c)
 	return (-1);
 }
 
+int	sub_copy_check(char *var, t_lista *current, t_lista *current1, int index)
+{
+	while (current != NULL)
+	{
+		if (ft_strncmp(var, current->content, index) == 0)
+		{
+			current->content = ft_strdup(var);
+			current1->content = ft_strdup(var);
+			return (-1);
+		}
+		current = current->next;
+		current1 = current1->next;
+	}
+	return (0);
+}
+
 int	copy_check(char *var, t_lista *sort, t_lista *envp)
 {
 	int		index;
 	t_lista	*current;
 	t_lista	*current1;
+	int		ret;
 
+	ret = 0;
 	current = sort;
 	current1 = envp;
 	index = char_check(var, '=');
@@ -129,17 +97,9 @@ int	copy_check(char *var, t_lista *sort, t_lista *envp)
 	}
 	else
 	{
-		while (current != NULL)
-		{
-			if (ft_strncmp(var, current->content, index) == 0)
-			{
-				current->content = ft_strdup(var);
-				current1->content = ft_strdup(var);
-				return (-1);
-			}
-			current = current->next;
-			current1 = current1->next;
-		}
+		ret = sub_copy_check(var, current, current1, index);
+		if (ret == -1)
+			return (-1);
 	}
 	return (0);
 }
