@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 14:41:59 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/22 20:46:08 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 22:26:48 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	do_heredoc(t_node *node)
 	int	i;
 
 	i = 0;
+	node->has_heredoc = false;
 	while (node->red[i] != NOTHING)
 	{
 		if (node->red[i] == TO_HEREDOC)
@@ -77,4 +78,5 @@ void	rl_heredoc(t_node *node, char *del)
 	}
 	close(fd);
 	node->has_heredoc = true;
+	free(del);
 }

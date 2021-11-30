@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:58:36 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 21:41:15 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 22:40:58 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	free_nodes(t_node *node, char **exp)
 {
 	t_node *temp;
 
-	temp = node;
+	temp = NULL;
 	g_gl.n_pipes = 0;
 	free(*exp);
 	*exp = NULL;
@@ -67,11 +67,14 @@ void	free_nodes(t_node *node, char **exp)
 		while (node->r->type == IS_A_PIPE)
 		{
 			free_one_node(node->l);
+			temp = node;
 			node = node->r;
+			free(temp);
+			temp = NULL;
 		}
 		free_one_node(node->l);
 		free_one_node(node->r);
-		free(temp);
-		temp = NULL;
+		free(node);
+		node = NULL;
 	}
 }

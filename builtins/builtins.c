@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/11/30 22:17:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 23:09:18 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,5 @@ int	builtins(t_node *node, t_listas *listas, char **line)
 		ft_env(listas->linked_env, line[1]);
 	if (line[1] && !ft_strncmp(line[0], "unset", ft_strlen(line[0])))
 		ft_unset(line[1], listas->linked_env, listas->sort);
-	free_dp(line);
 	return (0);
 }
