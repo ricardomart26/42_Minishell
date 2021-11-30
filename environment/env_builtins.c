@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 23:09:52 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/11/30 23:34:35 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,14 @@ int	ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort)
 	current = lst_env;
 	if (first_unset(path, lst_env) == 0)
 		return (0);
-	while (current->next != NULL)
+	while (current != NULL)
 	{
-		index = char_check(current->next->content, '=');
-		if (!ft_strncmp(current->next->content, path, index - 1))
+		index = char_check(current->content, '=');
+		if (!ft_strncmp(current->content, path, index))
 		{
-			to_remove = current->next;
-			current->next = current->next->next;
+			to_remove = current;
+			current = current->next;
+			printf("content %s\n", to_remove->content);
 			free(to_remove);
 			to_remove = NULL;
 			unset1(path, lst_sort);
