@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 22:40:45 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 19:17:28 by jmendes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,16 @@ void	get_red(t_node *curr, char *cmd, bool open_dq, bool open_q);
 /*	   Builtins Functions     */
 /******************************/
 
-void	list_sort(t_lista *lst);
-void	ft_export(char *var, t_lista *envp, t_lista *sort);
-void	ft_env(t_lista *lst, char *is_not_null);
-int		ft_unset(char *path, t_lista *lst_env, t_lista *lst_sort);
-void	list_init(t_listas **listas, char **env);
-int		char_check(char *str, char c);
-int		copy_check(char *var, t_lista *sort, t_lista *envp);		
-int		builtins(t_node *node, t_listas *listas, char **cmd);
-int		is_builtin(char **line);
-void	echo(char **line, int flag_n, t_listas *listas);
+void		list_sort(t_lista *lst);
+void		ft_export(char *var, t_lista *envp, t_lista *sort);
+void		ft_env(t_lista *lst, char *is_not_null);
+t_listas	*ft_unset(char *path, t_listas *listas); 
+void		list_init(t_listas **listas, char **env);
+int			char_check(char *str, char c);
+int			copy_check(char *var, t_lista *sort, t_lista *envp);		
+int			builtins(t_node *node, t_listas *listas, char **cmd);
+int			is_builtin(char **line);
+void		echo(char **line, int flag_n, t_listas *listas);
 
 /******************************/
 /*	  Redirection Functions   */
