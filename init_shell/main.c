@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 23:14:05 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 20:17:20 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,14 @@ int	get_readline_and_history(void)
 	return (0);
 }
 
-void	init_all(t_listas **listas, char **env)
+void	init_all(t_listas **listas, char **env, int ac, char **av)
 {
 	struct sigaction	sa;
 	struct sigaction	sa_1;
 	struct termios		term;
 
+	(void)ac;
+	(void)av;
 	tcgetattr(0, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(0, TCSANOW, &term);
@@ -74,12 +76,9 @@ int	main(int ac, char **av, char **env)
 	t_listas		*listas;
 	char			**split_var;
 
-	(void) ac;
-	(void) av;
-	init_all(&listas, env);
+	init_all(&listas, env, ac, av);
 	while (1)
 	{
-		split_var = NULL;
 		g_gl.node = empty_node;
 		if (get_readline_and_history() == -1)
 			continue ;
