@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/03 00:01:23 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/03 17:01:41 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	is_command_with_path(char *command_in_node, t_lista *env)
 	{
 		only_command = split_quotes(ft_strrchr(command_in_node, '/') + 1, 0);
 		path = ft_strndup(command_in_node, ft_strlen_c(command_in_node, ' '));
-		if (execve(path, only_command, convert_list_to_array((t_list *)env)) == -1)
+		if (execve(path, only_command,
+				convert_list_to_array((t_list *)env)) == -1)
 			printf("bash: %s: command not found\n",
 				eraser_quotes(command_in_node, false, false));
 		exit(COMMAND_NOT_FOUND);

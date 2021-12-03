@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/02 22:11:42 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/03 17:06:47 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	get_variable_value(char **split_exp, t_lista *lst_value)
 		{
 			v.j = v.i - 1;
 			while (!find_c_in_str(temp[v.i], SPACES) && temp[v.i] != '\0'
-				&& temp[v.i] != '\'' && temp[v.i] != '\"')
+				&& temp[v.i] != '\'' && temp[v.i] != '\"' && temp[v.i] != '$')
 				v.i++;
 			var_name = ft_substr(temp, v.j + 1, v.i - (v.j + 1));
 			value_of_var = search_for_value(var_name, lst_value);
