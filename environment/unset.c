@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_builtins.c                                     :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:08:18 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/02 20:40:18 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/12/02 23:44:58 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ t_lista	*sub_unset(t_lista *current, t_listas *listas, char *path)
 	t_lista	*to_remove;
 
 	index = 0;
+	if (current->next == NULL)
+		return (listas->sort);
 	index = char_check(current->next->content, '=');
 	if ((ft_strlen(path) == index && !ft_strncmp(current->next->content,
 				path, ft_strlen(path))) || (index == -1
@@ -71,7 +73,6 @@ t_lista	*sub_unset(t_lista *current, t_listas *listas, char *path)
 	{
 		to_remove = current->next;
 		current->next = current->next->next;
-		printf("%s\n", to_remove->content);
 		free(to_remove);
 		to_remove = NULL;
 		listas->sort = unset1(path, listas->sort);
@@ -95,7 +96,6 @@ t_listas	*ft_unset(char *path, t_listas *listas)
 		listas->sort = sub_unset(current, listas, path);
 		current = current->next;
 	}
-	if (unset1(path, listas->sort) == 0)
-		return (listas);
+	unset1(path, listas->sort);
 	return (listas);
 }

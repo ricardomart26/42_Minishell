@@ -1,0 +1,34 @@
+total 392
+drwxr-xr-x  16 rimartin  2020_lisbon     544 Dec  2 21:29 .
+drwxr-xr-x   8 rimartin  2020_lisbon     272 Nov 28 21:42 ..
+-rw-r--r--   1 rimartin  2020_lisbon    6148 Nov 29 22:30 .DS_Store
+drwxr-xr-x  15 rimartin  2020_lisbon     510 Dec  2 20:45 .git
+drwxr-xr-x  16 rimartin  2020_lisbon     544 Dec  2 21:17 Libft
+-rw-r--r--   1 rimartin  2020_lisbon     838 Dec  2 20:12 Makefile
+drwxr-xr-x   7 rimartin  2020_lisbon     238 Dec  2 21:27 Tester_for_minishell
+drwxr-xr-x   4 rimartin  2020_lisbon     136 Dec  2 20:12 builtins
+drwxr-xr-x   7 rimartin  2020_lisbon     238 Dec  2 21:05 environment
+drwxr-xr-x   6 rimartin  2020_lisbon     204 Nov 27 19:30 executor
+-rwxr-xr-x   1 rimartin  2020_lisbon       0 Dec  2 21:29 filename
+drwxr-xr-x   4 rimartin  2020_lisbon     136 Dec  2 20:12 includes
+drwxr-xr-x   4 rimartin  2020_lisbon     136 Nov 30 16:16 init_shell
+-rwxr-xr-x   1 rimartin  2020_lisbon  180264 Dec  2 21:17 minishell
+drwxr-xr-x  13 rimartin  2020_lisbon     442 Nov 30 21:35 parsing
+-rw-r--r--   1 rimartin  2020_lisbon    1672 Nov 27 20:17 readline_init.sh
+total 400
+drwxr-xr-x  16 rimartin  2020_lisbon     544 Dec  2 21:29 .
+drwxr-xr-x   8 rimartin  2020_lisbon     272 Nov 28 21:42 ..
+-rw-r--r--   1 rimartin  2020_lisbon    6148 Nov 29 22:30 .DS_Store
+drwxr-xr-x  15 rimartin  2020_lisbon     510 Dec  2 20:45 .git
+drwxr-xr-x  16 rimartin  2020_lisbon     544 Dec  2 21:17 Libft
+-rw-r--r--   1 rimartin  2020_lisbon     838 Dec  2 20:12 Makefile
+drwxr-xr-x   7 rimartin  2020_lisbon     238 Dec  2 21:27 Tester_for_minishell
+drwxr-xr-x   4 rimartin  2020_lisbon     136 Dec  2 20:12 builtins
+drwxr-xr-x   7 rimartin  2020_lisbon     238 Dec  2 21:05 environment
+drwxr-xr-x   6 rimartin  2020_lisbon     204 Nov 27 19:30 executor
+-rwxr-xr-x   1 rimartin  2020_lisbon    1088 Dec  2 21:29 filename
+drwxr-xr-x   4 rimartin  2020_lisbon     136 Dec  2 20:12 includes
+drwxr-xr-x   4 rimartin  2020_lisbon     136 Nov 30 16:16 init_shell
+-rwxr-xr-x   1 rimartin  2020_lisbon  180264 Dec  2 21:17 minishell
+drwxr-xr-x  13 rimartin  2020_lisbon     442 Nov 30 21:35 parsing
+-rw-r--r--   1 rimartin  2020_lisbon    1672 Nov 27 20:17 readline_init.sh

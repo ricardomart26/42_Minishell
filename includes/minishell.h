@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 04:47:08 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/02 20:16:05 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 23:49:04 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_pipes
 	int	pfd[2];	
 	int	save_fd;
 	int	index_for_pipes;
+	int	n_pipes;
 }	t_pipes;
 
 typedef struct s_global
@@ -100,6 +101,7 @@ typedef struct s_global
 	int				inside_command;
 	char			*exp;
 	int				n_pipes;
+	int				size_of_list;
 }	t_global;
 
 t_global	g_gl;
@@ -130,7 +132,7 @@ void		list_sort(t_lista *lst);
 void		ft_export(char *var, t_lista *envp, t_lista *sort);
 void		ft_env(t_lista *lst, char *is_not_null);
 t_listas	*ft_unset(char *path, t_listas *listas);
-void		list_init(t_listas **listas, char **env);
+int			list_init(t_listas **listas, char **env);
 int			char_check(char *str, char c);
 int			copy_check(char *var, t_lista *sort, t_lista *envp);		
 int			builtins(t_node *node, t_listas *listas, char **cmd);
@@ -160,8 +162,8 @@ void		abstract_tree_parser(t_node **node, char **exp,
 /*	     Piping Functions     */
 /******************************/
 
-void		ft_exec(t_node *node, int n_pipes, char **env);
-int			close_and_save_p(t_pipes *p, int n_pipes);
+void		ft_exec(t_node *node, int n_pipes, t_lista *lista);
+int			close_and_save_p(t_pipes *p);
 void		handle_pipes(int p[2], int save_fd,
 				int index_for_pipes, int n_pipes);
 

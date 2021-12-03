@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 22:52:00 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/27 20:40:49 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 22:24:32 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ void	get_error_and_wait(void)
 		g_gl.error_code = status / 256;
 }
 
-int	close_and_save_p(t_pipes *p, int n_pipes)
+int	close_and_save_p(t_pipes *p)
 {
 	get_error_and_wait();
-	if (n_pipes == 0)
+	if (p->n_pipes == 0)
 		return (0);
 	if (p->index_for_pipes == 0)
 	{
@@ -57,7 +57,7 @@ int	close_and_save_p(t_pipes *p, int n_pipes)
 		close(p->pfd[0]);
 		close(p->pfd[1]);
 	}
-	else if (p->index_for_pipes < n_pipes)
+	else if (p->index_for_pipes < p->n_pipes)
 	{
 		close(p->save_fd);
 		close(p->pfd[1]);

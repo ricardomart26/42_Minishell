@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 10:05:27 by jmendes           #+#    #+#             */
-/*   Updated: 2021/12/02 19:08:41 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/12/02 23:48:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	*get_home_var(t_lista *lst_env, char *path)
 		temp = temp->next;
 	if (!ft_strncmp(temp->content, "HOME", 4))
 	{
+		if (!path)
+			return (ft_strjoin(temp->content + 5, path));
 		if (path[1] && path[1] == '/')
 			return (ft_strjoin(temp->content + 5, path + 1));
 		return (temp->content + 5);
@@ -40,7 +42,9 @@ char	*get_home_var(t_lista *lst_env, char *path)
 
 void	cd(char *path, t_lista *lst_envp)
 {
-	if (path[0] == '~')
+	if (!path)
+		path = get_home_var(lst_envp, NULL);
+	else if (path[0] == '~')
 		path = ft_strdup(get_home_var(lst_envp, path));
 	if (chdir(path) != 0)
 	{
@@ -70,7 +74,7 @@ int	builtins(t_node *node, t_listas *listas, char **line)
 		echo(line, echo_n, listas);
 	}
 	g_gl.error_code = 0;
-	if (line[1] && !ft_strncmp(line[0], "cd", ft_strlen(line[0])))
+	if (!ft_strncmp(line[0], "cd", ft_strlen(line[0])))
 		cd(line[1], listas->linked_env);
 	else if (!ft_strncmp(line[0], "pwd", ft_strlen(line[0])))
 		pwd();

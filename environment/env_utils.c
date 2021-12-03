@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:17:27 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/18 15:55:19 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 20:56:21 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,3 @@ int	get_size_env(char *env, int pos)
 	size = pos - size;
 	return (size + 1);
 }
-
-// static void	ft_lstdelone_env(t_env *lst, void (*del)(void*))
-// {
-// 	if (lst)
-// 	{
-// 		del(lparser->keyword);
-// 		del(lparser->value);
-// 		free(lst);
-// 	}
-// }

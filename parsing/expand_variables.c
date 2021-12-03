@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 15:49:57 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 22:38:22 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 22:11:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	get_variable_value(char **split_exp, t_lista *lst_value)
 		{
 			v.j = v.i - 1;
 			while (!find_c_in_str(temp[v.i], SPACES) && temp[v.i] != '\0'
-				&& temp[v.i] != '\'')
+				&& temp[v.i] != '\'' && temp[v.i] != '\"')
 				v.i++;
 			var_name = ft_substr(temp, v.j + 1, v.i - (v.j + 1));
 			value_of_var = search_for_value(var_name, lst_value);
@@ -77,22 +77,6 @@ void	join_strings(char **exp, char **split_exp)
 	}
 	free_dp(split_exp);
 }
-
-// char	*get_home_var(t_lista *lst_env, char *path)
-// {
-// 	t_lista	*temp;
-
-// 	temp = lst_env;
-// 	while (ft_strncmp(temp->content, "HOME", 4) && temp != NULL)
-// 		temp = temp->next;
-// 	if (!ft_strncmp(temp->content, "HOME", 4))
-// 	{
-// 		if (path[1] && path[1] == '/')
-// 			return (ft_strjoin(temp->content + 5, path + 1));
-// 		return (temp->content + 5);
-// 	}
-// 	return (NULL);
-// }
 
 void	new_expand_vars(char **exp, t_lista *lst_env)
 {

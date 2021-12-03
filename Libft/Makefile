@@ -6,7 +6,7 @@
 #    By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/24 20:16:53 by rimartin          #+#    #+#              #
-#    Updated: 2021/11/30 17:03:22 by rimartin         ###   ########.fr        #
+#    Updated: 2021/12/03 00:01:44 by rimartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SRC		= 	mem/ft_bzero.c \
 		    list/ft_lstmap.c \
 		    list/ft_lstnew.c \
 		    list/ft_lstsize.c \
+		    list/convert_list_to_arr.c \
 			conv/ft_itoa.c \
 			conv/ft_atoi.c \
 			conv/atoh.c \

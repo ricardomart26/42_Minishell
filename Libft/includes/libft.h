@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 20:16:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/17 23:33:48 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/03 00:00:45 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ char	**ft_strdup_dp(const char **s1);
 void	print_dp(void **r, int fd, int len);
 char	*magic_eraser(char *str, char *set, bool f);
 bool	find_c_in_str(int c, char *str);
+char	**convert_list_to_array(t_list *lista);
 
 #endif

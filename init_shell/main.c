@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/02 20:17:20 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/02 23:49:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ void	init_all(t_listas **listas, char **env, int ac, char **av)
 	sa.sa_handler = &sig_int;
 	sa_1.sa_handler = SIG_IGN;
 	sa.sa_flags = SA_RESTART;
-	list_init(listas, env);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa_1, NULL);
+	list_init(listas, env);
 }
 
 int	main(int ac, char **av, char **env)
@@ -90,7 +90,7 @@ int	main(int ac, char **av, char **env)
 			&& is_builtin(split_var))
 			builtins(g_gl.node, listas, split_var);
 		else
-			ft_exec(g_gl.node, g_gl.n_pipes, env);
+			ft_exec(g_gl.node, g_gl.n_pipes, listas->linked_env);
 		free_nodes(g_gl.node, &g_gl.exp);
 		if (split_var)
 			free_dp(split_var);

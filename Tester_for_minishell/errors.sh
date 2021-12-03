@@ -1,7 +1,20 @@
+
+confirmation() {
+    read -p "Continue?"
+    echo
+}
 asdasdjlasdjklasjdlkasj
 echo $?
-ls -la 
+confirmation
+
+ls -la
 echo $?
+confirmation
+
 grep
 echo $?
+confirmation
 
+cd sadijaosdjaoisdjio
+echo $?
+confirmation

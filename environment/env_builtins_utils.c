@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 16:11:14 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 15:57:10 by jmendes          ###   ########.fr       */
+/*   Updated: 2021/12/02 22:27:59 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	deallocate(t_lista **root)
 	*root = NULL;
 }
 
-void	list_init(t_listas **listas, char **env)
+int	list_init(t_listas **listas, char **env)
 {
 	int	index;
 
@@ -43,6 +43,8 @@ void	list_init(t_listas **listas, char **env)
 			ft_lstnew((void *)ft_strdup(env[index + 1])));
 		index++;
 	}
+	printf("index %d\n", index);
+	return (index);
 }
 
 int	char_check(char *str, char c)
