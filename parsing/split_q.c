@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:41:48 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/02 20:14:42 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/20 03:58:19 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ int	ft_cw(const char *s, bool dq, bool q)
 			i++;
 		i = inspect_while_quotes_or_spaces(s, i, dq, q);
 		c++;
-		if (i >= ft_strlen(s))
-			break ;
-		if (s[i] == '\0' || s[i + 1] == '\0')
+		if (i >= ft_strlen(s) && (s[i] == '\0' || s[i + 1] == '\0'))
 			break ;
 		i++;
 	}
@@ -105,6 +103,8 @@ char	**split_quotes(const char *s, int option)
 	char	**r;
 
 	x = 0;
+	if (!s)
+		return (NULL);
 	r = collect(s, x, false, false);
 	i = -1;
 	if (option == 1)

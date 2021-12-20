@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 02:09:17 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/30 19:28:46 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/20 05:16:44 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**
  * 
- * @definition:
+ * @definition: 
  * 
  * @params:
  * 
@@ -60,11 +60,15 @@ char	**return_files(char *cmd, int nbr_files, int i, int j)
 		return (NULL);
 	k = 0;
 	while (cmd[++j])
+	{
+		if (is_space(cmd[j]))
+			break ;
 		if (get_token(cmd + j) == REDIRECTION)
 			ret[k++] = get_only_file(cmd, &i, &j);
+	}
 	i++;
-	ret[k] = get_only_file(cmd, &i, &j);
-	ret[k + 1] = NULL;
+	ret[k++] = get_only_file(cmd, &i, &j);
+	ret[k] = NULL;
 	return (ret);
 }
 
@@ -85,11 +89,7 @@ bool	command_doesnt_exist(char *cmd, t_node *curr)
  * @definition: Divide the command and the file (ls -la < file.txt >> file2.txt)
  * It becomes (node->cmd = ls -la) and 
  * (node->red[0] = TO_INFILE and node->filename[0] = file.txt) and
- * (node->red[1] = TO_APPEND and node->filename[1] = file2.txt).
- *
- *
- * @params: node -> Current tree with the commands and files
- * st -> geral struct 
+ * (node->red[1] = TO_APPEND and node->filename[1] = file2.txt). 
  *
  * @return_value: Add command , files and red to the node struct
  *
@@ -102,8 +102,7 @@ void	split_file_and_cmd(t_node *curr, int i, int j)
 
 	temp = ft_strdup_and_free(&curr->cmd);
 	cmd = if_file_first(ft_strtrim(temp, " "), curr);
-	if (command_doesnt_exist(cmd, curr) && free_with_return(cmd)
-		&& free_with_return(temp))
+	if (command_doesnt_exist(cmd, curr) && free_with_return(temp))
 		return ;
 	while (cmd[++j])
 	{
@@ -120,9 +119,9 @@ void	split_file_and_cmd(t_node *curr, int i, int j)
 		curr->filename = return_files((cmd + j), curr->n_red, 0, -1);
 	else
 		curr->cmd = ft_substr(cmd, 0, j);
-	free_with_return(cmd);
 	free_with_return(temp);
 }
+
 /**
  * 
  * @definition:

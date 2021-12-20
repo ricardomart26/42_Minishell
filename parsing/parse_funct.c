@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 22:14:41 by rimartin          #+#    #+#             */
-/*   Updated: 2021/11/29 20:07:52 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/20 03:13:42 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ bool	is_empty_tree(t_node *node)
 {
 	if (node->l == NULL && node->r == NULL)
 		return (true);
+
 	return (false);
 }
 

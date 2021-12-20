@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:15:43 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/03 17:01:41 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/20 03:21:30 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,11 @@ void	ft_exec(t_node *node, int n_pipes, t_lista *lista)
 	p.n_pipes = n_pipes;
 	seek_for_heredoc(node);
 	if (is_empty_tree(node) && node->cmd == NULL)
+	{
+		if (node->has_heredoc)
+			unlink(".temp_txt");
 		return ;
+	}
 	while (++p.index_for_pipes <= n_pipes)
 	{
 		g_gl.error_code = 0;

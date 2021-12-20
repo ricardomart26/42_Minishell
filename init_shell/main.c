@@ -6,7 +6,7 @@
 /*   By: rimartin <rimartin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 03:37:21 by rimartin          #+#    #+#             */
-/*   Updated: 2021/12/03 17:00:15 by rimartin         ###   ########.fr       */
+/*   Updated: 2021/12/20 03:58:02 by rimartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		abstract_tree_parser(&g_gl.node, &g_gl.exp, &g_gl.n_pipes,
 			listas->linked_env);
-		if (is_empty_tree(g_gl.node))
+		if (is_empty_tree(g_gl.node) && g_gl.node->cmd != NULL)
 			split_var = split_quotes(g_gl.node->cmd, 1);
 		if (g_gl.node->cmd != NULL && is_empty_tree(g_gl.node)
 			&& is_builtin(split_var))
