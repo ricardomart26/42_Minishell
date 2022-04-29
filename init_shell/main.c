@@ -53,20 +53,20 @@ int	get_readline_and_history(void)
 
 void	init_all(t_listas **listas, char **env, int ac, char **av)
 {
-	struct sigaction	sa;
-	struct sigaction	sa_1;
-	struct termios		term;
+	// struct sigaction	sa;
+	// struct sigaction	sa_1;
+	// struct termios		term;
 
 	(void)ac;
 	(void)av;
-	tcgetattr(0, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(0, TCSANOW, &term);
-	sa.sa_handler = &sig_int;
-	sa_1.sa_handler = SIG_IGN;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa_1, NULL);
+	// tcgetattr(0, &term);
+	// term.c_lflag &= ~ECHOCTL;
+	// tcsetattr(0, TCSANOW, &term);
+	// sa.sa_handler = &sig_int;
+	// sa_1.sa_handler = SIG_IGN;
+	// sa.sa_flags = SA_RESTART;
+	// sigaction(SIGINT, &sa, NULL);
+	// sigaction(SIGQUIT, &sa_1, NULL);
 	list_init(listas, env);
 }
 

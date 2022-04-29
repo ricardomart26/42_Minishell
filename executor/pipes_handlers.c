@@ -17,7 +17,7 @@ void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes)
 	if (index_for_pipes == 0)
 	{
 		close(p[0]);
-		dup2(p[1], STDOUT_FILENO);
+		dup2(p[1], 1);
 		close(p[1]);
 	}
 	else if (index_for_pipes < n_pipes)
@@ -31,9 +31,8 @@ void	handle_pipes(int p[2], int save_fd, int index_for_pipes, int n_pipes)
 	else
 	{
 		close(p[1]);
+		dup2(p[0], STDIN_FILENO);
 		close(p[0]);
-		dup2(save_fd, STDIN_FILENO);
-		close(save_fd);
 	}
 }
 
@@ -53,20 +52,16 @@ int	close_and_save_p(t_pipes *p)
 		return (0);
 	if (p->index_for_pipes == 0)
 	{
-		p->save_fd = dup(p->pfd[0]);
-		close(p->pfd[0]);
 		close(p->pfd[1]);
 	}
 	else if (p->index_for_pipes < p->n_pipes)
 	{
-		close(p->save_fd);
-		close(p->pfd[1]);
-		p->save_fd = dup(p->pfd[0]);
 		close(p->pfd[0]);
+		close(p->pfd[1]);
+
 	}
 	else
 	{
-		close(p->save_fd);
 		close(p->pfd[0]);
 		close(p->pfd[1]);
 	}

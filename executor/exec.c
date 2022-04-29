@@ -63,6 +63,9 @@ void	execute_cmd(t_node *node, t_lista *env, char *command_in_node)
 	cmd = split_quotes(command_in_node, 1);
 	if (sp_path)
 		get_path = find_path_of_cmd(sp_path, cmd[0]);
+	
+	
+	
 	if (execve(get_path, cmd, convert_list_to_array((t_list *)env)) == -1)
 		printf("bash: %s: command not found\n",
 			eraser_quotes(node->cmd, false, false));
@@ -94,12 +97,16 @@ void	ft_exec(t_node *node, int n_pipes, t_lista *lista)
 			unlink(".temp_txt");
 		return ;
 	}
+	if (pipe(p.pfd) == -1)
+			error_msg("Pipe error\n");
 	while (++p.index_for_pipes <= n_pipes)
 	{
 		g_gl.error_code = 0;
-		if (n_pipes != 0 && pipe(p.pfd) == -1)
+		if (pipe(p.pfd) == -1)
 			error_msg("Pipe error\n");
-		else if (fork() == FORKED_CHILD)
+		// if (n_pipes != 0)
+		// 	error_msg("Pipe error\n");
+		if (fork() == FORKED_CHILD)
 			child_exploration(node, &p, lista);
 		else
 			p.save_fd = close_and_save_p(&p);
