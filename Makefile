@@ -26,7 +26,7 @@ all: $(NAME)
 
 $(NAME):  $(OBJ) $(DEPS)
 	test -s $(LIBFT)/libft.a || $(MAKE) -C Libft
-	$(CC) $(OBJ) $(INC) -o $@ $(LIBS)
+	$(CC) $(OBJ) $(INC) -o $@ $(LIBS) $(LIBFT)/libft.a
 
 clean:  
 	$(MAKE) clean -C Libft
